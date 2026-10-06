@@ -1,0 +1,37 @@
+factory_version: "1652235"
+# MOFU — fluffy blob-creature screen pet. Niche: research/niche-research/niche-scout/history/2026-10-06_rotation37-next-ouo-tokens.md
+app:
+  display_name: Mofu
+  slug: mofu_pet
+  bundle_id: com.ouadieZerhouni.mofuPet
+  app_store_id: ""
+
+features:
+  widget: false
+  ads: false
+  iap: false
+  remote_config: false   # Firebase RC off; GitHub-hosted JSON config instead (lib/core/remote_config.dart)
+  voice: false
+
+ios:
+  display_name: "Mofu"
+  app_group: ""
+  widget_bundle_id: ""
+  encryption_exempt: true
+  skadnetwork: none
+
+locales:
+  base: en
+  supported: [en, ja, de, pt, es, fr, ar]
+
+firebase:
+  enabled: false
+
+admob:
+  ios_app_id: ""
+
+ci:
+  provider: codemagic
+  workflow_name: testFlight
+  asc_integration: "OUADIE ZERHOUNI"
+  notify_email: ""
