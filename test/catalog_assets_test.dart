@@ -17,6 +17,13 @@ void main() {
     expect(ids.toSet().length, 24);
   });
 
+  // F5-c1: 10 colours, 10 year-round accessories (plus "none" and the seasonal extras).
+  test('10 fur colours and 10 accessories', () {
+    expect(Catalog.furColors.map((c) => c.id).toSet().length, 10);
+    final yearRound = Catalog.accessories.where((a) => a.id != 'none' && a.rule.kind != UnlockKind.seasonal);
+    expect(yearRound.map((a) => a.id).toSet().length, 10);
+  });
+
   test('unlock rules are reachable', () {
     for (final r in [...Catalog.furColors.map((c) => c.rule), ...Catalog.accessories.map((a) => a.rule)]) {
       switch (r.kind) {

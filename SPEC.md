@@ -121,6 +121,39 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 
 All features work in every locale in `app.yaml` (en, ja, de, pt, es, fr, ar), with Arabic laid out right-to-left.
 
+## Open questions
+
+Raised by /build on 2026-10-07. The code and the SPEC disagree on these four
+criteria. Each one is a product call, so they stay unticked until the owner
+answers. Reply with a letter per question (or your own wording) and /build
+will do the rest.
+
+**Q1 — Snack line-up (F4-c1).** The SPEC lists *mochi, strawberry, dango, cookie, onigiri, star candy*.
+The app ships *strawberry, dango, cookie, onigiri, **pudding**, **candy*** (🍮 and 🍬, with hand-drawn icons).
+The same list appears in the ASO description in all 8 locales (`tools/aso/metadata.py`) and in the store
+screenshots. Mochi may have been dropped because "mochi squish" is already a reaction name.
+- (a) **Amend the SPEC to the shipped list.** No code, copy or screenshot changes. *Recommended: it is
+  already consistent everywhere, and "mochi" stays the squish.*
+- (b) Change the app to match the SPEC: mochi replaces pudding (new icon), "Candy" is renamed "Star candy".
+  Then re-translate 6 locales, rewrite the ASO copy in 8 locales, and redo the snack screenshot.
+
+**Q2 — What counts as a "fluffy day" (F3-c4, F5-c1).** The SPEC says the first brush of a day counts a
+"fluffy day", and colours and accessories unlock on fluffy days. The app has no fluffy-day counter.
+Day-based unlocks count *visit* days, which go up whenever the app is opened on a new day, and the
+locked tiles say "Visit on N days". The daily-brush sparkle burst and toast do exist.
+- (a) **Amend the SPEC: a fluffy day is a day you visit.** The brush only gives the sparkle bonus.
+  *Recommended: it is gentler ("no punishment for absence", no chore) and it is what the lock text
+  already says.*
+- (b) Build it as the SPEC says: add a `brushDays` counter, base day unlocks on it, and change the lock
+  text to "Brush on N days" in 7 locales. Unlocks then require brushing.
+
+**Q3 — "Pats its belly" (F4-c4).** When Mofu is full it currently shakes its head with a content face,
+plays "nope" and gives a light haptic. Nothing pats a belly, because Mofu is a round puffball with no limbs.
+- (a) **Amend the SPEC to "shakes its head with a content face and declines politely".**
+  *Recommended: it fits the limbless design.*
+- (b) Add a full-belly pose: the lower body bulges and wobbles twice while Mofu leans back.
+  This is a painter + sim change, checked by eye in /test-drive.
+
 ## Non-goals (v1.0)
 
 Home-screen widget (v1.1), ads, in-app purchases, accounts, cloud sync, notifications, multiple Mofus at once,
