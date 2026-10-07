@@ -1,61 +1,66 @@
-# Test drive — Mofu 1.0.0+1 · 2026-10-07 15:42
-iPhone 17 Pro sim (iOS 26.5) · Xcode 27.0 · build 23s (failed) · commit c4fdb54 · seams: DEBUG_SKIP_ADS
+# Test drive — Mofu 1.0.0+1 · 2026-10-07 15:44
+iPhone 17 Pro sim (iOS 26.5) · Xcode 27.0 · build 82s · commit 5105af9 · seams: DEBUG_SKIP_ADS (no trace seam exists, see Findings)
 
-PASS 0 · FAIL 1 · BLOCKED 37 · SKIP 0   (of 37 criteria + F0)
+PASS 30 · FAIL 0 · BLOCKED 5 · SKIP 3   (of 37 criteria + F0 + RTL)
 
 | Criterion | Verdict | Evidence | Note |
 | --- | --- | --- | --- |
-| F0 builds | FAIL | test-drive/20261007-1542/F0-build.log | expected a simulator build; observed `error: The iOS Simulator deployment target 'IPHONEOS_DEPLOYMENT_TARGET' is set to 13.0, but the range of supported deployment target versions is 15.0 to 27.0.x.` in targets Runner, Pods-Runner and Flutter |
-| F1-c1 Fur is drawn as individual strands whose length grows with the fluff l… | BLOCKED | | F0 build failed |
-| F1-c2 Idle life: breathing scale, blink every 2.5–6 s, a glance or hop every… | BLOCKED | | F0 build failed |
-| F1-c3 When a finger is down near Mofu, its pupils track the finger. | BLOCKED | | F0 build failed |
-| F1-c4 Holds 60 fps on the home screen. A 600-strand render stays under 8 ms … | BLOCKED | | F0 build failed |
-| F1-c5 Reduce Motion: hops and screen-wide bounces are disabled; breathing an… | BLOCKED | | F0 build failed |
-| F2-c1 Tap → squash-and-stretch boing, a squeak and a happy face. | BLOCKED | | F0 build failed |
-| F2-c2 5+ taps within 1.5 s → a giggle fit ("tickle"). | BLOCKED | | F0 build failed |
-| F2-c3 Stroke/pet (a drag across the body without holding first) → fur bends … | BLOCKED | | F0 build failed |
-| F2-c4 Hold still for 0.45 s → squish (flattens like mochi). Keep holding 1.6… | BLOCKED | | F0 build failed |
-| F2-c5 Hold, then move → pick Mofu up. Release → it falls with gravity, bounc… | BLOCKED | | F0 build failed |
-| F2-c6 Double-tap an eye → protest face (><). | BLOCKED | | F0 build failed |
-| F2-c7 Shake the phone → dizzy face and messy fur (strands frizz), which brus… | BLOCKED | | F0 build failed |
-| F2-c8 Every interaction gives a light haptic when haptics are on. | BLOCKED | | F0 build failed |
-| F3-c1 A brush tool (dock) turns strokes into brushing: sparkles follow the b… | BLOCKED | | F0 build failed |
-| F3-c2 Fluff level 0–100 is persisted. Milestones at 25/50/75/100 play a cele… | BLOCKED | | F0 build failed |
-| F3-c3 Fluff never decreases while the app is closed, so there is no punishme… | BLOCKED | | F0 build failed |
-| F3-c4 Daily brush: the first brush of each local day gives a sparkle burst, … | BLOCKED | | F0 build failed |
-| F4-c1 Snack tray with 6 snacks (strawberry, dango, cookie, onigiri, pudding,… | BLOCKED | | F0 build failed |
-| F4-c2 Dragging a snack onto Mofu's mouth area feeds it: mouth opens, chews, … | BLOCKED | | F0 build failed |
-| F4-c3 Each Mofu has one favourite snack, derived deterministically from its … | BLOCKED | | F0 build failed |
-| F4-c4 After 6 snacks within a rolling hour Mofu is full: it shakes its head … | BLOCKED | | F0 build failed |
-| F5-c1 10 fur colours and 10 accessories. Locked items show the exact unlock … | BLOCKED | | F0 build failed |
-| F5-c2 Selecting a colour or accessory updates Mofu instantly and persists. | BLOCKED | | F0 build failed |
-| F5-c3 A newly unlocked item shows a "New!" dot until viewed. | BLOCKED | | F0 build failed |
-| F6-c1 24 discoverable reactions, each with an icon, a name and a one-line hi… | BLOCKED | | F0 build failed |
-| F6-c2 Discovering one shows a small toast ("New! Tickle fit") and persists. | BLOCKED | | F0 build failed |
-| F7-c1 The room colours follow local time (morning / day / evening / night). | BLOCKED | | F0 build failed |
-| F7-c2 At night (22:00–06:00), or after 45 s without touch, Mofu dozes off (c… | BLOCKED | | F0 build failed |
-| F8-c1 A fluff seed wobbles, then a tap hatches it into Mofu. | BLOCKED | | F0 build failed |
-| F8-c2 The user can name Mofu (1–16 chars, default "Mofu") or skip. The name … | BLOCKED | | F0 build failed |
-| F8-c3 A one-time coach hint ("Pet me!") appears until the first stroke. | BLOCKED | | F0 build failed |
-| F9-c1 Fetched from `raw.githubusercontent.com/OuadieZerhouni/app-configs/mai… | BLOCKED | | F0 build failed |
-| F9-c2 Supports: min/latest version and update URL, a one-time announcement, … | BLOCKED | | F0 build failed |
-| F9-c3 Malformed values fall back to code defaults; a test covers every secti… | BLOCKED | | F0 build failed |
-| F10-c1 Sound on/off and haptics on/off, both persisted. | BLOCKED | | F0 build failed |
-| F10-c2 Rename, privacy policy link, support link, app version. | BLOCKED | | F0 build failed |
-| F10-c3 Reset Mofu (with confirmation) clears every persisted key. | BLOCKED | | F0 build failed |
+| F0 builds | PASS | (sim.py run output, 82 s) | fixed in 5105af9 (deployment target 15.0) |
+| F1-c1 Fur strands grow with fluff | PASS | test-drive/20261007-1544/RTL-home-ar.png, test-drive/20261007-1544/F3-c2-milestone-25.png | 8% vs 27%: visibly bigger, longer fur |
+| F1-c2 Idle life: breathing, blink 2.5–6 s, glance/hop 6–14 s | BLOCKED | | no trace seam, so intervals can't be read from the log; screenshots can't time them. Covered by sim_test 'idle life…' |
+| F1-c3 Pupils track the finger | PASS | test-drive/20261007-1544/F1-c3-look-topleft.png, test-drive/20261007-1544/F1-c3-look-bottomright.png | pupils shift up-left / down-right relative to the mouth |
+| F1-c4 60 fps; 600-strand render under 8 ms | SKIP | | 60 fps needs a device (the simulator renders on the Mac GPU). The 8 ms half: render_budget_test median 0.14 ms. Device: GATE-DEVICE-QA §10 |
+| F1-c5 Reduce Motion | BLOCKED | | iOS Reduce Motion not toggled this run (iOS Settings app). Covered by sim_test 'Reduce Motion…' |
+| F2-c1 Tap: boing, squeak, happy face | PASS | test-drive/20261007-1544/F2-c1-tap.png | happy face + sparkles + "New! Boing". Squeak is device QA |
+| F2-c2 5+ taps in 1.5 s: tickle | BLOCKED | | the MCP can't produce 5 taps within 1.5 s; covered by sim_test 'five quick taps…' |
+| F2-c3 Stroke: bend, eyes close, purr, hearts, fluff | PASS | test-drive/20261007-1544/F2-c3-after-stroke.png | hearts, bliss, 8→9%, "New! Happy pets". Purr is device QA |
+| F2-c4 Hold: squish, then hug | PASS | test-drive/20261007-1544/F2-c4-hug.png | "New! Big hug" toast after a 2.8 s hold; mid-hold frame not caught |
+| F2-c5 Hold and move: pick up, gravity, bounce, land squished; fast throw dizzy | PASS | test-drive/20261007-1544/F2-c5-air.png, test-drive/20261007-1544/F2-c5-landed.png | airborne and squashed with a shadow, then lands. My fling wasn't fast enough for dizzy: sim_test 'a fast throw…' |
+| F2-c6 Double-tap an eye: protest | BLOCKED | | 0.42 s window is sub-second for MCP taps; sim_test 'double-tap an eye…' |
+| F2-c7 Shake: dizzy + messy fur | SKIP | | accelerometer; device QA (GATE-DEVICE-QA §5) |
+| F2-c8 Light haptic for every interaction | SKIP | | haptics need a device; sim_test + sfx_test |
+| F3-c1 Brush: sparkles, smooths, faster fluff, sound | PASS | test-drive/20261007-1544/F3-c4-first-brush.png | one pass 9→17% (petting gave +1%). Sound is device QA |
+| F3-c2 Fluff persisted; milestones celebrate + unlock | PASS | test-drive/20261007-1544/F3-c2-relaunch.png, test-drive/20261007-1544/F3-c2-milestone-25.png, test-drive/20261007-1544/F3-c2-milestone-unlock.png | 9% survives a relaunch; 25%: "Mofu mofu! 25% fluffy", hearts, then wardrobe dot (Lavender) |
+| F3-c3 Fluff never decreases while closed | PASS | test-drive/20261007-1544/F3-c2-relaunch.png | same 9% after terminate/launch; long absence: store_test |
+| F3-c4 First daily brush: burst + toast + bonus | PASS | test-drive/20261007-1544/F3-c4-first-brush.png | "First brush of the day ✨", sparkles |
+| F4-c1 Six snacks | PASS | test-drive/20261007-1544/F4-c1-tray.png | strawberry, dango, cookie, onigiri, pudding, candy |
+| F4-c2 Drag to mouth feeds: chew, cheeks, happy | PASS | test-drive/20261007-1544/F4-c2-chewing.png, test-drive/20261007-1544/F4-c2-after-eat.png | mouth open, crumbs, then happy + "New! Yum!" |
+| F4-c3 Favourite snack, special reaction | PASS | test-drive/20261007-1544/F6-c1-journal-2.png | "Every Mofu has one" (favourite) discovered during the six feeds |
+| F4-c4 Full after 6 in an hour | PASS | test-drive/20261007-1544/F4-c4-seventh.png | 7th: content face + "… is full. Maybe later!" |
+| F5-c1 10 colours / 10 accessories; lock conditions | PASS | test-drive/20261007-1544/F5-c1-wardrobe-fur.png, test-drive/20261007-1544/F5-c3-accessories-new.png | "Visit on 2 days", "Reach 25% fluff", "Discover 6 reactions" |
+| F5-c2 Selection updates instantly and persists | PASS | test-drive/20261007-1544/F5-c2-cream.png, test-drive/20261007-1544/F5-c2-wearing.png, test-drive/20261007-1544/F3-c2-relaunch.png | Cream + Daisy survive a relaunch |
+| F5-c3 "New!" until viewed | PASS | test-drive/20261007-1544/F5-c3-accessories-new.png | Daisy carried "New!" |
+| F6-c1 24 reactions; silhouettes + hint | PASS | test-drive/20261007-1544/F6-c1-journal.png, test-drive/20261007-1544/F6-c1-journal-2.png | "10 of 24"; undiscovered = silhouette + hint |
+| F6-c2 Discovery toast "New! …" | PASS | test-drive/20261007-1544/F2-c1-tap.png | "New! Boing" |
+| F7-c1 Room colours follow local time | PASS | test-drive/20261007-1544/F2-c1-tap.png | day room at 15:4x local; other periods: app_smoke 'the room at H:00…' |
+| F7-c2 Dozes; a tap wakes with a sleepy blink | PASS | test-drive/20261007-1544/F8-c3-home-coach.png, test-drive/20261007-1544/F7-c2-waking.png, test-drive/20261007-1544/F7-c2-awake.png | asleep with closed eyes and zzz; the waking frame shows heavy lids mid-blink |
+| F8-c1 Seed wobbles; tap hatches | PASS | test-drive/20261007-1544/F8-c1-seed-a.png, test-drive/20261007-1544/F8-c1-seed-b.png, test-drive/20261007-1544/F8-c2-name-dialog.png | seed angle differs between frames; tap → "Hi! I'm your Mofu" |
+| F8-c2 Name 1–16, default "Mofu" or skip; header + Settings | PASS | test-drive/20261007-1544/F8-c2-name-limit.png, test-drive/20261007-1544/F8-c3-home-coach.png, test-drive/20261007-1544/F10-c2-settings.png, test-drive/20261007-1544/RTL-home-ar.png | input capped at 16 chars; Skip keeps "Mofu" |
+| F8-c3 One-time "Pet me!" until the first stroke | PASS | test-drive/20261007-1544/F8-c3-home-coach.png, test-drive/20261007-1544/F2-c3-after-stroke.png, test-drive/20261007-1544/F3-c2-relaunch.png | gone after the stroke and after a relaunch |
+| F9-c1 Background fetch, 6 s timeout, cache, non-blocking | PASS | test-drive/20261007-1544/F9-c1-launch.log | config URL returns 200; no "fetch skipped" within 12 s of launch; app interactive immediately |
+| F9-c2 Versions/announcement/kill-switches/seasons/links/reserved | BLOCKED | | needs editing the owner's live public config; covered by app_smoke wiring tests + remote_config_test |
+| F9-c3 Malformed values fall back; test per section | PASS | test/remote_config_test.dart | the criterion is about the test itself ('every section survives garbage') |
+| F10-c1 Sound/haptics persisted | PASS | test-drive/20261007-1544/F10-c1-sound-off-relaunch.png | Sounds off survives a relaunch |
+| F10-c2 Rename, privacy, support, version | PASS | test-drive/20261007-1544/F10-c2-settings.png | links return 200 |
+| F10-c3 Reset with confirmation | PASS | test-drive/20261007-1544/F10-c3-confirm.png, test-drive/20261007-1544/F10-c3-after-reset.png | back to the peach seed |
+| RTL (ar) | PASS | test-drive/20261007-1544/RTL-seed-ar.png, test-drive/20261007-1544/RTL-name-ar.png, test-drive/20261007-1544/RTL-home-ar.png | dock, header and dialog mirrored |
 
 ## Regressions
 
-None: there is no earlier committed report.
+None. The previous report (c4fdb54) had F0 FAIL and everything else BLOCKED; F0 now passes.
 
 ## Findings
 
-- **No behaviour trace seam.** `debug_flags.dart` has no `DEBUG_GESTURE_TRACE` (or equivalent), and `DEBUG_INSPECTOR`
-  is declared but never read. Timer-driven criteria (F1-c2 blink/glance/hop, F7-c2 doze after 45 s) therefore
-  cannot be read from the device log, only from mistimeable screenshots.
-- Flutter warns that every iOS plugin is a Swift Package while the project still integrates CocoaPods
-  (non-standard Podfile). This does not block the build; it is noted for build time.
+1. **Mofu falls asleep behind the first-run overlay and behind sheets.** The idle timer keeps counting while the
+   seed/name overlay or the wardrobe sheet is open, and those absorb every touch. After a 45 s+ naming, the new user
+   meets a **sleeping** Mofu (and "Sleepyhead" is logged) instead of a freshly hatched happy one
+   (test-drive/20261007-1544/F8-c3-home-coach.png). The same happened after the wardrobe (test-drive/20261007-1544/F5-c2-wearing.png).
+2. **No behaviour trace seam.** `DEBUG_INSPECTOR` is declared but never read, and nothing logs gestures or timers.
+   F1-c2 and similar can't be verified from the device log.
+3. "Visit at sunrise" silhouette renders as a **square**, because 🌅 is a square emoji (test-drive/20261007-1544/F6-c1-journal-2.png).
+4. The "Start over?" dialog title uses the system font, not the app's rounded font (test-drive/20261007-1544/F10-c3-confirm.png).
+5. Flutter notes that all iOS plugins are Swift Packages while the project still uses CocoaPods (build-time only).
 
 ## Next for /build
 
-| F0 builds | FAIL | test-drive/20261007-1542/F0-build.log | expected a simulator build; observed `IPHONEOS_DEPLOYMENT_TARGET` 13.0 rejected by Xcode 27 (supported 15.0–27.0.x) in Runner, Pods-Runner, Flutter |
+No FAIL rows.
