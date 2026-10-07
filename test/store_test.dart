@@ -176,4 +176,69 @@ void main() {
     expect(store.discover('boing'), isFalse);
     expect(store.discover('teleport'), isFalse);
   });
+
+  // F3-c3
+  test('fluff never goes down while the app is closed', () async {
+    store.addFluff(30);
+    await store.flush();
+    now = now.add(const Duration(days: 45));
+    final again = await fresh();
+    again.registerVisit();
+    expect(again.fluff, closeTo(38, 0.01));
+    expect(again.addFluff(-5), isEmpty);
+    expect(again.fluff, closeTo(38, 0.01));
+  });
+
+  // F3-c2
+  test('milestones that already fired stay celebrated after a relaunch', () async {
+    expect(store.addFluff(20), [25]);
+    await store.flush();
+    final again = await fresh();
+    expect(again.addFluff(1), isEmpty);
+    expect(again.addFluff(50), [50, 75]);
+    expect(again.colorUnlocked('lemon') && again.colorUnlocked('snow'), isTrue);
+    expect(again.accessoryUnlocked('starclip'), isTrue);
+    expect(again.addFluff(100), [100]);
+    expect(again.colorUnlocked('starry') && again.accessoryUnlocked('crown'), isTrue);
+  });
+
+  // F8-c3, F10-c1
+  test('settings and the coach flag survive a relaunch', () async {
+    store
+      ..setSound(false)
+      ..setHaptics(false)
+      ..completeCoach();
+    await store.flush();
+    final again = await fresh();
+    expect(again.soundOn, isFalse);
+    expect(again.hapticsOn, isFalse);
+    expect(again.coachDone, isTrue);
+  });
+
+  // F10-c3
+  test('reset removes every persisted key and restores every default', () async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mofu.remoteConfigCache', '{"schemaVersion":1}');
+    store
+      ..completeFirstRun()
+      ..completeCoach()
+      ..rename('Puffy')
+      ..addFluff(60)
+      ..setColor('lavender')
+      ..setAccessory('bow')
+      ..discover('boing')
+      ..markSeen(store.unseenUnlocks)
+      ..registerVisit()
+      ..registerBrush()
+      ..feed('dango')
+      ..setSound(false)
+      ..setHaptics(false)
+      ..markAnnouncementSeen('a1');
+    await store.flush();
+    await store.reset();
+    expect(prefs.getKeys().where((k) => k.startsWith('mofu.')), isEmpty);
+    expect(store.toJson(), PetStore(clock: () => now).toJson());
+    final again = await fresh();
+    expect(again.toJson(), PetStore(clock: () => now).toJson());
+  });
 }

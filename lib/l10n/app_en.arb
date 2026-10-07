@@ -30,7 +30,7 @@
   "actionClose": "Close",
   "actionOk": "OK",
 
-  "toastNewReaction": "New in the journal: {name}",
+  "toastNewReaction": "New! {name}",
   "@toastNewReaction": { "placeholders": { "name": { "type": "String" } } },
   "toastUnlocked": "Unlocked: {item}",
   "@toastUnlocked": { "placeholders": { "item": { "type": "String" } } },

@@ -144,7 +144,13 @@ class PetStore extends ChangeNotifier {
     _saveTimer?.cancel();
     final fresh = PetStore(clock: _clock);
     _apply(fresh.toJson());
-    await _prefs?.remove(prefsKey);
+    final p = _prefs;
+    if (p != null) {
+      // Every key the app writes is under `mofu.`, the remote-config cache included.
+      for (final k in p.getKeys().where((k) => k.startsWith('mofu.')).toList()) {
+        await p.remove(k);
+      }
+    }
     notifyListeners();
   }
 

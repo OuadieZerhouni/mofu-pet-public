@@ -60,8 +60,8 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 **Acceptance criteria**
 - [x] A brush tool (dock) turns strokes into brushing: sparkles follow the brush, messy fur becomes smooth, and fluff
       rises faster than petting. A soft brushing sound plays.
-- [ ] Fluff level 0–100 is persisted. Milestones at 25/50/75/100 play a celebration and unlock an item (see F5).
-- [ ] Fluff never decreases while the app is closed, so there is no punishment for absence.
+- [x] Fluff level 0–100 is persisted. Milestones at 25/50/75/100 play a celebration and unlock an item (see F5).
+- [x] Fluff never decreases while the app is closed, so there is no punishment for absence.
 - [ ] Daily brush: the first brush of each local day gives a sparkle burst and counts a "fluffy day".
 
 ### F4 — Snacks
@@ -70,7 +70,7 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 - [ ] Snack tray with 6 snacks (mochi, strawberry, dango, cookie, onigiri, star candy).
 - [x] Dragging a snack onto Mofu's mouth area feeds it: mouth opens, chews, cheeks puff, happy. Dropping it elsewhere
       returns it to the tray.
-- [ ] Each Mofu has one favourite snack, derived deterministically from its name, which gets a special reaction.
+- [x] Each Mofu has one favourite snack, derived deterministically from its name, which gets a special reaction.
 - [ ] After 6 snacks within a rolling hour Mofu is full: it pats its belly and declines politely. This is a
       discoverable reaction, not a lock.
 
@@ -79,29 +79,29 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 **Acceptance criteria**
 - [ ] 10 fur colours and 10 accessories. Locked items show the exact unlock condition (fluffy days, fluff milestone,
       journal count).
-- [ ] Selecting a colour or accessory updates Mofu instantly and persists.
-- [ ] A newly unlocked item shows a "New!" dot until viewed.
+- [x] Selecting a colour or accessory updates Mofu instantly and persists.
+- [x] A newly unlocked item shows a "New!" dot until viewed.
 
 ### F6 — Journal of reactions
 
 **Acceptance criteria**
-- [ ] 24 discoverable reactions, each with an icon, a name and a one-line hint. Undiscovered ones are shown as
+- [x] 24 discoverable reactions, each with an icon, a name and a one-line hint. Undiscovered ones are shown as
       silhouettes with the hint only.
-- [ ] Discovering one shows a small toast ("New! Tickle fit") and persists.
+- [x] Discovering one shows a small toast ("New! Tickle fit") and persists.
 
 ### F7 — Day & night
 
 **Acceptance criteria**
-- [ ] The room colours follow local time (morning / day / evening / night).
+- [x] The room colours follow local time (morning / day / evening / night).
 - [x] At night (22:00–06:00), or after 45 s without touch, Mofu dozes off (closed eyes, slow breathing, zzz, soft snore).
       A tap wakes it with a sleepy blink.
 
 ### F8 — First run
 
 **Acceptance criteria**
-- [ ] A fluff seed wobbles, then a tap hatches it into Mofu.
-- [ ] The user can name Mofu (1–16 chars, default "Mofu") or skip. The name shows in the header and Settings.
-- [ ] A one-time coach hint ("Pet me!") appears until the first stroke.
+- [x] A fluff seed wobbles, then a tap hatches it into Mofu.
+- [x] The user can name Mofu (1–16 chars, default "Mofu") or skip. The name shows in the header and Settings.
+- [x] A one-time coach hint ("Pet me!") appears until the first stroke.
 
 ### F9 — Remote config (GitHub-hosted JSON, no Firebase)
 
@@ -115,9 +115,9 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 ### F10 — Settings
 
 **Acceptance criteria**
-- [ ] Sound on/off and haptics on/off, both persisted.
-- [ ] Rename, privacy policy link, support link, app version.
-- [ ] Reset Mofu (with confirmation) clears every persisted key.
+- [x] Sound on/off and haptics on/off, both persisted.
+- [x] Rename, privacy policy link, support link, app version.
+- [x] Reset Mofu (with confirmation) clears every persisted key.
 
 All features work in every locale in `app.yaml` (en, ja, de, pt, es, fr, ar), with Arabic laid out right-to-left.
 

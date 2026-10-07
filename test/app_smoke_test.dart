@@ -8,6 +8,8 @@ import 'package:mofu_pet/main.dart';
 import 'package:mofu_pet/model/pet_store.dart';
 import 'package:mofu_pet/ui/first_run.dart';
 import 'package:mofu_pet/ui/home_screen.dart';
+import 'package:mofu_pet/ui/room.dart';
+import 'package:mofu_pet/ui/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The whole app, every locale, the smallest and largest supported iPhones.
@@ -20,24 +22,27 @@ void main() {
   const small = Size(375, 667); // iPhone SE (3rd gen)
   const large = Size(440, 956); // iPhone 16 Pro Max
 
-  Future<PetStore> pumpApp(WidgetTester tester, {required Locale locale, Size size = large, bool seeded = true}) async {
+  Future<PetStore> pumpApp(WidgetTester tester,
+      {required Locale locale, Size size = large, bool seeded = true, DateTime? at, void Function(PetStore)? prepare}) async {
+    final clock = at ?? DateTime(2026, 10, 7, 14);
     tester.view
       ..physicalSize = size * 3
       ..devicePixelRatio = 3;
     addTearDown(tester.view.reset);
     SharedPreferences.setMockInitialValues({});
-    final store = PetStore(clock: () => DateTime(2026, 10, 7, 14));
+    final store = PetStore(clock: () => clock);
     await store.load();
     if (seeded) {
       store
         ..firstRunDone = true
         ..coachDone = false;
     }
+    prepare?.call(store);
     final services = AppServices(
       store: store,
       config: RemoteConfigService(),
       sfx: Sfx.instance,
-      clock: () => DateTime(2026, 10, 7, 14),
+      clock: () => clock,
     );
     await tester.pumpWidget(MofuApp(services: services, locale: locale));
     await tester.pump(const Duration(milliseconds: 100));
@@ -200,4 +205,134 @@ void main() {
     await closeSheet(tester);
     expect(store.discovered, contains('dressUp'));
   });
+
+  Future<void> pet(WidgetTester tester, {int moves = 50}) async {
+    final sim = tester.state<HomeScreenState>(find.byType(HomeScreen)).sim;
+    final g = await tester.startGesture(sim.pos - const Offset(50, 30));
+    for (var i = 0; i < moves; i++) {
+      await g.moveBy(Offset(i.isEven ? 6 : -4, 0));
+      await tester.pump(const Duration(milliseconds: 20));
+    }
+    await g.up();
+  }
+
+  Future<Set<String>> toastsDuring(WidgetTester tester, int ms) async {
+    final seen = <String>{};
+    for (var i = 0; i < ms ~/ 100; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+      for (final t in tester.widgetList<Text>(find.descendant(of: find.byType(ToastView), matching: find.byType(Text)))) {
+        if (t.data != null) seen.add(t.data!);
+      }
+    }
+    return seen;
+  }
+
+  // F6-c1, F6-c2
+  testWidgets('journal: undiscovered = silhouette + hint; discovering toasts "New! …" and fills the entry', (tester) async {
+    final store = await pumpApp(tester, locale: const Locale('en'));
+    await tester.tap(find.text('Journal'));
+    await settle(tester);
+    expect(find.text('Stroke its fur'), findsOneWidget);
+    expect(find.text('Happy pets'), findsNothing);
+    expect(find.text('???'), findsNothing);
+    final silhouettes = tester.widgetList(find.byType(ColorFiltered)).length;
+    expect(silhouettes, greaterThan(6), reason: 'every visible entry is a silhouette');
+    await closeSheet(tester);
+    await pet(tester);
+    final toasts = await toastsDuring(tester, 1200);
+    expect(toasts, contains('New! Happy pets'));
+    expect(store.discovered, contains('pet'));
+    await settle(tester, 2600);
+    await tester.tap(find.text('Journal'));
+    await settle(tester);
+    expect(find.text('Happy pets'), findsOneWidget);
+    expect(find.byType(ColorFiltered), findsNWidgets(silhouettes - 1));
+    await closeSheet(tester);
+    await settle(tester, 800);
+  });
+
+  // F3-c2, F5-c3
+  testWidgets('crossing 25% fluff celebrates, unlocks Lavender, and the wardrobe shows "New!" once', (tester) async {
+    final store = await pumpApp(tester, locale: const Locale('en'), prepare: (s) => s.fluff = 24.9);
+    expect(store.unseenUnlocks, isEmpty);
+    await pet(tester);
+    final toasts = await toastsDuring(tester, 8000);
+    expect(toasts, containsAll(['Mofu mofu! 25% fluffy', 'Unlocked: Lavender']));
+    expect(store.colorUnlocked('lavender'), isTrue);
+    expect(store.unseenUnlocks, isNotEmpty);
+    await tester.tap(find.text('Wardrobe'));
+    await settle(tester);
+    expect(find.text('New!'), findsOneWidget);
+    await closeSheet(tester);
+    expect(store.unseenUnlocks, isEmpty);
+    await tester.tap(find.text('Wardrobe'));
+    await settle(tester);
+    expect(find.text('New!'), findsNothing);
+    await closeSheet(tester);
+    await settle(tester, 800);
+  });
+
+  // F5-c1, F5-c2
+  testWidgets('wardrobe: locked items say how to earn them; choosing a colour persists', (tester) async {
+    final store = await pumpApp(tester, locale: const Locale('en'));
+    await tester.tap(find.text('Wardrobe'));
+    await settle(tester);
+    expect(find.bySemanticsLabel('Lavender. Reach 25% fluff'), findsOneWidget);
+    expect(find.text('Reach 25% fluff'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Cream'));
+    await settle(tester, 300);
+    expect(store.colorId, 'cream');
+    await closeSheet(tester);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getString(PetStore.prefsKey), contains('"color":"cream"'));
+  });
+
+  // F8-c2
+  testWidgets('first run: skipping the name keeps "Mofu", shown in the header and Settings', (tester) async {
+    final store = await pumpApp(tester, locale: const Locale('en'), seeded: false);
+    await tester.tap(find.descendant(of: find.byType(FirstRunOverlay), matching: find.byType(GestureDetector)).first);
+    await settle(tester, 1800);
+    await tester.tap(find.text('Skip'));
+    await settle(tester);
+    expect(store.firstRunDone, isTrue);
+    expect(store.name, 'Mofu');
+    expect(find.text('Mofu'), findsWidgets);
+    await tester.tap(find.bySemanticsLabel('Settings'));
+    await settle(tester);
+    expect(find.descendant(of: find.byType(BottomSheet), matching: find.text('Mofu')), findsOneWidget);
+    await closeSheet(tester);
+  });
+
+  // F10-c1, F10-c2
+  testWidgets('settings: haptics toggle persists; rename, privacy, support and version are there', (tester) async {
+    final store = await pumpApp(tester, locale: const Locale('en'));
+    await tester.tap(find.bySemanticsLabel('Settings'));
+    await settle(tester);
+    for (final row in ['Rename', 'Privacy policy', 'Help & feedback']) {
+      expect(find.text(row), findsOneWidget, reason: row);
+    }
+    expect(find.textContaining('Version '), findsOneWidget);
+    await tester.tap(find.text('Haptics'));
+    await settle(tester, 300);
+    expect(store.hapticsOn, isFalse);
+    expect(Sfx.instance.hapticsOn, isFalse);
+    await tester.tap(find.text('Haptics'));
+    await settle(tester, 300);
+    expect(store.hapticsOn, isTrue);
+    await closeSheet(tester);
+  });
+
+  // F7-c1
+  for (final (hour, period) in [
+    (8, RoomPeriod.morning),
+    (14, RoomPeriod.day),
+    (19, RoomPeriod.evening),
+    (23, RoomPeriod.night),
+  ]) {
+    testWidgets('the room at $hour:00 is ${period.name}', (tester) async {
+      await pumpApp(tester, locale: const Locale('en'), at: DateTime(2026, 10, 7, hour));
+      final painters = tester.widgetList<CustomPaint>(find.byType(CustomPaint)).map((c) => c.painter).whereType<RoomPainter>();
+      expect(painters.single.period, period);
+    });
+  }
 }

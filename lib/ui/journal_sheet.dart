@@ -102,17 +102,23 @@ class _Entry extends StatelessWidget {
               alignment: Alignment.center,
               child: known
                   ? Text(emoji, style: const TextStyle(fontSize: 26))
-                  : Text('?', style: t.titleLarge?.copyWith(color: MofuColors.lock)),
+                  : ColorFiltered(
+                      colorFilter: const ColorFilter.mode(MofuColors.lock, BlendMode.srcIn),
+                      child: Text(emoji, style: const TextStyle(fontSize: 26)),
+                    ),
             ),
             const SizedBox(height: 6),
-            Text(
-              known ? name : unknown,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w800, color: known ? MofuColors.ink : MofuColors.lock),
-            ),
-            const SizedBox(height: 2),
+            // Undiscovered: a silhouette and the hint, nothing that gives the name away.
+            if (known) ...[
+              Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w800, color: MofuColors.ink),
+              ),
+              const SizedBox(height: 2),
+            ],
             Expanded(
               child: Text(
                 hint,

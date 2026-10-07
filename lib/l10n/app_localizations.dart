@@ -225,7 +225,7 @@ abstract class AppLocalizations {
   /// No description provided for @toastNewReaction.
   ///
   /// In en, this message translates to:
-  /// **'New in the journal: {name}'**
+  /// **'New! {name}'**
   String toastNewReaction(String name);
 
   /// No description provided for @toastUnlocked.
