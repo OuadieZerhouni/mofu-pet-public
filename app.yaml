@@ -35,3 +35,7 @@ ci:
   workflow_name: testFlight
   asc_integration: "OUADIE ZERHOUNI"
   notify_email: ""
+
+legal:
+  privacy_url: "https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md"
+  support_url: "https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md"
