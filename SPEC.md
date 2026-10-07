@@ -106,11 +106,11 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 ### F9 — Remote config (GitHub-hosted JSON, no Firebase)
 
 **Acceptance criteria**
-- [ ] Fetched from `raw.githubusercontent.com/OuadieZerhouni/app-configs/main/mofu-pet/config.json` in the background
+- [x] Fetched from `raw.githubusercontent.com/OuadieZerhouni/app-configs/main/mofu-pet/config.json` in the background
       (6 s timeout), cached, and never blocking launch.
-- [ ] Supports: min/latest version and update URL, a one-time announcement, feature kill-switches (shake, toss,
+- [x] Supports: min/latest version and update URL, a one-time announcement, feature kill-switches (shake, toss,
       sounds), a seasonal accessory window, links, and reserved `ads`/`iap` flags (read, never acted on in v1).
-- [ ] Malformed values fall back to code defaults; a test covers every section.
+- [x] Malformed values fall back to code defaults; a test covers every section.
 
 ### F10 — Settings
 

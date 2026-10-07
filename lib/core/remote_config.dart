@@ -151,7 +151,7 @@ class RemoteConfig {
     String url(Object? v, String fallback) {
       if (v is! String) return fallback;
       final s = v.trim();
-      if (s.isEmpty) return '';
+      if (s.isEmpty) return fallback;
       final u = Uri.tryParse(s);
       return (u != null && u.scheme == 'https') ? s : fallback;
     }

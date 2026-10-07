@@ -23,7 +23,12 @@ void main() {
   const large = Size(440, 956); // iPhone 16 Pro Max
 
   Future<PetStore> pumpApp(WidgetTester tester,
-      {required Locale locale, Size size = large, bool seeded = true, DateTime? at, void Function(PetStore)? prepare}) async {
+      {required Locale locale,
+      Size size = large,
+      bool seeded = true,
+      DateTime? at,
+      void Function(PetStore)? prepare,
+      Map<String, dynamic>? config}) async {
     final clock = at ?? DateTime(2026, 10, 7, 14);
     tester.view
       ..physicalSize = size * 3
@@ -40,7 +45,7 @@ void main() {
     prepare?.call(store);
     final services = AppServices(
       store: store,
-      config: RemoteConfigService(),
+      config: RemoteConfigService()..value = RemoteConfig.fromJson(config ?? const {}),
       sfx: Sfx.instance,
       clock: () => clock,
     );
@@ -335,4 +340,32 @@ void main() {
       expect(painters.single.period, period);
     });
   }
+
+  // F9-c2
+  testWidgets('remote kill-switches reach the creature and the sound engine', (tester) async {
+    await pumpApp(tester, locale: const Locale('en'), config: {
+      'features': {'toss': false, 'sounds': false},
+    });
+    final home = tester.state<HomeScreenState>(find.byType(HomeScreen));
+    expect(home.sim.tossEnabled, isFalse);
+    expect(Sfx.instance.remoteSoundsEnabled, isFalse);
+    Sfx.instance.remoteSoundsEnabled = true;
+  });
+
+  testWidgets('an announcement shows once per id', (tester) async {
+    const ann = {
+      'announcement': {'enabled': true, 'id': 'hello26', 'title': 'Hello!', 'body': 'Mofu says hi'},
+    };
+    final store = await pumpApp(tester, locale: const Locale('en'), config: ann);
+    await settle(tester);
+    expect(find.text('Mofu says hi'), findsOneWidget);
+    expect(store.lastAnnouncementId, 'hello26');
+    await tester.tap(find.text('OK'));
+    await settle(tester);
+    expect(find.text('Mofu says hi'), findsNothing);
+    await tester.pumpWidget(const SizedBox());
+    await pumpApp(tester, locale: const Locale('en'), config: ann, prepare: (s) => s.markAnnouncementSeen('hello26'));
+    await settle(tester);
+    expect(find.text('Mofu says hi'), findsNothing);
+  });
 }
