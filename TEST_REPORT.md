@@ -1,7 +1,7 @@
 # Test drive — Mofu 1.0.0+1 · 2026-10-07 15:44
 iPhone 17 Pro sim (iOS 26.5) · Xcode 27.0 · build 82s · commit 5105af9 · seams: DEBUG_SKIP_ADS (no trace seam exists, see Findings)
 
-PASS 30 · FAIL 0 · BLOCKED 5 · SKIP 3   (of 37 criteria + F0 + RTL)
+PASS 29 · FAIL 0 · BLOCKED 5 · SKIP 3   (of 37 criteria; F0 build and RTL also PASS)
 
 | Criterion | Verdict | Evidence | Note |
 | --- | --- | --- | --- |
