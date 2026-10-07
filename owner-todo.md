@@ -45,7 +45,7 @@ knows not to ask again.
 
 **Done when:** the app appears in App Store Connect and its Apple ID is in app.yaml
 
-- [ ] GATE-ASC-RECORD cleared
+- [x] GATE-ASC-RECORD cleared — 2026-10-07, "Mofu: Fluffy Pet" created (Apple ID 6820155832, SKU = bundle id), in app.yaml
 
 ## GATE-CODEMAGIC — connect the repo to Codemagic
 

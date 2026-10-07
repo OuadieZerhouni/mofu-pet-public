@@ -4,7 +4,7 @@ app:
   display_name: Mofu
   slug: mofu_pet
   bundle_id: com.ouadieZerhouni.mofuPet
-  app_store_id: ""
+  app_store_id: "6820155832"
 
 features:
   widget: false
