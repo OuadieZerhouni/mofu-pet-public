@@ -24,6 +24,11 @@ void main() {
     expect(yearRound.map((a) => a.id).toSet().length, 10);
   });
 
+  // F4-c1
+  test('the six snacks', () {
+    expect(Catalog.snacks.map((s) => s.id), ['strawberry', 'dango', 'cookie', 'onigiri', 'pudding', 'candy']);
+  });
+
   test('unlock rules are reachable', () {
     for (final r in [...Catalog.furColors.map((c) => c.rule), ...Catalog.accessories.map((a) => a.rule)]) {
       switch (r.kind) {

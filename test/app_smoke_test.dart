@@ -8,6 +8,7 @@ import 'package:mofu_pet/core/sfx.dart';
 import 'package:mofu_pet/l10n/app_localizations.dart';
 import 'package:mofu_pet/main.dart';
 import 'package:mofu_pet/model/pet_store.dart';
+import 'package:mofu_pet/sim/mofu_sim.dart';
 import 'package:mofu_pet/ui/first_run.dart';
 import 'package:mofu_pet/ui/home_screen.dart';
 import 'package:mofu_pet/ui/room.dart';
@@ -377,5 +378,33 @@ void main() {
     await pumpApp(tester, locale: const Locale('en'), config: ann, prepare: (s) => s.markAnnouncementSeen('hello26'));
     await settle(tester);
     expect(find.text('Mofu says hi'), findsNothing);
+  });
+
+  // F3-c4
+  testWidgets('the first brush of the day sparkles, toasts and adds fluff; the second one does not', (tester) async {
+    final store = await pumpApp(tester, locale: const Locale('en'));
+    final home = tester.state<HomeScreenState>(find.byType(HomeScreen));
+    await tester.tap(find.text('Brush'));
+    await settle(tester);
+    expect(home.sim.brushMode, isTrue);
+    final before = store.fluff;
+    await pet(tester, moves: 30);
+    final toasts = await toastsDuring(tester, 600);
+    expect(toasts, contains('First brush of the day ✨'));
+    expect(home.sim.particles.where((p) => p.kind == ParticleKind.sparkle).length, greaterThanOrEqualTo(10));
+    expect(store.fluff - before, greaterThan(3));
+    await settle(tester, 2600);
+    await pet(tester, moves: 30);
+    expect(await toastsDuring(tester, 600), isNot(contains('First brush of the day ✨')));
+    await settle(tester, 800);
+  });
+
+  // F5-c1: day-based unlocks count days visited.
+  testWidgets('a locked day colour says how many visits it needs', (tester) async {
+    await pumpApp(tester, locale: const Locale('en'));
+    await tester.tap(find.text('Wardrobe'));
+    await settle(tester);
+    expect(find.bySemanticsLabel('Mint. Visit on 2 days'), findsOneWidget);
+    await closeSheet(tester);
   });
 }

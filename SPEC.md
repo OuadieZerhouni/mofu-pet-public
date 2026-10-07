@@ -62,23 +62,24 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
       rises faster than petting. A soft brushing sound plays.
 - [x] Fluff level 0–100 is persisted. Milestones at 25/50/75/100 play a celebration and unlock an item (see F5).
 - [x] Fluff never decreases while the app is closed, so there is no punishment for absence.
-- [ ] Daily brush: the first brush of each local day gives a sparkle burst and counts a "fluffy day".
+- [x] Daily brush: the first brush of each local day gives a sparkle burst, a toast and a small fluff bonus. A
+      "fluffy day" is any local day the user opens the app (Q2).
 
 ### F4 — Snacks
 
 **Acceptance criteria**
-- [ ] Snack tray with 6 snacks (mochi, strawberry, dango, cookie, onigiri, star candy).
+- [x] Snack tray with 6 snacks (strawberry, dango, cookie, onigiri, pudding, candy) (Q1).
 - [x] Dragging a snack onto Mofu's mouth area feeds it: mouth opens, chews, cheeks puff, happy. Dropping it elsewhere
       returns it to the tray.
 - [x] Each Mofu has one favourite snack, derived deterministically from its name, which gets a special reaction.
-- [ ] After 6 snacks within a rolling hour Mofu is full: it pats its belly and declines politely. This is a
-      discoverable reaction, not a lock.
+- [x] After 6 snacks within a rolling hour Mofu is full: it shakes its head with a content face and declines
+      politely (Q3). This is a discoverable reaction, not a lock.
 
 ### F5 — Wardrobe (fur colours & accessories, all free)
 
 **Acceptance criteria**
-- [ ] 10 fur colours and 10 accessories. Locked items show the exact unlock condition (fluffy days, fluff milestone,
-      journal count).
+- [x] 10 fur colours and 10 accessories. Locked items show the exact unlock condition (days visited, fluff milestone,
+      journal count, snacks shared).
 - [x] Selecting a colour or accessory updates Mofu instantly and persists.
 - [x] A newly unlocked item shows a "New!" dot until viewed.
 
@@ -121,38 +122,16 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 
 All features work in every locale in `app.yaml` (en, ja, de, pt, es, fr, ar), with Arabic laid out right-to-left.
 
-## Open questions
+## Answered questions
 
-Raised by /build on 2026-10-07. The code and the SPEC disagree on these four
-criteria. Each one is a product call, so they stay unticked until the owner
-answers. Reply with a letter per question (or your own wording) and /build
-will do the rest.
+Raised by /build on 2026-10-07. The owner took the recommended option for all three the same day, and the SPEC
+was amended to match the shipped app.
 
-**Q1 — Snack line-up (F4-c1).** The SPEC lists *mochi, strawberry, dango, cookie, onigiri, star candy*.
-The app ships *strawberry, dango, cookie, onigiri, **pudding**, **candy*** (🍮 and 🍬, with hand-drawn icons).
-The same list appears in the ASO description in all 8 locales (`tools/aso/metadata.py`) and in the store
-screenshots. Mochi may have been dropped because "mochi squish" is already a reaction name.
-- (a) **Amend the SPEC to the shipped list.** No code, copy or screenshot changes. *Recommended: it is
-  already consistent everywhere, and "mochi" stays the squish.*
-- (b) Change the app to match the SPEC: mochi replaces pudding (new icon), "Candy" is renamed "Star candy".
-  Then re-translate 6 locales, rewrite the ASO copy in 8 locales, and redo the snack screenshot.
-
-**Q2 — What counts as a "fluffy day" (F3-c4, F5-c1).** The SPEC says the first brush of a day counts a
-"fluffy day", and colours and accessories unlock on fluffy days. The app has no fluffy-day counter.
-Day-based unlocks count *visit* days, which go up whenever the app is opened on a new day, and the
-locked tiles say "Visit on N days". The daily-brush sparkle burst and toast do exist.
-- (a) **Amend the SPEC: a fluffy day is a day you visit.** The brush only gives the sparkle bonus.
-  *Recommended: it is gentler ("no punishment for absence", no chore) and it is what the lock text
-  already says.*
-- (b) Build it as the SPEC says: add a `brushDays` counter, base day unlocks on it, and change the lock
-  text to "Brush on N days" in 7 locales. Unlocks then require brushing.
-
-**Q3 — "Pats its belly" (F4-c4).** When Mofu is full it currently shakes its head with a content face,
-plays "nope" and gives a light haptic. Nothing pats a belly, because Mofu is a round puffball with no limbs.
-- (a) **Amend the SPEC to "shakes its head with a content face and declines politely".**
-  *Recommended: it fits the limbless design.*
-- (b) Add a full-belly pose: the lower body bulges and wobbles twice while Mofu leans back.
-  This is a painter + sim change, checked by eye in /test-drive.
+- **Q1 Snacks:** keep the shipped list: strawberry, dango, cookie, onigiri, pudding, candy. "Mochi" stays the
+  squish reaction.
+- **Q2 Fluffy day:** any day the user opens the app. The lock text "Visit on N days" says exactly that. The
+  daily first brush gives a sparkle bonus only.
+- **Q3 Full:** Mofu is limbless, so it shakes its head with a content face instead of patting its belly.
 
 ## Non-goals (v1.0)
 

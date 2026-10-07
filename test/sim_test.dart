@@ -214,6 +214,16 @@ void main() {
     expect(r, contains('yum'));
     sim.refuseFull();
     expect(reactions(), contains('full'));
+    // F4-c4: a content face and a head shake, then back to normal.
+    expect(sim.expr, Expr.content);
+    var shook = 0.0;
+    for (var t = 0.0; t < 0.6; t += 1 / 60) {
+      sim.update(1 / 60);
+      shook = math.max(shook, sim.rot.abs());
+    }
+    expect(shook, greaterThan(0.02));
+    run(2);
+    expect(sim.expr, Expr.idle);
   });
 
   test('fluff makes Mofu bigger and its fur longer', () {

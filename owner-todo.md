@@ -17,7 +17,7 @@ knows not to ask again.
 
 **Done when:** each question has an answer and `/build` has ticked F3-c4, F4-c1, F4-c4 and F5-c1. That unblocks /test-drive.
 
-- [ ] GATE-SPEC-QUESTIONS cleared
+- [x] GATE-SPEC-QUESTIONS cleared — 2026-10-07, owner took (a) for Q1-Q3; SPEC amended to the shipped app
 ## GATE-BUNDLE-ID — register the bundle identifier com.ouadieZerhouni.mofuPet
 
 **Only you can decide:** Apple requires an account holder for identifier registration — this becomes automatic once the App Store Connect API key is in place (bundle ids can be registered over the API)
