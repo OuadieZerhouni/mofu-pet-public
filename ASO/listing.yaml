@@ -2,7 +2,7 @@
 # Push writes back only what differs from App Store Connect.
 app: 'Mofu: Fluffy Pet'
 bundle_id: com.ouadieZerhouni.mofuPet
-version: '1.0'
+version: 1.0.0
 version_state: PREPARE_FOR_SUBMISSION
 locales:
   en-US:
