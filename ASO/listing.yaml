@@ -1,0 +1,335 @@
+# Generated from ASO/metadata.json (tools/aso/metadata.py) by /aso on 2026-10-07.
+# Push writes back only what differs from App Store Connect.
+app: 'Mofu: Fluffy Pet'
+bundle_id: com.ouadieZerhouni.mofuPet
+version: '1.0'
+version_state: PREPARE_FOR_SUBMISSION
+locales:
+  en-US:
+    name: 'Mofu: Fluffy Pet'
+    subtitle: Cute Squishy Cozy Kawaii Pal
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Meet Mofu — a round, ultra-fluffy little creature that lives on your iPhone.
+
+
+      Tap it and it boings. Stroke its fur and it closes its eyes and purrs. Press and hold for a mochi squish, hold a little longer for a big hug. Pick it up, toss it, and watch it bounce. Shake your phone and its fur goes everywhere — then brush it smooth again.
+
+
+      MAKE IT FLUFFIER
+
+      Every pet and every brush makes Mofu fluffier. Watch its fur grow from a tiny puff into a magnificent cloud — and celebrate every milestone together. Fluff never goes down, so there is no pressure and nothing to lose.
+
+
+      SHARE A SNACK
+
+      Strawberries, dango, cookies, onigiri, pudding and candy. Every Mofu has a secret favorite — find out which one makes yours the happiest.
+
+
+      DRESS IT UP
+
+      Collect 10 fur colors and a wardrobe of tiny accessories: a bow, a sprout, a beanie, headphones, a crown and more. Everything is free to earn by playing.
+
+
+      FILL THE JOURNAL
+
+      Mofu hides 24 reactions — tickle fits, sleepy yawns, dizzy spins and more. Some you''ll find in seconds, others take curiosity.
+
+
+      DAY AND NIGHT
+
+      Mofu''s room follows your clock. At night it gets sleepy, dozes off and snores softly until you wake it with a gentle tap.
+
+
+      Cozy, soft and calm. No ads, no purchases, no account, and nothing collected. Just a fluffy friend that is happy to see you.'
+    keywords: virtual,game,relax,stress,relief,plush,fluff,blob,creature,pocket,comfort,mofumofu,boop,soft,toy
+    promotionalText: Meet Mofu, a pocket-sized cloud of fluff. Brush it, boop it, squish it and listen to it purr. Collect fur colors and tiny accessories. Free, no ads.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  en-GB:
+    name: 'Mofu: Fluffy Pet'
+    subtitle: Cute Cuddly Kawaii Soft Friend
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Meet Mofu — a round, ultra-fluffy little creature that lives on your iPhone.
+
+
+      Tap it and it boings. Stroke its fur and it closes its eyes and purrs. Press and hold for a mochi squish, hold a little longer for a big hug. Pick it up, toss it, and watch it bounce. Shake your phone and its fur goes everywhere — then brush it smooth again.
+
+
+      MAKE IT FLUFFIER
+
+      Every pet and every brush makes Mofu fluffier. Watch its fur grow from a tiny puff into a magnificent cloud — and celebrate every milestone together. Fluff never goes down, so there is no pressure and nothing to lose.
+
+
+      SHARE A SNACK
+
+      Strawberries, dango, cookies, onigiri, pudding and candy. Every Mofu has a secret favourite — find out which one makes yours the happiest.
+
+
+      DRESS IT UP
+
+      Collect 10 fur colours and a wardrobe of tiny accessories: a bow, a sprout, a beanie, headphones, a crown and more. Everything is free to earn by playing.
+
+
+      FILL THE JOURNAL
+
+      Mofu hides 24 reactions — tickle fits, sleepy yawns, dizzy spins and more. Some you''ll find in seconds, others take curiosity.
+
+
+      DAY AND NIGHT
+
+      Mofu''s room follows your clock. At night it gets sleepy, dozes off and snores softly until you wake it with a gentle tap.
+
+
+      Cosy, soft and calm. No ads, no purchases, no account, and nothing collected. Just a fluffy friend that is happy to see you.'
+    keywords: virtual,game,relax,stress,relief,toy,plush,fluff,blob,pocket,comfort,squishy,cosy,boop,creature
+    promotionalText: Meet Mofu, a pocket-sized cloud of fluff. Stroke it, boop it, squish it and hear it purr. Collect fur colours and tiny accessories. Free, no ads.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  ja:
+    name: Mofu：もふもふペット
+    subtitle: 癒しのかわいい育成ゲーム
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'まんまるで、もふもふの小さな生きもの「Mofu」が、あなたのiPhoneにすみつきました。
+
+
+      タップすると、ぽよん。毛並みをなでると、目を細めてごろごろ。長押しでもちもち、もう少し押すとぎゅー。つかんで投げれば、ぽよよんと跳ねます。スマホをふると毛がボサボサに — ブラシでさらさらに戻してあげてね。
+
+
+      もっと、もふもふに
+
+      なでるたび、ブラッシングするたびに、Mofuはどんどんもふもふに。小さな毛玉から、ふわふわの雲みたいに育っていきます。もふもふは減らないので、のんびり遊べます。
+
+
+      おやつをあげよう
+
+      いちご、だんご、クッキー、おにぎり、プリン、キャンディ。Mofuにはそれぞれ大好物があります。
+
+
+      きせかえ
+
+      10色の毛いろと、リボン・ふたば・ニット帽・ヘッドホン・王冠などのアクセサリー。すべて遊んで手に入ります。
+
+
+      ずかんをうめよう
+
+      くすぐったい、おねむ、くるくる…24このリアクションがかくれています。
+
+
+      昼と夜
+
+      お部屋は時計に合わせて変わります。夜になると、Mofuはうとうと眠りにつきます。
+
+
+      広告なし・課金なし・アカウント不要・データ収集なし。あなたに会えるのを楽しみにしている、もふもふの友だちです。'
+    keywords: ふわふわ,ふわもこ,ぬいぐるみ,スクイーズ,ストレス解消,ペットゲーム,マスコット,タップ,なでなで,ブラシ,着せ替え,ゆるい,おやつ,図鑑,暇つぶし,ほっこり,毛玉,ぷにぷに,もちもち,ほのぼの
+    promotionalText: ふわふわの丸い生きもの「Mofu」があなたの画面にやってきました。なでる、つつく、ぷにぷに、くすぐる。毛色やアクセサリーを集めて、ひみつのリアクションを見つけよう。広告なし。
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  de-DE:
+    name: 'Mofu: Flauschiges Haustier'
+    subtitle: Niedlicher Kawaii Begleiter
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Triff Mofu – ein rundes, superflauschiges kleines Wesen, das auf deinem iPhone wohnt.
+
+
+      Tippe es an und es macht boing. Streichle sein Fell und es schließt die Augen und schnurrt. Drücke und halte für einen Mochi-Knautsch, halte länger für eine große Umarmung. Heb es hoch, wirf es und sieh zu, wie es hüpft. Schüttle dein Handy – dann bürste das zerzauste Fell wieder glatt.
+
+
+      NOCH FLAUSCHIGER
+
+      Jedes Streicheln und Bürsten macht Mofu flauschiger – vom winzigen Puschel zur prächtigen Wolke. Der Flausch geht nie verloren, also kein Druck.
+
+
+      SNACKS TEILEN
+
+      Erdbeeren, Dango, Kekse, Onigiri, Pudding und Bonbons. Jedes Mofu hat einen geheimen Lieblingssnack.
+
+
+      OUTFITS
+
+      10 Fellfarben und winzige Accessoires: Schleife, Sprössling, Mütze, Kopfhörer, Krone und mehr. Alles kostenlos erspielbar.
+
+
+      DAS ALBUM FÜLLEN
+
+      24 versteckte Reaktionen warten: Kicheranfälle, Gähnen, Schwindel-Drehungen und mehr.
+
+
+      TAG UND NACHT
+
+      Mofus Zimmer folgt deiner Uhrzeit. Nachts wird es müde und schnarcht leise.
+
+
+      Ohne Werbung, ohne Käufe, ohne Konto, keine Daten. Nur ein flauschiger Freund, der sich freut, dich zu sehen.'
+    keywords: virtuelles,spiel,entspannen,stressabbau,plüsch,knuddeln,streicheln,kuschelig,flausch,bürsten,tier
+    promotionalText: Triff Mofu, eine kleine Wolke aus Fell. Streicheln, bürsten, drücken und dem Schnurren lauschen. Sammle Fellfarben und winzige Accessoires. Kostenlos, ohne Werbung.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  pt-BR:
+    name: 'Mofu: Bichinho Virtual Fofo'
+    subtitle: Pet kawaii peludo e macio
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Conheça o Mofu — uma criaturinha redonda e superfofinha que mora no seu iPhone.
+
+
+      Toque e ele faz boing. Acaricie o pelo e ele fecha os olhinhos e ronrona. Segure para um apertinho de mochi, segure mais um pouco para um abraço. Pegue, jogue e veja quicar. Sacuda o celular e o pelo fica todo bagunçado — depois é só escovar.
+
+
+      CADA VEZ MAIS FOFINHO
+
+      Cada carinho e cada escovada deixam o Mofu mais fofinho, de um pompom pequenininho até uma nuvem enorme. A fofura nunca diminui: sem pressão.
+
+
+      DIVIDA UM LANCHE
+
+      Morango, dango, biscoito, onigiri, pudim e bala. Todo Mofu tem um lanche favorito secreto.
+
+
+      VISUAL
+
+      10 cores de pelo e acessórios: laço, brotinho, gorro, fones, coroa e mais. Tudo grátis jogando.
+
+
+      COMPLETE O DIÁRIO
+
+      24 reações escondidas: crises de cócegas, bocejos, giros tontos e muito mais.
+
+
+      DIA E NOITE
+
+      O quarto do Mofu segue o seu relógio. À noite ele fica com sono e ronca baixinho.
+
+
+      Sem anúncios, sem compras, sem conta e sem coleta de dados. Só um amigo fofinho feliz em ver você.'
+    keywords: fofura,fofinho,pelúcia,relaxar,estresse,jogo,amigo,tela,cuidar,apertar,acariciar,escovar,mascote
+    promotionalText: Conheça o Mofu, uma nuvem de pelos do tamanho do bolso. Faça carinho, escove, aperte e ouça o ronronar. Colecione cores de pelo e acessórios. Grátis, sem anúncios.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  es-MX:
+    name: 'Mofu: Mascota Esponjosa'
+    subtitle: Tierna mascota virtual kawaii
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Conoce a Mofu: una criaturita redonda y súper esponjosa que vive en tu iPhone.
+
+
+      Tócalo y hace boing. Acaricia su pelo y cierra los ojos y ronronea. Mantén pulsado para un apretón de mochi, un poco más para un gran abrazo. Levántalo, lánzalo y mira cómo rebota. Agita el teléfono y se le alborota el pelo; luego cepíllalo.
+
+
+      MÁS Y MÁS ESPONJOSO
+
+      Cada caricia y cada cepillado lo hacen más esponjoso, de una pequeña pelusa a una nube enorme. La esponjosidad nunca baja: sin presión.
+
+
+      COMPARTE UN SNACK
+
+      Fresas, dango, galletas, onigiri, flan y caramelos. Cada Mofu tiene un snack favorito secreto.
+
+
+      ESTILO
+
+      10 colores de pelo y accesorios: lazo, brote, gorro, audífonos, corona y más. Todo gratis jugando.
+
+
+      LLENA EL DIARIO
+
+      24 reacciones escondidas: ataques de risa, bostezos, vueltas mareadas y más.
+
+
+      DÍA Y NOCHE
+
+      El cuarto de Mofu sigue tu reloj. De noche le da sueño y ronca bajito.
+
+
+      Sin anuncios, sin compras, sin cuenta y sin recopilar datos. Solo un amigo esponjoso feliz de verte.'
+    keywords: peluche,suave,relajante,antiestrés,juego,pantalla,acariciar,cepillar,fluffy,cute,pet,plush,amigo
+    promotionalText: Conoce a Mofu, una nube de pelo para tu bolsillo. Acarícialo, cepíllalo, apriétalo y escucha su ronroneo. Colecciona colores de pelo y accesorios. Gratis, sin anuncios.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  fr-FR:
+    name: 'Mofu : Animal Tout Doux'
+    subtitle: Compagnon kawaii et câlin
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Voici Mofu, une petite créature toute ronde et ultra moelleuse qui vit dans ton iPhone.
+
+
+      Touche-le et il fait boing. Caresse son pelage : il ferme les yeux et ronronne. Appuie longuement pour un écrasé de mochi, encore un peu pour un gros câlin. Attrape-le, lance-le et regarde-le rebondir. Secoue ton téléphone et ses poils s''ébouriffent — brosse-le pour les lisser.
+
+
+      TOUJOURS PLUS MOELLEUX
+
+      Chaque caresse et chaque coup de brosse le rendent plus moelleux, du petit pompon au nuage géant. Le moelleux ne baisse jamais : aucune pression.
+
+
+      PARTAGE UN GOÛTER
+
+      Fraise, dango, cookie, onigiri, flan et bonbon. Chaque Mofu a son goûter préféré secret.
+
+
+      LOOKS
+
+      10 pelages et des accessoires : nœud, pousse, bonnet, casque, couronne et plus. Tout se gagne gratuitement.
+
+
+      REMPLIS LE JOURNAL
+
+      24 réactions cachées : fous rires, bâillements, tourbillons étourdis et plus encore.
+
+
+      JOUR ET NUIT
+
+      La chambre de Mofu suit ton horloge. La nuit, il s''endort et ronfle doucement.
+
+
+      Sans pub, sans achat, sans compte, aucune donnée collectée. Juste un ami tout doux, heureux de te voir.'
+    keywords: virtuel,jeu,relaxant,anti-stress,peluche,moelleux,mignon,caresser,brosser,boule,poils,douceur
+    promotionalText: Voici Mofu, un petit nuage de poils à emporter partout. Caresse-le, brosse-le, écrase-le et écoute-le ronronner. Collectionne pelages et accessoires. Gratuit, sans pub.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  ar-SA:
+    name: 'Mofu: Fluffy Cute Pet'
+    subtitle: حيوان أليف فروي ولطيف لشاشتك
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'تعرّف على موفو — مخلوق صغير مستدير ومنفوش جدًا يعيش في جوالك.
+
+
+      انقره فيقفز "بوينغ". مرّر يدك على فروه فيغمض عينيه ويخرخر. اضغط مطوّلًا لعصرة موتشي، وأطِل قليلًا لحضن كبير. امسكه وارمه وشاهده يرتد. هزّ جوالك فينكش فروه — ثم مشّطه ليعود ناعمًا.
+
+
+      أكثر نفشًا
+
+      كل تدليل وكل تمشيط يجعل موفو أكثر نفشًا، من كرة صغيرة إلى غيمة كبيرة. النفش لا ينقص أبدًا، فلا ضغط ولا خسارة.
+
+
+      شاركه وجبة
+
+      فراولة ودانغو وكوكيز وأونيغيري وبودينغ وحلوى. لكل موفو وجبة مفضّلة سرية.
+
+
+      ملابس وإكسسوارات
+
+      10 ألوان فرو وإكسسوارات صغيرة: فيونكة ونبتة وطاقية وسماعات وتاج وغيرها. كلها مجانية باللعب.
+
+
+      املأ الدفتر
+
+      24 ردة فعل مخفية: نوبات ضحك وتثاؤب ودوخة وأكثر.
+
+
+      ليل ونهار
+
+      غرفة موفو تتبع ساعتك. في الليل ينعس وينام ويشخر بهدوء.
+
+
+      بدون إعلانات، بدون مشتريات، بدون حساب، ولا نجمع أي بيانات. فقط صديق منفوش سعيد برؤيتك.'
+    keywords: kawaii,virtual,game,squishy,plush,relax,screen,تسلية,ألعاب,استرخاء,ناعم,كائن,رقيق,حيوانات,موفو
+    promotionalText: تعرّف على موفو، كتلة صغيرة من الفرو تعيش على شاشتك. دلّعه ومشّطه واضغطه واستمع لخرخرته. اجمع ألوان الفرو والإكسسوارات. مجاني وبدون إعلانات.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
