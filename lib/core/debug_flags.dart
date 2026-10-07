@@ -18,6 +18,10 @@
 /// tree-shaken out of release builds. That is why they are safe to leave in.
 library;
 
+import 'dart:ui' show Locale;
+
+import '../ui/room.dart' show RoomPeriod;
+
 class DebugFlags {
   const DebugFlags._();
 
@@ -59,6 +63,28 @@ class DebugFlags {
 
   static bool get hasFakeInput => fakeInput.isNotEmpty;
 
+  /// Screenshot seam: pose Mofu (`love`, `giggle`, `happy`, `sleep`, `dizzy`, `brush`).
+  static const String pose = String.fromEnvironment('DEBUG_POSE');
+
+  /// Screenshot seam: force the room's time of day (`morning|day|evening|night`).
+  static const String _period = String.fromEnvironment('DEBUG_PERIOD');
+
+  static RoomPeriod? get forcedPeriod => switch (_period) {
+        'morning' => RoomPeriod.morning,
+        'day' => RoomPeriod.day,
+        'evening' => RoomPeriod.evening,
+        'night' => RoomPeriod.night,
+        _ => null,
+      };
+
+  /// Screenshot seam: force the UI language (`ja`, `ar`, …). Empty = device.
+  static const String _locale = String.fromEnvironment('DEBUG_LOCALE');
+
+  static Locale? get forcedLocale => _locale.isEmpty ? null : Locale(_locale);
+
+  /// Screenshot seam: start with this fluff level (0–100), wardrobe fully open.
+  static const int seedFluff = int.fromEnvironment('DEBUG_SEED_FLUFF', defaultValue: -1);
+
   /// One line for the inspector overlay and for bug reports.
   static String get summary {
     final on = <String>[
@@ -67,6 +93,9 @@ class DebugFlags {
       if (resetFirstRun) 'resetFirstRun',
       if (showInspector) 'inspector',
       if (hasFakeInput) 'fakeInput="$fakeInput"',
+      if (pose.isNotEmpty) 'pose=$pose',
+      if (_period.isNotEmpty) 'period=$_period',
+      if (seedFluff >= 0) 'seedFluff=$seedFluff',
     ];
     return on.isEmpty ? 'no debug flags' : on.join(' · ');
   }

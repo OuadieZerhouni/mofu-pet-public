@@ -25,7 +25,7 @@ knows not to ask again.
 **Do:**
 1. Open https://appstoreconnect.apple.com/apps
 2. + → New App
-3. Platform: iOS · Name: `Mofu` · Primary language: English
+3. Platform: iOS · Name: `Mofu: Fluffy Pet` (plain `Mofu` is already taken on the store) · Primary language: English (U.S.)
 4. Bundle ID: pick `com.ouadieZerhouni.mofuPet` from the dropdown (it appears only after GATE-BUNDLE-ID)
 5. SKU: anything unique, e.g. the bundle id
 6. Create — then copy the numeric **Apple ID** from App Information
@@ -35,4 +35,89 @@ knows not to ask again.
 
 - [ ] GATE-ASC-RECORD cleared
 
-<!-- last updated 2026-10-06 21:53 -->
+## GATE-CODEMAGIC — connect the repo to Codemagic
+
+**Only you can decide:** Codemagic app creation needs your login; the App Store Connect key stays in Codemagic's own settings, never in the repo
+
+**Do:**
+1. https://codemagic.io/apps → Add application → GitHub → `OuadieZerhouni/mofu-pet`
+2. Configuration: `codemagic.yaml` (already in the repo), workflow **testFlight**
+3. Confirm the shared App Store Connect integration `OUADIE ZERHOUNI` is enabled for this app
+4. Start a build on `main` (needs GATE-BUNDLE-ID and GATE-ASC-RECORD first)
+
+**Done when:** a build lands in TestFlight
+
+- [ ] GATE-CODEMAGIC cleared
+## GATE-DEVICE-QA — 15 minutes on a real iPhone (TestFlight build)
+
+**Only you can decide:** sound, haptics, shake and feel do not exist on web or in tests — perception is yours
+
+**Do (tick mentally, note anything off):**
+1. First run: seed wobbles → tap → hatch sound → name dialog → "Pet me!" bubble
+2. Sounds: squeaks, giggle, purr loop while stroking, brush loop, chew/yum, snore at night — cute, not shrill? Volume balanced?
+3. Start Spotify/Music first, then open Mofu: **your music must keep playing** (ambient session)
+4. Silent switch on → Mofu is silent; haptics still tick on taps
+5. Shake the phone → dizzy; hold → squish → hug; drag up and flick → toss and bounce
+6. Brush until fluff passes 25% → lavender unlock toast + wardrobe "New!" dot
+7. Drag 7 snacks within an hour → 7th is refused ("full")
+8. Night: after 22:00 the room is dark, labels readable, Mofu sleeps after ~12 s idle
+9. Settings → Sound off persists after force-quit; Start over returns to the seed
+10. Smooth on the oldest iPhone you can borrow (fur is ~800 strands)
+
+**Done when:** nothing above sounds or feels wrong (if a sound is off, say which — `tools/audio/synth_sfx.py` regenerates any one)
+
+- [ ] GATE-DEVICE-QA cleared
+## GATE-ASA — check real search volume in Apple Search Ads
+
+**Only you can decide:** ASA is behind your login; every applyra number is an estimate
+
+**Do:** Apple Search Ads → Keyword planner / popularity for:
+- `mofu` in US, GB, DE, MX, BR, SA, JP
+- `fluffy pet` (US), `もふもふ` (JP), `flauschig` (DE), `bichinho virtual` (BR), `kawaii` (SA)
+
+**Done when:** `mofu` shows non-minimal popularity in at least US + one other market (otherwise tell Claude: the subtitle/keywords get rebalanced toward the category words)
+
+- [ ] GATE-ASA cleared
+## GATE-NAME — trademark and name census
+
+**Only you can decide:** legal risk call
+
+**Do:**
+1. Search "MOFU" in USPTO (classes 9, 28, 41), EUIPO, J-PlatPat (JP). Note: **Mofusand** (Japanese cat character brand) is a different mark — never use its name or art; Mofu is a round blob, not a cat
+2. Re-run the App Store name census on submission day: `python tools/aso/names.py` — new Mofu-named apps keep appearing
+3. If "Mofu: Fluffy Pet" is rejected as taken at ASC record creation, fallback: `Mofu: Fluffy Cute Pet`
+
+**Done when:** no live conflicting mark in your markets, and the ASC record accepted the name
+
+- [ ] GATE-NAME cleared
+## GATE-L10N-REVIEW — native read of ja / ar store copy and app strings
+
+**Only you can decide:** machine-quality copy in a storefront reads as spam
+
+**Do:** have a native speaker read `ASO/metadata.json` (ja, ar-SA, then de-DE, pt-BR) and skim the app in that language (Settings → the phone's language). Fix strings in `tools/l10n/translations.py` / `tools/aso/metadata.py` and regenerate.
+
+- [ ] GATE-L10N-REVIEW cleared
+## GATE-LISTING — fill the App Store Connect listing
+
+**Do:**
+1. Per locale (en-US, en-GB, ja, de-DE, pt-BR, es-MX, fr-FR, ar-SA): name, subtitle, keywords, promotional text, description from `ASO/metadata.json`
+2. Screenshots: drag `ASO/screenshots/<locale>/01…06*.png` into the **6.9" iPhone** slot (1320×2868). No other sizes needed
+3. Category: **Entertainment**, secondary **Lifestyle**. Age rating questionnaire: all "None" → 4+. Do **not** opt into the Kids category
+4. App Privacy → **Data Not Collected**
+5. Privacy Policy URL: `https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md` · Support URL: `…/mofu-pet/SUPPORT.md`
+6. Price: Free. No in-app purchases
+7. Review notes (4.3 sibling risk — same account as OuO/Neko): "Mofu is a standalone toy about grooming a fluffy creature: brushing grows its fur (fluff meter), 24 hidden reactions to discover in a journal, snacks, 10 fur colours and 13 accessories. No account, no ads, no purchases, no data collected."
+
+**Done when:** the version is "Ready for Review" and you press Submit
+
+- [ ] GATE-LISTING cleared
+## GATE-POST-RELEASE — after approval
+
+**Do:**
+1. Put the numeric Apple ID in `app.yaml` → `app.app_store_id`, re-run `scaffold.py --regen`
+2. In `app-configs/mofu-pet/config.json` set `updateUrlIos` and `links.appStore` to `https://apps.apple.com/app/id<APPLE_ID>` (see `docs/REMOTE_CONFIG.md`) — this also turns on the "Rate Mofu" row
+3. Add the app + the keyword list (ASO report §7) to applyra tracking
+
+- [ ] GATE-POST-RELEASE cleared
+
+<!-- last updated 2026-10-07 -->

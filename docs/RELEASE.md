@@ -26,3 +26,16 @@ processing instead of stopping at "Missing Compliance".
 Gates appear in `owner-todo.md` when they are genuinely unavoidable — the first
 build of a new app needs an identifier, an App Store Connect record, and a
 Codemagic app.
+
+## Mofu: first release checklist
+
+1. Owner gates in `owner-todo.md` (bundle id, App Store Connect record, Codemagic app).
+2. Codemagic workflow `testFlight` builds the IPA on a Mac and uploads to
+   TestFlight. There is no Mac here: Codemagic is the only iOS build path.
+3. Install from TestFlight on a real iPhone and run the device checklist in
+   `owner-todo.md` (sound, haptics, shake — none of these exist on web or in tests).
+4. App Store Connect listing: paste per-locale fields from `ASO/metadata.json`;
+   upload `ASO/screenshots/<locale>/*.png` (6.9" only — Apple scales it down).
+5. App Privacy: **Data Not Collected**. Age rating: 4+, no objectionable content.
+6. After approval: set `app_store_id` in `app.yaml`, and the store URL in remote
+   config (`docs/REMOTE_CONFIG.md` → "After the first release").

@@ -30,7 +30,8 @@ flutter pub get
 flutter gen-l10n                      # after editing any .arb
 flutter analyze
 flutter test
-flutter test test/preview_dump_test.dart --run-skipped   # render visuals to look at
+flutter test test/render_dump_test.dart --run-skipped     # Mofu poses/colours/hats -> build/render/
+flutter test test/store_screenshots_test.dart --run-skipped && python tools/screenshots/compose.py
 ```
 
 If `flutter test` produces **no output at all**, stale testers are holding
@@ -44,7 +45,12 @@ locks: `pkill -f flutter_tester`, then re-run. That is not a hang in your code.
 | `lib/core/debug_flags.dart` | Every `--dart-define` seam, in one place. Each feature ships an inspector and an injector. |
 | `lib/core/feature_gates.dart` | The single answer to "what is unlocked". Ads/IAP are interfaces, no-op unless the feature is on. |
 | `lib/l10n/` | `.arb` per locale, generated from `app.yaml`. Edit the base locale only; translation is a batched pass. |
-| `lib/ui/seed_sprout.dart` | The custom-painted element the pixel test measures. Replace with your app's real one. |
+| `lib/sim/mofu_sim.dart` | The creature. Pure Dart: physics, gestures, moods, particles. Emits `SimEvent`s; never touches Flutter, sound or storage. |
+| `lib/ui/mofu_painter.dart` | Draws the sim: fur strands, face, accessories, particles. |
+| `lib/ui/home_screen.dart` | Owns the ticker; turns sim events into sound, haptics, store updates and toasts. |
+| `lib/model/catalog.dart` / `pet_store.dart` | What exists and what the user has. Unlock rules live in the catalogue. |
+| `lib/core/remote_config.dart` | Public GitHub JSON; schema in `docs/REMOTE_CONFIG.md`. |
+| `lib/ui/icons.dart` | Hand-drawn dock and snack icons (not emoji: they must render in tests for screenshots). |
 
 ## The six exemplar tests
 
@@ -53,11 +59,10 @@ Each documents a trap in its header — read the header before changing the test
 1. `no_wrong_test_guard_test.dart` — greps `lib/` for the always-false
    `bool.fromEnvironment('FLUTTER_TEST')`. Source-grep guards are the answer
    whenever the failure mode is *silence*.
-2. `pixel_visibility_test.dart` — asserts a visual change is visibly different,
-   in pixels, at the size it actually renders. State reaching a painter is not
-   the same as a user seeing anything.
-3. `preview_dump_test.dart` — dev tool, skipped by default. Documents the
-   fake-async `Picture.toImage` hang and the `tester.runAsync` way out.
+2. `sim_test.dart` / `store_test.dart` — every gesture, unlock and persistence
+   rule (SPEC F1–F10).
+3. `render_dump_test.dart` / `store_screenshots_test.dart` — dev tools, skipped
+   by default. Use `tester.runAsync` for `Picture.toImage` (it hangs in fake-async).
 4. `rtl_layout_test.dart` — Arabic renders RTL and its plural categories
    resolve. RTL is tested from the first commit or discovered late.
 5. `manifest_sync_test.dart` — generated files still agree with `app.yaml`.
@@ -80,3 +85,20 @@ Anything the pipeline cannot decide — perception, legal declarations, account
 actions — is appended to `owner-todo.md` with exact steps and a checkbox. Tick
 the box and re-run the skill that raised it; tools read that file to know what
 has been cleared.
+
+## Mofu specifics (learned building it)
+
+- **The home screen never settles** (Mofu breathes): widget tests pump fixed
+  durations, never `pumpAndSettle`. Debounced saves need ~800 ms of pumping
+  before a test ends, or a pending timer fails it.
+- **Every child of the room `Stack` must be `Positioned`.** A bare
+  `SizedBox.shrink()` (e.g. the brush cursor with no finger down) sizes the
+  whole Stack to 0×0 and the dock jumps off-screen.
+- **No emoji in painted or tested UI.** Test fonts have no emoji glyphs, so
+  screenshots would show boxes. Emoji remain only in the journal and toasts.
+- **Night room is dark**: anything drawn over it (dock labels, sleep "z") needs
+  a light variant — check `RoomPeriod.night` renders after any UI change.
+- **Sounds are synthesized** by `tools/audio/synth_sfx.py` (seeded, reproducible).
+  Loops are WAV, not MP3: MP3 encoder padding makes an audible gap at the seam.
+- **Arabic captions** for screenshots are rendered by Flutter (HarfBuzz), not
+  Pillow, which cannot join Arabic letters without libraqm.
