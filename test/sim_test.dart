@@ -255,5 +255,292 @@ void main() {
     expect(sim.squash.isFinite, isTrue);
     expect(sim.pos.dy.isFinite, isTrue);
   });
-}
 
+  // F1-c2: idle life, observed without touching. Reduce Motion off so hops run.
+  test('idle life: breathing, blinks every 2.5–6 s, glances and hops every 6–14 s', () {
+    sim = MofuSim(seed: 3)..fluff = 0.3;
+    sim.layout(room, top: 140, floor: 620);
+    const dt = 1 / 60;
+    final blinks = <double>[], hops = <double>[], glances = <double>[];
+    final breaths = <double>{};
+    var lastBlink = 0.0, lastLook = (sim.lookX, sim.lookY);
+    var looking = false;
+    var wasAir = false;
+    for (var t = 0.0; t < 40; t += dt) {
+      sim.update(dt);
+      if (sim.blink > 0 && lastBlink == 0) blinks.add(sim.time);
+      lastBlink = sim.blink;
+      final moving = (sim.lookX - lastLook.$1).abs() + (sim.lookY - lastLook.$2).abs() > 1e-4;
+      if (moving && !looking) glances.add(sim.time);
+      looking = moving;
+      lastLook = (sim.lookX, sim.lookY);
+      final air = sim.mode == MofuMode.air;
+      if (air && !wasAir) hops.add(sim.time);
+      wasAir = air;
+      breaths.add((sim.breath * 1000).roundToDouble());
+    }
+    expect(sim.asleep, isFalse);
+    expect(breaths.length, greaterThan(10), reason: 'body scale breathes');
+    List<double> gaps(List<double> xs) => [for (var i = 1; i < xs.length; i++) xs[i] - xs[i - 1]];
+    expect(blinks.first, greaterThanOrEqualTo(2.5));
+    expect(blinks.length, greaterThanOrEqualTo(6));
+    for (final g in gaps(blinks)) {
+      expect(g, inInclusiveRange(2.5, 6.1));
+    }
+    expect(hops.length, greaterThanOrEqualTo(2));
+    for (final g in gaps(hops)) {
+      expect(g, inInclusiveRange(6, 14.1));
+    }
+    expect(glances, isNotEmpty);
+    for (final g in gaps(glances)) {
+      expect(g, greaterThanOrEqualTo(6), reason: 'a glance comes no sooner than 6 s after the last');
+    }
+  });
+
+  // F1-c3
+  test('pupils follow a finger that is down', () {
+    final right = sim.pos + Offset(sim.radius * 2.5, 0);
+    sim.pointerDown(1, right);
+    run(0.5);
+    expect(sim.lookX, greaterThan(0.6));
+    final left = sim.pos - Offset(sim.radius * 2.5, sim.radius);
+    sim.pointerMove(1, left);
+    run(0.5);
+    expect(sim.lookX, lessThan(-0.6));
+    expect(sim.lookY, lessThan(0));
+  });
+
+  // F1-c5
+  test('Reduce Motion: no idle hops and no celebration jump; breathing and blinking stay', () {
+    var blinked = false;
+    final breaths = <int>{};
+    for (var t = 0.0; t < 40; t += 1 / 60) {
+      sim.update(1 / 60);
+      expect(sim.mode, MofuMode.rest);
+      if (sim.blink > 0) blinked = true;
+      breaths.add((sim.breath * 1000).round());
+    }
+    expect(blinked, isTrue);
+    expect(breaths.length, greaterThan(10));
+    sim.celebrate();
+    run(0.3);
+    expect(sim.mode, MofuMode.rest);
+    final moving = MofuSim(seed: 1)..layout(room, top: 140, floor: 620);
+    moving.update(1 / 60);
+    moving.celebrate();
+    moving.update(1 / 60);
+    expect(moving.mode, MofuMode.air);
+  });
+
+  // F2-c5
+  test('a fast throw makes Mofu dizzy and it lands squished', () {
+    final start = sim.pos;
+    sim.pointerDown(1, start);
+    run(0.5);
+    for (var i = 1; i <= 6; i++) {
+      sim.pointerMove(1, start + Offset(i * 15.0, -i * 60.0));
+      run(1 / 60);
+    }
+    sim.pointerUp(1, start + const Offset(90, -360));
+    var squished = false;
+    final seen = <String>{};
+    for (var t = 0.0; t < 6; t += 1 / 60) {
+      sim.update(1 / 60);
+      if (sim.squash > 0.05) squished = true;
+      seen.addAll(reactions());
+    }
+    expect(seen, containsAll(['toss', 'dizzyToss']));
+    expect(squished, isTrue);
+    expect(sim.mode, MofuMode.rest);
+  });
+
+  // F2-c3 (the parts the first stroke test does not assert)
+  test('petting closes the eyes happily and floats hearts', () {
+    final p = sim.pos;
+    sim.pointerDown(1, p - const Offset(40, 20));
+    for (var i = 0; i < 90; i++) {
+      sim.pointerMove(1, p + Offset(-40 + (i % 20) * 4.0, -20));
+      run(1 / 60);
+    }
+    expect(sim.expr, Expr.bliss);
+    expect(sim.particles.where((x) => x.kind == ParticleKind.heart), isNotEmpty);
+    sim.pointerUp(1, p);
+  });
+
+  // F2-c8
+  test('every interaction gives a haptic', () {
+    bool haptic(void Function() act) {
+      sim.drainEvents();
+      act();
+      return sim.drainEvents().any((e) => e.type == SimEventType.haptic);
+    }
+
+    void tap() {
+      sim.pointerDown(1, sim.pos);
+      run(0.05);
+      sim.pointerUp(1, sim.pos);
+    }
+
+    void stroke() {
+      final p = sim.pos;
+      sim.pointerDown(1, p);
+      for (var i = 0; i < 20; i++) {
+        sim.pointerMove(1, p + Offset((i % 10) * 6.0 - 30, 0));
+        run(1 / 60);
+      }
+    }
+
+    expect(haptic(tap), isTrue, reason: 'tap');
+    run(2);
+    expect(
+      haptic(() {
+        for (var i = 0; i < 5; i++) {
+          tap();
+          run(0.1);
+        }
+      }),
+      isTrue,
+      reason: 'tickle',
+    );
+    run(2);
+    expect(haptic(stroke), isTrue, reason: 'stroke');
+    sim.pointerUp(1, sim.pos);
+    run(2);
+    sim = fresh();
+    expect(
+      haptic(() {
+        sim.pointerDown(1, sim.pos);
+        run(0.5);
+      }),
+      isTrue,
+      reason: 'squish',
+    );
+    expect(haptic(() => run(1.2)), isTrue, reason: 'hug');
+    expect(haptic(() => sim.pointerUp(1, sim.pos)), isTrue, reason: 'release');
+    run(2);
+    final start = sim.pos;
+    sim.pointerDown(1, start);
+    run(0.5);
+    expect(haptic(() => sim.pointerMove(1, start + const Offset(30, -40))), isTrue, reason: 'pick up');
+    sim.pointerMove(1, start + const Offset(60, -80));
+    run(1 / 60);
+    expect(haptic(() => sim.pointerUp(1, start + const Offset(60, -80))), isTrue, reason: 'throw');
+    run(6);
+    expect(
+      haptic(() {
+        final eye = sim.eyePos(1);
+        for (var i = 0; i < 2; i++) {
+          sim.pointerDown(1, eye);
+          run(0.05);
+          sim.pointerUp(1, eye);
+          run(0.1);
+        }
+      }),
+      isTrue,
+      reason: 'eye poke',
+    );
+    expect(haptic(sim.shake), isTrue, reason: 'shake');
+    expect(haptic(() => sim.eat(favorite: false)), isTrue, reason: 'eat');
+    run(3);
+    expect(haptic(sim.refuseFull), isTrue, reason: 'full');
+    run(3);
+    final c = sim.pos;
+    sim.pointerDown(1, c + const Offset(50, 0));
+    var spun = false;
+    for (var i = 0; i <= 80 && !spun; i++) {
+      final a = i / 80 * 2 * math.pi * 1.3;
+      sim.pointerMove(1, c + Offset(50 * math.cos(a), 50 * math.sin(a)));
+      run(1 / 60);
+      final ev = sim.drainEvents();
+      if (ev.any((e) => e.id == 'spin')) {
+        spun = true;
+        expect(ev.any((e) => e.type == SimEventType.haptic), isTrue, reason: 'spin');
+      }
+    }
+    expect(spun, isTrue);
+    sim.pointerUp(1, c);
+  });
+
+  // F3-c1
+  test('brushing: brush loop, sparkles, and more fluff than petting', () {
+    double strokeFluff({required bool brush}) {
+      final s = fresh()..brushMode = brush;
+      sim = s;
+      final p = s.pos;
+      var fluff = 0.0;
+      var loop = '';
+      s.pointerDown(1, p - const Offset(60, 20));
+      for (var i = 0; i < 60; i++) {
+        s.pointerMove(1, p + Offset(-60 + (i % 30) * 4.0, -20));
+        s.update(1 / 60);
+        for (final e in s.drainEvents()) {
+          if (e.type == SimEventType.fluff) fluff += e.value;
+          if (e.type == SimEventType.loopStart) loop = e.id;
+        }
+      }
+      if (brush) expect(s.particles.where((x) => x.kind == ParticleKind.sparkle), isNotEmpty);
+      s.pointerUp(1, p);
+      for (final e in s.drainEvents()) {
+        if (e.type == SimEventType.fluff) fluff += e.value;
+      }
+      expect(loop, brush ? 'brush' : 'purr');
+      return fluff;
+    }
+
+    final pet = strokeFluff(brush: false);
+    final brush = strokeFluff(brush: true);
+    expect(brush, greaterThan(pet * 2));
+  });
+
+  // F4-c2
+  test('eating opens and closes the mouth and puffs the cheeks', () {
+    sim.eat(favorite: false);
+    var maxMouth = 0.0, maxCheek = 0.0;
+    for (var t = 0.0; t < 1.2; t += 1 / 60) {
+      sim.update(1 / 60);
+      maxMouth = math.max(maxMouth, sim.mouthOpen);
+      maxCheek = math.max(maxCheek, sim.cheekPuff);
+    }
+    expect(maxMouth, greaterThan(0.4));
+    expect(maxCheek, greaterThan(0.8));
+    expect(sim.expr, Expr.eating);
+    run(2);
+    expect(sim.expr, isNot(Expr.eating));
+  });
+
+  // F7-c2
+  test('dozing: awake at 44 s, asleep with snore, zzz and slow breathing; a tap wakes it with a sleepy blink', () {
+    run(44);
+    expect(sim.asleep, isFalse);
+    sim.drainEvents();
+    run(2);
+    expect(sim.asleep, isTrue);
+    expect(sim.drainEvents().any((e) => e.type == SimEventType.loopStart && e.id == 'snore'), isTrue);
+    expect(sim.blink, 1);
+    var hi = 0.0;
+    for (var t = 0.0; t < 5; t += 1 / 60) {
+      sim.update(1 / 60);
+      hi = math.max(hi, sim.breath);
+    }
+    expect(hi, greaterThan(1.02), reason: 'asleep the breath is deeper (0.03) than awake (0.018)');
+    expect(sim.particles.where((x) => x.kind == ParticleKind.zzz), isNotEmpty);
+    sim.pointerDown(1, sim.pos);
+    run(0.05);
+    sim.pointerUp(1, sim.pos);
+    final ev = sim.drainEvents();
+    expect(ev.any((e) => e.type == SimEventType.loopStop && e.id == 'snore'), isTrue);
+    expect(ev.any((e) => e.id == 'boing'), isFalse, reason: 'the waking tap only wakes');
+    expect(sim.expr, Expr.sleepy);
+    final lids = <double>[];
+    for (var t = 0.0; t < MofuSim.sleepyDuration - 0.1; t += 1 / 60) {
+      sim.update(1 / 60);
+      lids.add(sim.blink);
+    }
+    expect(lids.first, closeTo(0.55, 0.01), reason: 'heavy lids');
+    expect(lids.reduce(math.max), greaterThan(0.95), reason: 'one slow blink');
+    expect(lids.last, closeTo(0.55, 0.01));
+    run(0.3);
+    expect(sim.expr, Expr.idle);
+    expect(sim.blink, 0);
+  });
+}

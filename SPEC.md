@@ -35,30 +35,30 @@ A procedurally drawn puffball: hundreds of fur strands around a soft body, big s
 It breathes, blinks, looks around, follows the finger with its eyes, and hops now and then.
 
 **Acceptance criteria**
-- [ ] Fur is drawn as individual strands whose length grows with the fluff level (visibly fluffier at 100 than at 0).
-- [ ] Idle life: breathing scale, blink every 2.5–6 s, a glance or hop every 6–14 s.
-- [ ] When a finger is down near Mofu, its pupils track the finger.
-- [ ] Holds 60 fps on the home screen. A 600-strand render stays under 8 ms per frame in the profile test.
-- [ ] Reduce Motion: hops and screen-wide bounces are disabled; breathing and blinking remain.
+- [x] Fur is drawn as individual strands whose length grows with the fluff level (visibly fluffier at 100 than at 0).
+- [x] Idle life: breathing scale, blink every 2.5–6 s, a glance or hop every 6–14 s.
+- [x] When a finger is down near Mofu, its pupils track the finger.
+- [x] Holds 60 fps on the home screen. A 600-strand render stays under 8 ms per frame in the profile test.
+- [x] Reduce Motion: hops and screen-wide bounces are disabled; breathing and blinking remain.
 
 ### F2 — Touch interactions
 
 **Acceptance criteria**
-- [ ] **Tap** → squash-and-stretch boing, a squeak and a happy face.
-- [ ] **5+ taps within 1.5 s** → a giggle fit ("tickle").
-- [ ] **Stroke/pet** (a drag across the body without holding first) → fur bends along the stroke, eyes close happily,
+- [x] **Tap** → squash-and-stretch boing, a squeak and a happy face.
+- [x] **5+ taps within 1.5 s** → a giggle fit ("tickle").
+- [x] **Stroke/pet** (a drag across the body without holding first) → fur bends along the stroke, eyes close happily,
       a purr plays while stroking, hearts float up, fluff rises.
-- [ ] **Hold still for 0.45 s** → squish (flattens like mochi). **Keep holding 1.6 s** → hug (blush, hearts).
-- [ ] **Hold, then move** → pick Mofu up. **Release** → it falls with gravity, bounces off the walls and floor, and lands
+- [x] **Hold still for 0.45 s** → squish (flattens like mochi). **Keep holding 1.6 s** → hug (blush, hearts).
+- [x] **Hold, then move** → pick Mofu up. **Release** → it falls with gravity, bounces off the walls and floor, and lands
       with a squish. A fast throw makes it dizzy.
-- [ ] **Double-tap an eye** → protest face (><).
-- [ ] **Shake the phone** → dizzy face and messy fur (strands frizz), which brushing fixes.
-- [ ] Every interaction gives a light haptic when haptics are on.
+- [x] **Double-tap an eye** → protest face (><).
+- [x] **Shake the phone** → dizzy face and messy fur (strands frizz), which brushing fixes.
+- [x] Every interaction gives a light haptic when haptics are on.
 
 ### F3 — Brush & fluff growth
 
 **Acceptance criteria**
-- [ ] A brush tool (dock) turns strokes into brushing: sparkles follow the brush, messy fur becomes smooth, and fluff
+- [x] A brush tool (dock) turns strokes into brushing: sparkles follow the brush, messy fur becomes smooth, and fluff
       rises faster than petting. A soft brushing sound plays.
 - [ ] Fluff level 0–100 is persisted. Milestones at 25/50/75/100 play a celebration and unlock an item (see F5).
 - [ ] Fluff never decreases while the app is closed, so there is no punishment for absence.
@@ -68,7 +68,7 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 
 **Acceptance criteria**
 - [ ] Snack tray with 6 snacks (mochi, strawberry, dango, cookie, onigiri, star candy).
-- [ ] Dragging a snack onto Mofu's mouth area feeds it: mouth opens, chews, cheeks puff, happy. Dropping it elsewhere
+- [x] Dragging a snack onto Mofu's mouth area feeds it: mouth opens, chews, cheeks puff, happy. Dropping it elsewhere
       returns it to the tray.
 - [ ] Each Mofu has one favourite snack, derived deterministically from its name, which gets a special reaction.
 - [ ] After 6 snacks within a rolling hour Mofu is full: it pats its belly and declines politely. This is a
@@ -93,7 +93,7 @@ It breathes, blinks, looks around, follows the finger with its eyes, and hops no
 
 **Acceptance criteria**
 - [ ] The room colours follow local time (morning / day / evening / night).
-- [ ] At night (22:00–06:00), or after 45 s without touch, Mofu dozes off (closed eyes, slow breathing, zzz, soft snore).
+- [x] At night (22:00–06:00), or after 45 s without touch, Mofu dozes off (closed eyes, slow breathing, zzz, soft snore).
       A tap wakes it with a sleepy blink.
 
 ### F8 — First run

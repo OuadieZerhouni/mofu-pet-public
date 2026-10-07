@@ -221,7 +221,7 @@ void _paintFace(Canvas canvas, MofuSim sim, FurColor col) {
         _spiral(canvas, eye, r * 0.10, stroke..strokeWidth = r * 0.032);
         stroke.strokeWidth = r * 0.045;
       case Expr.sleepy:
-        _openEye(canvas, sim, eye, r, ink, lid: 0.55);
+        _openEye(canvas, sim, eye, r, ink, lid: sim.blink);
       case Expr.surprised:
         _openEye(canvas, sim, eye, r, ink, scale: 1.18);
       case Expr.idle:
