@@ -118,7 +118,7 @@ knows not to ask again.
 4. App Privacy → **Data Not Collected**
 5. Privacy Policy URL: `https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md` · Support URL: `…/mofu-pet/SUPPORT.md`
 6. Price: Free. No in-app purchases
-7. Review notes (4.3 sibling risk — same account as OuO/Neko): "Mofu is a standalone toy about grooming a fluffy creature: brushing grows its fur (fluff meter), 24 hidden reactions to discover in a journal, snacks, 10 fur colours and 13 accessories. No account, no ads, no purchases, no data collected."
+7. Review notes (4.3 sibling risk — same account as OuO/Neko): "Mofu is a standalone toy about grooming a fluffy creature: brushing grows its fur (fluff meter), 24 hidden reactions to discover in a journal, snacks, 10 fur colours and 12 accessories (2 of them seasonal). No account, no ads, no purchases, no data collected."
 
 **Done when:** the version is "Ready for Review" and you press Submit
 
