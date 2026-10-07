@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mofu_pet/core/app_scope.dart';
@@ -70,6 +72,14 @@ void main() {
   testWidgets('first run: tap the seed, name it, land on the room', (tester) async {
     final store = await pumpApp(tester, locale: const Locale('en'), seeded: false);
     expect(find.byType(FirstRunOverlay), findsOneWidget);
+    final seed = find.descendant(of: find.byType(FirstRunOverlay), matching: find.byType(Transform));
+    double tilt() => tester.widgetList<Transform>(seed).map((t) => t.transform.entry(1, 0).abs()).reduce(math.max);
+    final tilts = <double>{};
+    for (var i = 0; i < 8; i++) {
+      await tester.pump(const Duration(milliseconds: 90));
+      tilts.add((tilt() * 1000).roundToDouble());
+    }
+    expect(tilts.length, greaterThan(3), reason: 'the seed wobbles');
     await tester.tap(find.descendant(of: find.byType(FirstRunOverlay), matching: find.byType(GestureDetector)).first);
     await settle(tester, 1800);
     expect(find.byType(TextField), findsOneWidget);

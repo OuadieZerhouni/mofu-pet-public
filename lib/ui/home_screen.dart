@@ -171,11 +171,20 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     _last = elapsed;
     sim.reduceMotion = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
     sim.update(dt);
+    // One haptic per frame (e.g. a throw into a wall is also a bonk): the strongest wins.
+    String? haptic;
     for (final e in sim.drainEvents()) {
-      _handle(e);
+      if (e.type == SimEventType.haptic) {
+        if (haptic == null || _hapticRank(e.id) > _hapticRank(haptic)) haptic = e.id;
+      } else {
+        _handle(e);
+      }
     }
+    if (haptic != null) _app.sfx.haptic(haptic);
     _frame.value++;
   }
+
+  static int _hapticRank(String kind) => const ['light', 'medium', 'success', 'heavy'].indexOf(kind);
 
   void _handle(SimEvent e) {
     switch (e.type) {

@@ -19,7 +19,7 @@
   "actionCancel": "Annuler",
   "actionClose": "Fermer",
   "actionOk": "OK",
-  "toastNewReaction": "Nouveau dans le journal : {name}",
+  "toastNewReaction": "Nouveau ! {name}",
   "toastUnlocked": "Débloqué : {item}",
   "toastDailyBrush": "Premier brossage du jour ✨",
   "toastFluffMilestone": "Mofu mofu ! {percent} % moelleux",

@@ -79,6 +79,9 @@ class SeasonWindow {
   }
 }
 
+/// Where the last fetched config is kept. PetStore.reset leaves it alone.
+const remoteConfigCacheKey = 'mofu.remoteConfigCache';
+
 /// Everything the app can be tuned with remotely.
 ///
 /// Rules (docs/REMOTE_CONFIG.md): config tunes behaviour, it never invents
@@ -211,7 +214,7 @@ class RemoteConfig {
 class RemoteConfigService extends ValueNotifier<RemoteConfig> {
   RemoteConfigService() : super(RemoteConfig.defaults);
 
-  static const _cacheKey = 'mofu.remoteConfigCache';
+  static const _cacheKey = remoteConfigCacheKey;
   String appVersion = '1.0.0';
 
   Future<void> init() async {

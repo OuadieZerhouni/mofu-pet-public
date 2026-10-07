@@ -426,19 +426,19 @@ void main() {
     run(1 / 60);
     expect(haptic(() => sim.pointerUp(1, start + const Offset(60, -80))), isTrue, reason: 'throw');
     run(6);
-    expect(
-      haptic(() {
-        final eye = sim.eyePos(1);
-        for (var i = 0; i < 2; i++) {
-          sim.pointerDown(1, eye);
-          run(0.05);
-          sim.pointerUp(1, eye);
-          run(0.1);
-        }
-      }),
-      isTrue,
-      reason: 'eye poke',
-    );
+    final eye = sim.eyePos(1);
+    sim.pointerDown(1, eye);
+    run(0.05);
+    sim.pointerUp(1, eye);
+    run(0.1);
+    sim.drainEvents();
+    sim.pointerDown(1, eye);
+    run(0.05);
+    sim.pointerUp(1, eye);
+    final poke = sim.drainEvents();
+    expect(poke.any((e) => e.id == 'eyePoke'), isTrue);
+    expect(poke.any((e) => e.type == SimEventType.haptic), isTrue, reason: 'eye poke');
+    run(1.5);
     expect(haptic(sim.shake), isTrue, reason: 'shake');
     expect(haptic(() => sim.eat(favorite: false)), isTrue, reason: 'eat');
     run(3);
@@ -459,6 +459,23 @@ void main() {
     }
     expect(spun, isTrue);
     sim.pointerUp(1, c);
+    run(3);
+    // A stroke that starts off the body and sweeps across it still buzzes.
+    final off = sim.pos - Offset(sim.radius + sim.furLength + 30, 0);
+    sim.pointerDown(1, off);
+    expect(haptic(() {
+      for (var i = 1; i <= 30; i++) {
+        sim.pointerMove(1, off + Offset(i * 8.0, 0));
+        run(1 / 60);
+      }
+    }), isTrue, reason: 'stroke from outside');
+    sim.pointerUp(1, sim.pos);
+    run(3);
+    sim = fresh();
+    run(46);
+    expect(sim.asleep, isTrue);
+    expect(haptic(() => sim.pointerDown(1, sim.pos)), isTrue, reason: 'wake');
+    sim.pointerUp(1, sim.pos);
   });
 
   // F3-c1
@@ -539,8 +556,15 @@ void main() {
     expect(lids.first, closeTo(0.55, 0.01), reason: 'heavy lids');
     expect(lids.reduce(math.max), greaterThan(0.95), reason: 'one slow blink');
     expect(lids.last, closeTo(0.55, 0.01));
-    run(0.3);
+    var blinkedAgainAt = -1.0;
+    final awakeAt = sim.time;
+    var prev = sim.blink;
+    for (var t = 0.0; t < 2.4 && blinkedAgainAt < 0; t += 1 / 60) {
+      sim.update(1 / 60);
+      if (sim.expr == Expr.idle && prev == 0 && sim.blink > 0) blinkedAgainAt = sim.time - awakeAt;
+      prev = sim.blink;
+    }
     expect(sim.expr, Expr.idle);
-    expect(sim.blink, 0);
+    expect(blinkedAgainAt, -1, reason: 'no twitchy blink right after the sleepy one');
   });
 }

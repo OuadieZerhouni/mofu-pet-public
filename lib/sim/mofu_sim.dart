@@ -266,6 +266,7 @@ class MofuSim {
     _downTime = time;
     _downOnBody = hitBody(p);
     _stroking = false;
+    _strokeBuzzed = false;
     _hold = 0;
     _petTime = 0;
     _lastAngle = null;
@@ -294,10 +295,7 @@ class MofuSim {
       _stroking = true;
       _spinStart = time;
       // Any stroke on the body answers the first-run "Pet me!" hint.
-      if (_downOnBody) {
-        _emit(SimEventType.coach);
-        _emit(SimEventType.haptic, 'light');
-      }
+      if (_downOnBody) _emit(SimEventType.coach);
     }
     if (_stroking) _stroke(_lastPos, p);
     _lastPos = p;
@@ -346,6 +344,7 @@ class MofuSim {
   }
 
   bool _wokeOnDown = false;
+  bool _strokeBuzzed = false;
 
   void _lookAt(Offset p, double seconds) {
     final d = p - pos;
@@ -402,6 +401,10 @@ class MofuSim {
     if (segLen < 0.5) return;
     final onBody = hitBody(b);
     if (!onBody) return;
+    if (!_strokeBuzzed) {
+      _strokeBuzzed = true;
+      _emit(SimEventType.haptic, 'light');
+    }
     final dir = seg / segLen;
     final r = radius;
     final reach = r * 0.55;
@@ -786,6 +789,11 @@ class MofuSim {
     lookY += (_lookTY - lookY) * k;
 
     // Blink. Just woken: heavy lids, one slow sleepy blink.
+    if (asleep || expr == Expr.sleepy) {
+      // No ordinary blink resumes the moment Mofu is awake again.
+      _blinkT = -1;
+      _nextBlink = math.max(_nextBlink, time + 2.5);
+    }
     if (asleep) {
       blink = 1;
     } else if (expr == Expr.sleepy) {

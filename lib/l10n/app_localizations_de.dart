@@ -81,7 +81,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String toastNewReaction(String name) {
-    return 'Neu im Album: $name';
+    return 'Neu! $name';
   }
 
   @override

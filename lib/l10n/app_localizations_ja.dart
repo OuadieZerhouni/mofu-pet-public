@@ -80,7 +80,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String toastNewReaction(String name) {
-    return 'ずかんに追加：$name';
+    return 'NEW! $name';
   }
 
   @override

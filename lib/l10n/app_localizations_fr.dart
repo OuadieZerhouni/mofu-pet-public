@@ -81,7 +81,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String toastNewReaction(String name) {
-    return 'Nouveau dans le journal : $name';
+    return 'Nouveau ! $name';
   }
 
   @override

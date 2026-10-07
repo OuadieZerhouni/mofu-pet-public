@@ -216,7 +216,7 @@ void main() {
   });
 
   // F10-c3
-  test('reset removes every persisted key and restores every default', () async {
+  test('reset removes every key of Mofu\'s state and restores every default; the config cache stays', () async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('mofu.remoteConfigCache', '{"schemaVersion":1}');
     store
@@ -236,7 +236,7 @@ void main() {
       ..markAnnouncementSeen('a1');
     await store.flush();
     await store.reset();
-    expect(prefs.getKeys().where((k) => k.startsWith('mofu.')), isEmpty);
+    expect(prefs.getKeys().where((k) => k.startsWith('mofu.')), ['mofu.remoteConfigCache']);
     expect(store.toJson(), PetStore(clock: () => now).toJson());
     final again = await fresh();
     expect(again.toJson(), PetStore(clock: () => now).toJson());

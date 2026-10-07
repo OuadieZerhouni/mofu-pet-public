@@ -19,7 +19,7 @@
   "actionCancel": "Abbrechen",
   "actionClose": "Schließen",
   "actionOk": "OK",
-  "toastNewReaction": "Neu im Album: {name}",
+  "toastNewReaction": "Neu! {name}",
   "toastUnlocked": "Freigeschaltet: {item}",
   "toastDailyBrush": "Erstes Bürsten heute ✨",
   "toastFluffMilestone": "Mofu mofu! {percent} % flauschig",

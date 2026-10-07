@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart' show StringCharacters;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../core/remote_config.dart' show remoteConfigCacheKey;
 import 'catalog.dart';
 
 /// Result of offering a snack.
@@ -146,8 +147,9 @@ class PetStore extends ChangeNotifier {
     _apply(fresh.toJson());
     final p = _prefs;
     if (p != null) {
-      // Every key the app writes is under `mofu.`, the remote-config cache included.
-      for (final k in p.getKeys().where((k) => k.startsWith('mofu.')).toList()) {
+      // Every key of Mofu's state. The remote-config cache is not the user's data and
+      // must survive: it carries kill-switches and the forced-update floor.
+      for (final k in p.getKeys().where((k) => k.startsWith('mofu.') && k != remoteConfigCacheKey).toList()) {
         await p.remove(k);
       }
     }
