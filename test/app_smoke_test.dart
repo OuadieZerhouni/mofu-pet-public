@@ -407,4 +407,26 @@ void main() {
     expect(find.bySemanticsLabel('Mint. Visit on 2 days'), findsOneWidget);
     await closeSheet(tester);
   });
+
+  // TEST_REPORT finding 1: idle time only counts while the room is what the user sees.
+  // settle() steps 50 ms but the sim clamps a frame to 1/30 s: 80 s pumped ≈ 53 s of Mofu time.
+  testWidgets('Mofu does not doze off behind the first-run overlay or a sheet', (tester) async {
+    await pumpApp(tester, locale: const Locale('en'), seeded: false);
+    final sim = tester.state<HomeScreenState>(find.byType(HomeScreen)).sim;
+    await settle(tester, 80000);
+    expect(sim.asleep, isFalse, reason: 'first-run overlay');
+    await tester.tap(find.descendant(of: find.byType(FirstRunOverlay), matching: find.byType(GestureDetector)).first);
+    await settle(tester, 1800);
+    await settle(tester, 80000); // name dialog open
+    expect(sim.asleep, isFalse, reason: 'name dialog');
+    await tester.tap(find.text('Skip'));
+    await settle(tester);
+    await tester.tap(find.text('Wardrobe'));
+    await settle(tester);
+    await settle(tester, 80000);
+    expect(sim.asleep, isFalse, reason: 'wardrobe sheet');
+    await closeSheet(tester);
+    await settle(tester, 80000);
+    expect(sim.asleep, isTrue, reason: 'back in the room, 45 s idle still dozes');
+  });
 }

@@ -51,7 +51,7 @@ None. The previous report (c4fdb54) had F0 FAIL and everything else BLOCKED; F0 
 
 ## Findings
 
-1. **Mofu falls asleep behind the first-run overlay and behind sheets.** The idle timer keeps counting while the
+1. **FIXED after the drive**: idle time is now frozen while the first run, a sheet or a dialog covers the room. Verified on the simulator (test-drive/20261007-1544/finding1-fixed-after-55s-overlay.png: awake after 55 s on the seed screen) and by app_smoke 'Mofu does not doze off behind the first-run overlay or a sheet'. Original finding: **Mofu falls asleep behind the first-run overlay and behind sheets.** The idle timer keeps counting while the
    seed/name overlay or the wardrobe sheet is open, and those absorb every touch. After a 45 s+ naming, the new user
    meets a **sleeping** Mofu (and "Sleepyhead" is logged) instead of a freshly hatched happy one
    (test-drive/20261007-1544/F8-c3-home-coach.png). The same happened after the wardrobe (test-drive/20261007-1544/F5-c2-wearing.png).

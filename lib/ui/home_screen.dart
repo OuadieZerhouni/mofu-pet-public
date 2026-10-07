@@ -170,6 +170,7 @@ class HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMi
     final dt = _last == Duration.zero ? 1 / 60 : (elapsed - _last).inMicroseconds / 1e6;
     _last = elapsed;
     sim.reduceMotion = MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+    sim.idleFrozen = !_store.firstRunDone || !(ModalRoute.of(context)?.isCurrent ?? true);
     sim.update(dt);
     // One haptic per frame (e.g. a throw into a wall is also a bonk): the strongest wins.
     String? haptic;

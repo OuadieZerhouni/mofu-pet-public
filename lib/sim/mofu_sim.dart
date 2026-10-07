@@ -80,6 +80,10 @@ class MofuSim {
   static const gravity = 2600.0;
   static const sleepyDuration = 1.4;
 
+  /// Set by the UI while something covers the room (first run, a sheet, a dialog):
+  /// idle time stops counting, so Mofu is not found asleep when it closes.
+  bool idleFrozen = false;
+
   // ── world ─────────────────────────────────────────────────────────────
   Size room = const Size(390, 700);
   double floorY = 560;
@@ -852,7 +856,7 @@ class MofuSim {
     }
 
     // Sleep.
-    if (_pointer == null && mode == MofuMode.rest && _eatTimer <= 0 && !snackHover) {
+    if (_pointer == null && mode == MofuMode.rest && _eatTimer <= 0 && !snackHover && !idleFrozen) {
       idleTime += dt;
     }
     if (!asleep && mode == MofuMode.rest && _pointer == null &&
