@@ -8,8 +8,8 @@
 // iPhone size App Store Connect asks for. Output: build/screenshots/raw/<lang>/.
 //
 // Fonts: flutter_test renders text in a placeholder font, so the real ones are
-// loaded first. Japanese falls back to Hiragino on device; here Yu Gothic Bold
-// (Windows) stands in under that family name. Emoji have no test font, which
+// loaded first. Japanese falls back to Hiragino Maru Gothic on device; the macOS
+// copy (or Yu Gothic Bold on Windows) is loaded under that family name. Emoji have no test font, which
 // is why the scenes avoid the journal.
 import 'dart:convert';
 import 'dart:io';
@@ -44,8 +44,14 @@ Future<void> _loadFonts() async {
   final sdk = File(Platform.resolvedExecutable).parent.parent.parent.parent.parent.parent.path;
   final icons = '$sdk/bin/cache/artifacts/material_fonts/materialicons-regular.otf';
   if (File(icons).existsSync()) await _font('MaterialIcons', icons);
-  const jp = r'C:\Windows\Fonts\YuGothB.ttc';
-  if (File(jp).existsSync()) await _font('Hiragino Maru Gothic ProN', jp);
+  // Without a Japanese font every ja string renders as tofu boxes.
+  const jp = [
+    '/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc', // macOS: the font iOS falls back to
+    r'C:\Windows\Fonts\YuGothB.ttc',
+  ];
+  final jpFont = jp.where((p) => File(p).existsSync()).firstOrNull;
+  if (jpFont == null) throw StateError('no Japanese font found; ja screenshots would be tofu');
+  await _font('Hiragino Maru Gothic ProN', jpFont);
 }
 
 class _Scene {
