@@ -7,7 +7,7 @@ class MofuColors {
   static const ink = Color(0xFF4A3542);
   static const inkSoft = Color(0xFF8A7280);
   static const accent = Color(0xFFFF7FA8);
-  static const accentDeep = Color(0xFFE85C8A);
+  static const accentDeep = Color(0xFFC2386A); // AA: 5.2:1 with white text, 5.3:1 as text on cards
   static const cream = Color(0xFFFFF8F2);
   static const card = Color(0xFFFFFFFF);
   static const line = Color(0xFFF1E3EA);
