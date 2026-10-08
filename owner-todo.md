@@ -122,7 +122,7 @@ knows not to ask again.
 
 **Done when:** the version is "Ready for Review" and you press Submit
 
-- [ ] GATE-LISTING cleared
+- [x] GATE-LISTING cleared — 2026-10-08 by Claude over the API + Chrome (8 locales, 48 screenshots, Data Not Collected, Free/175 territories, review contact from Hot Cold Globe); 1.0.0 (2) submitted, submission 481ed41b
 ## GATE-POST-RELEASE — after approval
 
 **Do:**
