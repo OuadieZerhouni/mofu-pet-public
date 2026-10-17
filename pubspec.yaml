@@ -72,6 +72,9 @@ flutter:
 
   assets:
     - assets/sounds/
+    - assets/sounds/oink/
+    - assets/sounds/wuff/
+    - assets/sounds/boop/
 
   fonts:
     - family: Nunito

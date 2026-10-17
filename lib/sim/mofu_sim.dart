@@ -87,6 +87,12 @@ class MofuSim {
   bool tossEnabled = true;
   bool brushMode = false;
 
+  /// Held still by a care tool (spa): no idle hops, no pick-up.
+  bool pinned = false;
+
+  /// Something else to look at when no finger is down (a friend, a toy).
+  Offset? lookTarget;
+
   // ── body ──────────────────────────────────────────────────────────────
   double baseRadius = 92;
   double fluff = 0.1; // 0..1, fed from the store
@@ -286,7 +292,7 @@ class MofuSim {
       }
       pos = p + _grabOffset;
       _clampHeld();
-    } else if (_hold > 0 && moved > 12 && tossEnabled && mode == MofuMode.rest) {
+    } else if (_hold > 0 && moved > 12 && tossEnabled && !pinned && mode == MofuMode.rest) {
       _pickUp(p);
     } else if (_hold == 0 && !_stroking && moved > strokeSlop) {
       _stroking = true;
@@ -668,6 +674,92 @@ class MofuSim {
     }
   }
 
+  // ── hooks for the house (other friends, rooms, care tools) ────────────
+  void sleepNow() {
+    if (!asleep) _fallAsleep();
+  }
+
+  void wakeUp() {
+    if (asleep) _wake();
+  }
+
+  /// Push from a neighbour or a landing friend (px/s, applied this frame).
+  void nudge(Offset impulse) {
+    if (mode != MofuMode.rest || pinned) return;
+    pos = Offset(pos.dx + impulse.dx / 60, pos.dy);
+    _clampToRoom();
+  }
+
+  /// A friend did something nearby. [kind]: 0 touched, 1 landed on me,
+  /// 2 nuzzled me, 3 celebrate.
+  void socialCue(int kind, Offset? from) {
+    if (from != null) _lookAt(from, 1.2);
+    if (asleep && kind != 1) return;
+    switch (kind) {
+      case 1:
+        if (asleep) _wake();
+        squashVel += 5;
+        _setExpr(Expr.surprised, 0.8);
+        _emit(SimEventType.sound, 'bonk');
+        _emit(SimEventType.haptic, 'light');
+        _emit(SimEventType.reaction, 'bumped');
+      case 2:
+        _setExpr(Expr.happy, 1.0);
+        _burst(ParticleKind.heart, pos - Offset(0, radius), 2);
+        _emit(SimEventType.sound, 'coo');
+        _emit(SimEventType.reaction, 'nuzzle');
+      case 3:
+        celebrateSmall();
+      default:
+        break;
+    }
+  }
+
+  double _groomTick = 0;
+  double _groomGiggle = 0;
+
+  /// A spa tool rubs at [p] at [speed] px/s. Foam and towel bend the fur
+  /// and make Mofu giggle now and then; the dryer fluffs it up.
+  void groom(Offset p, double speed, String tool) {
+    _resetIdle();
+    if (asleep) _wake();
+    final reach = radius * 0.6;
+    final push = math.min(speed, 900) / 900;
+    for (final s in strands) {
+      final d = (strandTip(s) - p).distance;
+      if (d > reach) continue;
+      final w = 1 - d / reach;
+      if (tool == 'dryer') {
+        s.bendVel += (_rng.nextDouble() - 0.5) * 30 * w * push;
+      } else {
+        s.bendVel += (s.angle.isNegative ? -1 : 1) * 6 * w * push;
+      }
+    }
+    _lookAt(p, 0.5);
+    if (tool == 'dryer') {
+      _pendingFluff += push * 0.25;
+      if (_pendingFluff > 0.6) _flushFluff();
+      if (expr != Expr.bliss) _setExpr(Expr.bliss, 0.5);
+    } else if (tool == 'towel') {
+      if (expr != Expr.content) _setExpr(Expr.content, 0.5);
+    } else {
+      if (expr != Expr.giggle && expr != Expr.bliss) _setExpr(Expr.bliss, 0.5);
+    }
+    _groomTick += push;
+    if (_groomTick > 1.5) {
+      _groomTick = 0;
+      _emit(SimEventType.haptic, 'selection');
+    }
+    _groomGiggle += push * 0.08;
+    if (_groomGiggle > 1) {
+      _groomGiggle = 0;
+      _setExpr(Expr.giggle, 0.7);
+      squashVel -= 2;
+      _emit(SimEventType.sound, 'giggle');
+      _emit(SimEventType.reaction, 'spa');
+    }
+  }
+
   // ── geometry used by painter and tests ────────────────────────────────
   /// World position of a strand's tip (ignores squash; good enough for hits).
   Offset strandTip(Strand s) {
@@ -729,7 +821,7 @@ class MofuSim {
     switch (mode) {
       case MofuMode.rest:
         pos = Offset(pos.dx, floorY - radius);
-        if (!asleep && !reduceMotion && _pointer == null && time >= _nextHop && expr != Expr.eating) {
+        if (!asleep && !reduceMotion && !pinned && _pointer == null && time >= _nextHop && expr != Expr.eating) {
           _nextHop = time + 6 + _rng.nextDouble() * 8;
           mode = MofuMode.air;
           // Idle hops wander a little but drift home towards the centre.
@@ -754,7 +846,7 @@ class MofuSim {
     rotVel += (-90 * rot - 9 * rotVel) * dt;
     rot += rotVel * dt;
 
-    final follow = finger;
+    final follow = finger ?? lookTarget;
     if (follow != null && mode != MofuMode.held) {
       _lookAt(follow, 0.4);
     } else if (time >= _nextGlance && !asleep) {
