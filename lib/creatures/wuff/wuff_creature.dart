@@ -833,6 +833,7 @@ class WuffCreature extends Creature {
   }
 
   /// Shake gesture from the accelerometer: dizzy.
+  @override
   void shake() {
     if (_asleep) _wake();
     _cancelAction();

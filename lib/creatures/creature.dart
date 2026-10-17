@@ -183,6 +183,12 @@ abstract class Creature {
   void react(SocialCue cue, {Offset? from});
   void celebrate();
 
+  /// The phone was shaken: every species reacts in its own way (dizzy, surprised, wobble).
+  void shake() {
+    if (asleep) wake();
+    nudge(Offset(seed.isEven ? 220 : -220, 0));
+  }
+
   // ── feeding ───────────────────────────────────────────────────────────
   Offset get mouth;
   bool nearMouth(Offset p);

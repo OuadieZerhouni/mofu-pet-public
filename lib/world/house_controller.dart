@@ -277,6 +277,15 @@ class HouseController extends ChangeNotifier {
     return out;
   }
 
+  /// The phone was shaken: everyone in the room you are in reacts.
+  void shake() {
+    for (final c in scene.creatures) {
+      if (c.life == LifeState.held || c.pinned) continue;
+      c.shake();
+    }
+    audio.haptic('medium');
+  }
+
   /// Everyone in the bedroom curls up; leaving the bedroom wakes them gently.
   void bedtime(bool on) {
     final s = scenes[Room.bedroom]!;

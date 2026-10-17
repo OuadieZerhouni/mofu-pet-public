@@ -940,6 +940,14 @@ class BoopCreature extends Creature {
     _confetti(nosePos, 28);
   }
 
+  /// A shaken phone sets the jelly body wobbling.
+  @override
+  void shake() {
+    if (asleep) wake();
+    _wobble(Offset(_x + radius, 0));
+    _reaction('boop.wobble');
+  }
+
   void _wobble(Offset p, {bool sound = true}) {
     if (!reduceMotion) {
       final dir = (p.dx - _x).sign;

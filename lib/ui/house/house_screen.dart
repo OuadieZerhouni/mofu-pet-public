@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import '../../core/app_scope.dart';
 import '../../core/test_env.dart';
@@ -42,6 +43,8 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   bool _hatching = false;
   final Set<int> _pointersOnFriend = {};
   late AppServices _app;
+  StreamSubscription<UserAccelerometerEvent>? _accel;
+  final List<double> _shakePeaks = [];
 
   AppLocalizations get _l => AppLocalizations.of(context);
   HouseStore get store => _app.store;
@@ -63,12 +66,14 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     _pages = PageController(initialPage: store.lastRoom.index);
     store.addListener(_onStore);
     _ticker.start();
+    if (!skipDeviceOnlyWork) _startShakeDetection();
     WidgetsBinding.instance.addPostFrameCallback((_) => _onVisit());
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    unawaited(_accel?.cancel());
     store.removeListener(_onStore);
     _ticker.dispose();
     house.dispose();
@@ -87,6 +92,24 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
       _app.audio.stopAllLoops();
       unawaited(store.flush());
     }
+  }
+
+  /// Three strong jolts within 0.7 s = a shake; everyone in the room reacts.
+  void _startShakeDetection() {
+    try {
+      _accel = userAccelerometerEventStream(samplingPeriod: SensorInterval.gameInterval).listen((e) {
+        final mag = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+        if (mag < 16) return;
+        final t = house.time;
+        _shakePeaks
+          ..add(t)
+          ..removeWhere((p) => t - p > 0.7);
+        if (_shakePeaks.length >= 3 && _app.config.value.shakeEnabled && store.firstRunDone) {
+          _shakePeaks.clear();
+          house.shake();
+        }
+      }, onError: (Object _) {});
+    } catch (_) {}
   }
 
   void _onStore() {

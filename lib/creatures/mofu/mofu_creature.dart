@@ -120,6 +120,9 @@ class MofuCreature extends Creature {
   void celebrate() => sim.celebrate();
 
   @override
+  void shake() => sim.shake();
+
+  @override
   Offset get mouth => sim.mouthPos;
 
   @override

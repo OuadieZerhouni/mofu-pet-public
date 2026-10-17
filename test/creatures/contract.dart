@@ -83,6 +83,25 @@ void runCreatureContract(String name, Creature Function() make) {
       expect(c.asleep, isFalse);
     });
 
+    test('a phone shake wakes it and gets a reaction, and it stays in the room', () {
+      final c = _placed(make);
+      c.sleep();
+      for (var i = 0; i < 30; i++) {
+        c.update(1 / 60);
+      }
+      c.drainEvents();
+      c.shake();
+      final events = <CreatureEvent>[];
+      for (var i = 0; i < 90; i++) {
+        c.update(1 / 60);
+        events.addAll(c.drainEvents());
+      }
+      expect(c.asleep, isFalse);
+      expect(events.where((e) => e.type == CreatureEventType.sound || e.type == CreatureEventType.haptic || e.type == CreatureEventType.reaction), isNotEmpty);
+      expect(_finite(c.position), isTrue);
+      expect(c.position.dx, inInclusiveRange(_room.left, _room.right));
+    });
+
     test('feeding: mouth is on the body, eat and refuse emit events', () {
       final c = _placed(make);
       expect(c.nearMouth(c.mouth), isTrue);

@@ -838,6 +838,13 @@ class OinkCreature extends Creature {
     }
   }
 
+  /// A shaken phone startles Oink into a surprised little hop.
+  @override
+  void shake() {
+    if (_sleeping) wake();
+    react(SocialCue.landedOnMe);
+  }
+
   @override
   void react(SocialCue cue, {Offset? from}) {
     if (_sleeping) return;
