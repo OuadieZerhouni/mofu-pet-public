@@ -36,6 +36,27 @@ List<(String, String)> voicePads(Species s) => switch (s) {
       Species.boop => const [('boop', 'boop.boop_02'), ('boop!', 'boop.boop_06'), ('boop!!', 'boop.boop_10'), ('giggle', 'boop.giggle'), ('achoo', 'boop.sneeze'), ('hug', 'boop.hug')],
     };
 
+/// One recognisable icon per voice, so the pads read without words in every language.
+IconData voiceIcon(String id) => switch (id) {
+      'hello' => Icons.waving_hand_rounded,
+      'squeak' || 'yip' => Icons.music_note_rounded,
+      'giggle' => Icons.sentiment_very_satisfied_rounded,
+      'coo' || 'hug' => Icons.favorite_rounded,
+      'whee' || 'play' => Icons.celebration_rounded,
+      'yawn' => Icons.bedtime_rounded,
+      'hmph' || 'growl' => Icons.sentiment_dissatisfied_rounded,
+      'whimper' => Icons.water_drop_rounded,
+      'howl' => Icons.nightlight_round,
+      'sneeze' || 'achoo' || 'pant' || 'snort' => Icons.air_rounded,
+      'squeal' => Icons.campaign_rounded,
+      'oink' || 'boop' => Icons.chat_bubble_rounded,
+      'oink!' || 'boop!' => Icons.mark_chat_unread_rounded,
+      'boop!!' => Icons.bolt_rounded,
+      _ => Icons.graphic_eq_rounded,
+    };
+
+const _padFills = [Color(0xFFFFE3D6), Color(0xFFFFF0C2), Color(0xFFDDF1D3), Color(0xFFE3ECFF), Color(0xFFF6E2F5), Color(0xFFD6F2EE)];
+
 Future<void> showFriendCard(BuildContext context, {required HouseController house, required String friendId, required void Function(String) toast}) {
   return showModalBottomSheet<void>(
     context: context,
@@ -150,11 +171,9 @@ class _FriendCardState extends State<_FriendCard> {
                 excludeSemantics: true,
                 child: Row(
                   children: [
-                    for (var i = 1; i <= 5; i++)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 2),
-                        child: Icon(Icons.favorite_rounded, size: 18, color: (f.level + 1) ~/ 2 >= i ? House.rose : const Color(0xFFE8D5C4)),
-                      ),
+                    // One heart per friendship level (10), so the row and the label always agree.
+                    for (var i = 1; i <= 10; i++)
+                      Icon(Icons.favorite_rounded, size: 13, color: f.level >= i ? House.rose : const Color(0xFFE8D5C4)),
                     const SizedBox(width: 4),
                     Flexible(
                       child: Text(l.cardLevel(f.level),
@@ -266,12 +285,12 @@ class _FriendCardState extends State<_FriendCard> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: const [Color(0xFFFFE3D6), Color(0xFFFFF0C2), Color(0xFFDDF1D3), Color(0xFFE3ECFF), Color(0xFFF6E2F5), Color(0xFFFFE0D8)][i % 6],
+                      color: f.species == Species.wuff ? wuffBarkPads[i].color : _padFills[i % _padFills.length],
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(color: Colors.white, width: 2),
                       boxShadow: const [BoxShadow(color: House.tagShadow, offset: Offset(0, 3))],
                     ),
-                    child: const Center(child: Icon(Icons.graphic_eq_rounded, color: House.ink, size: 26)),
+                    child: Center(child: Icon(voiceIcon(pad.$1), color: House.ink, size: 28)),
                   ),
                 ),
               ),
@@ -498,14 +517,25 @@ class _WearTile extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Opacity(
-                  opacity: locked ? 0.35 : 1,
-                  child: FittedBox(child: FriendPortrait(friend: preview, size: 76)),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Opacity(
+                      opacity: locked ? 0.55 : 1,
+                      child: FittedBox(child: FriendPortrait(friend: preview, size: 76)),
+                    ),
+                    if (locked)
+                      const PositionedDirectional(
+                        top: 0,
+                        end: 0,
+                        child: CircleAvatar(radius: 11, backgroundColor: House.rose, child: Icon(Icons.lock_rounded, size: 13, color: Colors.white)),
+                      ),
+                  ],
                 ),
               ),
               Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: House.ink)),
               if (locked)
-                Text(lockText!, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 10, color: House.inkSoft)),
+                Text(lockText!, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: House.roseDeep)),
             ],
           ),
         ),

@@ -37,6 +37,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   late final Ticker _ticker = createTicker(_tick);
   final ValueNotifier<int> frame = ValueNotifier(0);
   final ToastController _toasts = ToastController();
+  final ValueNotifier<double> _shelfH = ValueNotifier(180);
   Duration _last = Duration.zero;
   bool _started = false;
   bool _locked = false;
@@ -82,6 +83,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     house.dispose();
     _pages.dispose();
     _toasts.dispose();
+    _shelfH.dispose();
     frame.dispose();
     super.dispose();
   }
@@ -157,10 +159,13 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     }
   }
 
-  void toast(String message) => _toasts.show(message);
+  // Rooms call these after awaits (dialogs, hatch animation): the screen may be gone by then.
+  void toast(String message) {
+    if (mounted) _toasts.show(message);
+  }
 
   void _lockPaging(bool locked) {
-    if (_locked == locked) return;
+    if (!mounted || _locked == locked) return;
     setState(() => _locked = locked);
   }
 
@@ -187,6 +192,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
 
   void _onPage(int i) {
     if (_flyingTo != null && i != _flyingTo!.index) return;
+    _toasts.clear(); // news from the room you left would read as stale here
     final r = Room.values[i];
     final rc = _rc();
     roomModule(house.active).onLeave(rc);
@@ -306,13 +312,61 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
               ),
             ),
             Positioned(top: media.padding.top + 8, left: 16, right: 16, child: _topBar(l)),
+            // An empty room says what to do instead of showing a bare stage.
+            if (store.firstRunDone && house.scene.creatures.isEmpty)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: ValueListenableBuilder<double>(
+                    valueListenable: _shelfH,
+                    builder: (context, h, _) {
+                      final dark = house.active == Room.bedroom && house.daypart == Daypart.night;
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: h + 70, left: 32, right: 32),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: FeltTag(
+                            radius: 22,
+                            height: 52,
+                            dark: dark,
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Flexible(
+                                  child: Text(l.shelfTapHint,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: dark ? House.nightText : House.ink)),
+                                ),
+                                const SizedBox(width: 8),
+                                Icon(Icons.south_rounded, size: 22, color: dark ? House.nightText : House.rose),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            // Toasts float just above the shelf's real top edge, clear of the header cards.
+            Positioned.fill(
+              child: IgnorePointer(
+                child: ValueListenableBuilder<double>(
+                  valueListenable: _shelfH,
+                  builder: (context, h, child) => Padding(
+                    padding: EdgeInsets.only(bottom: h + 14),
+                    child: Align(alignment: Alignment.bottomCenter, child: child),
+                  ),
+                  child: ToastView(controller: _toasts),
+                ),
+              ),
+            ),
             Positioned(
               left: 0,
               right: 0,
-              bottom: 104 + module.shelfExtra + media.padding.bottom + 12,
-              child: IgnorePointer(child: ToastView(controller: _toasts)),
+              bottom: 0,
+              child: MeasureSize(onChange: (s) => _shelfH.value = s.height, child: _shelf(l, module, rc, media.padding.bottom)),
             ),
-            Positioned(left: 0, right: 0, bottom: 0, child: _shelf(l, module, rc, media.padding.bottom)),
             if (!store.firstRunDone)
               Positioned.fill(
                 child: IgnorePointer(

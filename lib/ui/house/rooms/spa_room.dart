@@ -111,7 +111,7 @@ class SpaRoom extends RoomModule {
 
   @override
   Widget overlay(BuildContext context, RoomContext rc) {
-    final top = MediaQuery.of(context).padding.top + 64;
+    final top = MediaQuery.of(context).padding.top + 74;
     return ValueListenableBuilder<int>(
       valueListenable: rc.frame,
       builder: (context, _, _) {

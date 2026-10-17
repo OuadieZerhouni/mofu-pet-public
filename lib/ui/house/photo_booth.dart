@@ -106,11 +106,14 @@ class _PhotoBoothState extends State<PhotoBooth> {
       backgroundColor: House.paper,
       appBar: AppBar(
         backgroundColor: House.paper,
+        centerTitle: true,
+        titleSpacing: 0,
         title: Text(l.photoTitle, style: const TextStyle(fontWeight: FontWeight.w900)),
         leading: IconButton(tooltip: l.photoClose, icon: const Icon(Icons.close_rounded), onPressed: () => Navigator.pop(context)),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 12),
+            // Directional, so the button keeps the 16 pt gutter on the left in Arabic too.
+            padding: const EdgeInsetsDirectional.only(end: 16),
             child: FilledButton.icon(
               style: FilledButton.styleFrom(backgroundColor: House.rose, shape: const StadiumBorder()),
               onPressed: _friends.isEmpty || _sharing ? null : () => _share(l),
@@ -243,18 +246,19 @@ class _PhotoBoothState extends State<PhotoBooth> {
           const SizedBox(height: 6),
           Row(
             children: [
-              for (final k in StickerKind.values)
+              for (final (i, k) in StickerKind.values.indexed) ...[
+                if (i > 0) const SizedBox(width: 6),
                 Expanded(
                   child: GestureDetector(
                     onTap: () => _addSticker(k),
                     child: Container(
                       height: 48,
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
                       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
                       child: Padding(padding: const EdgeInsets.all(8), child: CustomPaint(painter: _StickerPainter(k))),
                     ),
                   ),
                 ),
+              ],
             ],
           ),
           const SizedBox(height: 4),

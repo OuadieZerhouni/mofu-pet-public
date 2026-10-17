@@ -84,6 +84,12 @@ class _SnackCatchScreenState extends State<SnackCatchScreen> with WidgetsBinding
   final ValueNotifier<bool> _dragged = ValueNotifier<bool>(false);
 
   late SnackCatchGame _game;
+
+  /// The round in progress, and a way to steer like a finger (store screenshots play a real round).
+  @visibleForTesting
+  SnackCatchGame get game => _game;
+  @visibleForTesting
+  void steer(double x) => _targetX = x;
   int _round = 0;
   double _targetX = 0.5;
   double _flash = 0;
@@ -271,14 +277,19 @@ class _SnackCatchScreenState extends State<SnackCatchScreen> with WidgetsBinding
                     ),
                   ),
                 ),
-                // Falling snacks: real hand-drawn icons, kept in step each frame.
-                Positioned.fill(
+                // Falling snacks: real hand-drawn icons, kept in step each frame. Clipped at the
+                // floor so a missed snack drops out of sight instead of sliding over the boards.
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  height: _floorY > 0 ? _floorY + 6 : size.height,
                   child: IgnorePointer(
                     child: ExcludeSemantics(
                       child: ValueListenableBuilder<int>(
                         valueListenable: frame,
                         builder: (context, _, _) => Stack(
-                          clipBehavior: Clip.none,
+                          clipBehavior: Clip.hardEdge,
                           children: [
                             for (final it in _game.items)
                               if (it.kind != FallKind.bee)

@@ -16,11 +16,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mofu_pet/core/app_scope.dart';
 import 'package:mofu_pet/core/remote_config.dart';
-import 'package:mofu_pet/games/boop_rush.dart';
+import 'package:mofu_pet/games/snack_catch.dart';
 import 'package:mofu_pet/l10n/app_localizations.dart';
 import 'package:mofu_pet/main.dart';
 import 'package:mofu_pet/model/house_store.dart';
-import 'package:mofu_pet/ui/games/boop_rush_screen.dart';
+import 'package:mofu_pet/ui/games/snack_catch_screen.dart';
 import 'package:mofu_pet/ui/house/house_screen.dart';
 import 'package:mofu_pet/ui/house/rooms.dart';
 import 'package:mofu_pet/world/spa_session.dart';
@@ -83,13 +83,19 @@ final _scenes = <_Scene>[
   _Scene('5_hatch', eggReady: true, pose: (tester, home, store) async {
     home.house.moveFriend(store.friends[3].id, Room.garden);
     home.goTo(Room.garden);
-    await _wait(tester, 1800);
+    await _wait(tester, 1500);
+    // Tap the ready egg and catch it mid-crack, before the naming dialog.
+    final l = AppLocalizations.of(tester.element(find.byType(HouseScreen)));
+    final label = l.eggLabel(l.gardenEggReadyHint);
+    await tester.tap(find.byWidgetPredicate((w) => w is Semantics && w.properties.label == label).last);
+    await _wait(tester, 1250);
   }),
   _Scene('6_dress', pose: (tester, home, store) async {
     home.goTo(Room.living);
     await _wait(tester, 700);
+    store.friends[1].wear['neck'] = 'bowtie';
     // ignore: unawaited_futures
-    home.openFriend(store.friends[2].id);
+    home.openFriend(store.friends[1].id);
     await _wait(tester, 800);
     final l = AppLocalizations.of(tester.element(find.byType(HouseScreen)));
     await tester.tap(find.text(l.cardTabWardrobe).last);
@@ -97,22 +103,17 @@ final _scenes = <_Scene>[
   }),
   _Scene('7_games', pose: (tester, home, store) async {
     // ignore: unawaited_futures
-    playBoopRush(tester.element(find.byType(HouseScreen)), store: store);
+    playSnackCatch(tester.element(find.byType(HouseScreen)), store: store, friend: store.friends[1]);
     await _wait(tester, 600);
-    // Play like a person: boop awake and golden critters, skip the sleepy ones.
-    final game = (tester.state(find.byType(BoopRushScreen)) as dynamic).game as BoopRushGame;
-    for (var i = 0; i < 40; i++) {
-      await _wait(tester, 260);
-      for (var cell = 0; cell < BoopRushGame.cells; cell++) {
-        final p = game.slots[cell];
-        if (p != null && p.kind != RushKind.sleepy) {
-          game.tap(cell);
-          break;
-        }
-      }
+    // Play like a person: slide under the lowest snack, away from bees.
+    final st = tester.state(find.byType(SnackCatchScreen)) as dynamic;
+    final game = st.game as SnackCatchGame;
+    for (var i = 0; i < 70; i++) {
+      final snacks = game.items.where((it) => it.kind != FallKind.bee).toList()..sort((a, b) => b.y.compareTo(a.y));
+      if (snacks.isNotEmpty) st.steer(snacks.first.x);
+      await _wait(tester, 130);
     }
-    // Hands off for a moment so several critters are up in the shot.
-    await _wait(tester, 1500);
+    await _wait(tester, 300);
   }),
 ];
 

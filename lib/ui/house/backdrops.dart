@@ -132,8 +132,18 @@ class RoomBackdrop extends CustomPainter {
     final pic = Rect.fromLTWH(w * 0.09 + _back, floorY * 0.3, w * 0.22, floorY * 0.2);
     canvas.drawRRect(RRect.fromRectAndRadius(pic.shift(const Offset(0, 5)), const Radius.circular(12)), _fill(const Color(0x22000000)));
     canvas.drawRRect(RRect.fromRectAndRadius(pic, const Radius.circular(12)), _fill(const Color(0xFFFFF7EC)));
-    canvas.drawRRect(RRect.fromRectAndRadius(pic.deflate(8), const Radius.circular(6)), _fill(const Color(0xFFF2C1B2)));
-    canvas.drawCircle(pic.deflate(8).center, pic.width * 0.16, _fill(const Color(0xFFFFE3D6)));
+    // A little painting: sky, sun, rolling hills and a tiny house.
+    final art = pic.deflate(8);
+    canvas.save();
+    canvas.clipRRect(RRect.fromRectAndRadius(art, const Radius.circular(6)));
+    canvas.drawRect(art, Paint()..shader = const LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xFFFFD9C7), Color(0xFFFFF1E2)]).createShader(art));
+    canvas.drawCircle(Offset(art.left + art.width * 0.72, art.top + art.height * 0.3), art.width * 0.13, _fill(const Color(0xFFF6B86B)));
+    canvas.drawOval(Rect.fromCenter(center: Offset(art.left + art.width * 0.25, art.bottom), width: art.width * 1.1, height: art.height * 0.7), _fill(const Color(0xFFA9D39A)));
+    canvas.drawOval(Rect.fromCenter(center: Offset(art.left + art.width * 0.85, art.bottom + art.height * 0.05), width: art.width * 1.0, height: art.height * 0.6), _fill(const Color(0xFF8CC283)));
+    final hw = art.width * 0.2, hx = art.left + art.width * 0.42, hy = art.bottom - art.height * 0.36;
+    canvas.drawRect(Rect.fromLTWH(hx, hy, hw, hw * 0.8), _fill(const Color(0xFFFFFBF2)));
+    canvas.drawPath(Path()..moveTo(hx - hw * 0.15, hy)..lineTo(hx + hw / 2, hy - hw * 0.6)..lineTo(hx + hw * 1.15, hy)..close(), _fill(const Color(0xFFC2386A)));
+    canvas.restore();
     // Plant.
     final pot = Rect.fromLTWH(w * 0.04 + _mid, floorY - 64, 44, 52);
     for (var i = 0; i < 5; i++) {
@@ -192,7 +202,9 @@ class RoomBackdrop extends CustomPainter {
       canvas.drawRRect(j, _fill(jars[i]));
       canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromLTWH(j.left - 2, j.top - 6, j.width + 4, 9), const Radius.circular(4)), _fill(const Color(0xFFFFFBF2)));
     }
-    _window(canvas, Rect.fromLTWH(w * 0.62 + _back, floorY * 0.18, w * 0.28, floorY * 0.3), frame: const Color(0xFFFFFBF2));
+    // The kitchen floor sits high (tall menu shelf): keep the window clear of the header.
+    final winTop = math.max(floorY * 0.18, 150.0);
+    _window(canvas, Rect.fromLTWH(w * 0.62 + _back, winTop, w * 0.28, math.min(floorY * 0.3, floorY - winTop - 120)), frame: const Color(0xFFFFFBF2));
     _floor(canvas, size, const Color(0xFFE9C79A), const Color(0xFFDDB688));
     canvas.drawRect(Rect.fromLTWH(0, floorY - 10, w, 14), _fill(Colors.white));
     canvas.drawRect(Rect.fromLTWH(0, floorY + 4, w, 4), _fill(const Color(0xFFE7D3B4)));

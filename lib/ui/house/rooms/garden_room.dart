@@ -91,7 +91,7 @@ class GardenRoom extends RoomModule {
           fit: StackFit.expand,
           children: [
             Positioned(
-              top: media.padding.top + 64,
+              top: media.padding.top + 74,
               left: 16,
               right: 16,
               child: IgnorePointer(child: _EggCard(l: l, store: store)),

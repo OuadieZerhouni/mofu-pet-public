@@ -44,8 +44,6 @@ class _Settings extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(width: 46, height: 5, decoration: BoxDecoration(color: const Color(0xFFD9C3AD), borderRadius: BorderRadius.circular(3))),
-              const SizedBox(height: 14),
               Text(l.settingsTitle, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 22, color: House.ink)),
               const SizedBox(height: 14),
               _Card(children: [
