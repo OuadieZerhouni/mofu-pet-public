@@ -83,6 +83,10 @@ class _BoopRushScreenState extends State<BoopRushScreen> with WidgetsBindingObse
   final ValueNotifier<int> _streak = ValueNotifier<int>(0);
 
   late BoopRushGame _game;
+
+  /// The round in progress (store screenshots tap real boops through it).
+  @visibleForTesting
+  BoopRushGame get game => _game;
   int _round = 0;
   double _shake = 0;
 

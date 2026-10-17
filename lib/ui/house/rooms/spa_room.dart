@@ -35,7 +35,9 @@ class SpaRoom extends RoomModule {
       return;
     }
     final c = here.first;
-    if (_friendId == c.friendId && session != null) return;
+    // Same friend AND the same creature: after a rebuild (Start over, a new house) the id can
+    // repeat while the creature is new, and an old session would scrub a discarded body.
+    if (session != null && identical(session!.creature, c)) return;
     session?.abandon();
     _friendId = c.friendId;
     session = SpaSession(c, seed: c.seed);

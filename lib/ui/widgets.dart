@@ -185,6 +185,12 @@ class ToastController extends ChangeNotifier {
     }
   }
 
+  /// Drops the current and queued messages.
+  void clear() {
+    _queue.clear();
+    _next();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();

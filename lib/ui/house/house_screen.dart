@@ -47,6 +47,9 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   final List<double> _shakePeaks = [];
 
   AppLocalizations get _l => AppLocalizations.of(context);
+
+  @visibleForTesting
+  void clearToasts() => _toasts.clear();
   HouseStore get store => _app.store;
 
   @override

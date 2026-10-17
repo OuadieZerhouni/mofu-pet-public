@@ -1,4 +1,4 @@
-"""Compose captioned App Store screenshots from the test-rendered raws.
+"""Compose captioned App Store screenshots from the test-rendered raws (generic; from the build-app skill).
 
     flutter test test/store_screenshots_test.dart --run-skipped
     python tools/screenshots/compose.py
@@ -23,34 +23,20 @@ RAW = ROOT / "build" / "screenshots" / "raw"
 OUT = ROOT / "ASO" / "screenshots"
 W, H = 1320, 2868
 
-SCENES = ["1_hero", "2_brush", "3_snacks", "4_play", "5_wardrobe", "6_night"]
+# Everything app-specific lives in captions.json, which the Flutter screenshot test
+# also reads (it renders the caption PNGs: Flutter shapes Arabic with HarfBuzz and has
+# the app's fonts; Pillow without libraqm cannot join Arabic letters). Schema:
+#   scenes:        ["1_hero", "2_action", ...]          (raw PNG names, in store order)
+#   dark:          ["6_night"]                          (scenes with a dark backdrop)
+#   bg:            {"1_hero": [[r,g,b], [r,g,b]], ...}   (top/bottom gradient per scene)
+#   store_locales: {"en-US": "en", "ar-SA": "ar", ...}   (App Store locale -> app language)
+#   captions:      {"en": ["two short lines joined by a newline", ...], ...}  (one per scene)
+SPEC = json.loads(Path(__file__).with_name("captions.json").read_text("utf-8"))
+SCENES: list[str] = SPEC["scenes"]
+DARK = set(SPEC.get("dark", []))
+BG = {k: (tuple(v[0]), tuple(v[1])) for k, v in SPEC["bg"].items()}
+STORE_LOCALES: dict[str, str] = SPEC["store_locales"]
 
-# Background gradient (top, bottom) per scene, sampled from the room palettes.
-BG = {
-    "1_hero": ((255, 236, 222), (255, 204, 218)),
-    "2_brush": ((224, 246, 236), (206, 228, 255)),
-    "3_snacks": ((255, 244, 214), (255, 222, 230)),
-    "4_play": ((238, 228, 255), (255, 214, 234)),
-    "5_wardrobe": ((244, 232, 255), (255, 226, 240)),
-    "6_night": ((62, 50, 112), (28, 22, 64)),
-}
-
-# Captions live in captions.json, shared with the Flutter test that renders
-# them (Flutter shapes Arabic with HarfBuzz and uses the app's own fonts;
-# Pillow without libraqm cannot join Arabic letters).
-CAPTIONS: dict[str, list[str]] = json.loads((Path(__file__).with_name("captions.json")).read_text("utf-8"))["captions"]
-
-# App Store locale -> rendered app language.
-STORE_LOCALES = {
-    "en-US": "en",
-    "en-GB": "en",
-    "ja": "ja",
-    "de-DE": "de",
-    "pt-BR": "pt",
-    "es-MX": "es",
-    "fr-FR": "fr",
-    "ar-SA": "ar",
-}
 
 def gradient(top, bottom) -> Image.Image:
     g = Image.new("RGB", (1, H))
@@ -93,7 +79,7 @@ def frame(shot: Image.Image, dark: bool) -> Image.Image:
 
 
 def compose(lang: str, idx: int, scene: str) -> Image.Image:
-    dark = scene == "6_night"
+    dark = scene in DARK
     img = gradient(*BG[scene])
     caption(img, lang, idx)
     shot = Image.open(RAW / lang / f"{scene}.png")

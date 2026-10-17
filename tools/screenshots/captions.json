@@ -1,71 +1,175 @@
 {
   "scenes": [
-    "1_hero",
-    "2_brush",
-    "3_snacks",
-    "4_play",
-    "5_wardrobe",
-    "6_night"
+    "1_house",
+    "2_spa",
+    "3_sleep",
+    "4_kitchen",
+    "5_hatch",
+    "6_dress",
+    "7_games"
   ],
   "dark": [
-    "6_night"
+    "3_sleep"
   ],
+  "bg": {
+    "1_house": [
+      [
+        255,
+        236,
+        222
+      ],
+      [
+        255,
+        204,
+        218
+      ]
+    ],
+    "2_spa": [
+      [
+        222,
+        246,
+        240
+      ],
+      [
+        198,
+        230,
+        246
+      ]
+    ],
+    "3_sleep": [
+      [
+        62,
+        50,
+        112
+      ],
+      [
+        28,
+        22,
+        64
+      ]
+    ],
+    "4_kitchen": [
+      [
+        255,
+        244,
+        214
+      ],
+      [
+        255,
+        222,
+        200
+      ]
+    ],
+    "5_hatch": [
+      [
+        214,
+        238,
+        255
+      ],
+      [
+        214,
+        240,
+        206
+      ]
+    ],
+    "6_dress": [
+      [
+        244,
+        232,
+        255
+      ],
+      [
+        255,
+        226,
+        240
+      ]
+    ],
+    "7_games": [
+      [
+        238,
+        228,
+        255
+      ],
+      [
+        255,
+        214,
+        234
+      ]
+    ]
+  },
+  "store_locales": {
+    "en-US": "en",
+    "en-GB": "en",
+    "ja": "ja",
+    "de-DE": "de",
+    "pt-BR": "pt",
+    "es-MX": "es",
+    "fr-FR": "fr",
+    "ar-SA": "ar"
+  },
   "captions": {
     "en": [
-      "Your fluffy\nlittle friend",
-      "Brush it\nextra fluffy",
-      "Feed it\ncute snacks",
-      "Squish it,\ntoss it, hug it",
-      "Dress it up\nyour way",
-      "Sweet dreams\nevery night"
+      "Mofu & friends\nin a cozy house",
+      "Relaxing\nASMR spa days",
+      "Cozy sleep\nsounds",
+      "Snack time\nfor everyone",
+      "Hatch new\nfriends",
+      "Dress up\nyour friends",
+      "Cute\nmini-games"
     ],
     "ja": [
-      "もふもふの\nちいさな友だち",
-      "ブラッシングで\nもっともふもふ",
-      "かわいいおやつを\nあげよう",
-      "むぎゅっ、ぽーん、\nぎゅっ！",
-      "好きなように\nおしゃれしよう",
-      "夜はぐっすり\nおやすみ"
+      "モフとなかまの\nほっこりおうち",
+      "癒しのASMR\nスパタイム",
+      "ぐっすり\n睡眠サウンド",
+      "みんなで\nおやつタイム",
+      "たまごから\nなかまが誕生",
+      "みんなを\nおしゃれに",
+      "かわいい\nミニゲーム"
     ],
     "de": [
-      "Dein flauschiger\nkleiner Freund",
-      "Bürste es\nextra flauschig",
-      "Füttere süße\nLeckereien",
-      "Knuddeln, werfen,\numarmen",
-      "Zieh es an,\nwie du willst",
-      "Süße Träume\njede Nacht"
+      "Mofu & Freunde\nim Kuschelhaus",
+      "Entspannende\nASMR-Spa-Tage",
+      "Gemütliche\nEinschlafklänge",
+      "Snackzeit\nfür alle",
+      "Neue Freunde\nschlüpfen",
+      "Zieh deine\nFreunde an",
+      "Süße\nMinispiele"
     ],
     "pt": [
-      "Seu amiguinho\nfofinho",
-      "Escove e deixe\nainda mais fofo",
-      "Dê lanchinhos\nfofos",
-      "Aperte, jogue\ne abrace",
-      "Vista do\nseu jeito",
-      "Bons sonhos\ntoda noite"
+      "Mofu e amigos\nnuma casinha fofa",
+      "Dias de spa\nASMR relaxantes",
+      "Sons para\ndormir tranquilo",
+      "Hora do lanche\npara todos",
+      "Novos amigos\nsaem do ovo",
+      "Vista seus\namigos",
+      "Minijogos\nfofos"
     ],
     "es": [
-      "Tu amiguito\nesponjoso",
-      "Cepíllalo\nsúper esponjoso",
-      "Dale snacks\nadorables",
-      "Apriétalo, lánzalo,\nabrázalo",
-      "Vístelo\na tu estilo",
-      "Dulces sueños\ncada noche"
+      "Mofu y amigos\nen una casita",
+      "Días de spa\nASMR relajantes",
+      "Sonidos\npara dormir",
+      "Hora del snack\npara todos",
+      "Nuevos amigos\nsalen del huevo",
+      "Viste a\ntus amigos",
+      "Minijuegos\nadorables"
     ],
     "fr": [
-      "Ton petit ami\ntout doux",
-      "Brosse-le pour\nplus de douceur",
-      "Donne-lui de\njolies friandises",
-      "Serre-le, lance-le,\ncâline-le",
-      "Habille-le\nà ta façon",
-      "Fais de beaux\nrêves"
+      "Mofu et ses amis\nà la maison",
+      "Spa ASMR\ntout en douceur",
+      "Sons apaisants\npour dormir",
+      "Goûter\npour tout le monde",
+      "De nouveaux amis\néclosent",
+      "Habille\ntes amis",
+      "Mini-jeux\ntout mignons"
     ],
     "ar": [
-      "صديقك الصغير\nالناعم",
-      "مشّطه ليصبح\nأنعم وأنعم",
-      "أطعمه وجبات\nلطيفة",
-      "اضغطه، ارمِه،\nواحضنه",
-      "لبّسه\nعلى ذوقك",
-      "أحلام سعيدة\nكل ليلة"
+      "موفو وأصدقاؤه\nفي بيت دافئ",
+      "أيام سبا مريحة\nبأصوات ASMR",
+      "أصوات هادئة\nللنوم",
+      "وقت الوجبات\nللجميع",
+      "افقس بيضة\nلصديق جديد",
+      "لبّس\nأصدقاءك",
+      "ألعاب صغيرة\nلطيفة"
     ]
   }
 }
