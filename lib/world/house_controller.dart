@@ -53,6 +53,8 @@ class HouseController extends ChangeNotifier {
     for (final r in Room.values) {
       scenes[r] = RoomScene(seed: r.index + 3)..socialIdle = r == Room.living || r == Room.garden || r == Room.playroom;
     }
+    // The hatchery nest sits mid-garden: friends play either side of it.
+    scenes[Room.garden]!.keepOut = const [(0.36, 0.64)];
     sync();
   }
 
@@ -112,9 +114,12 @@ class HouseController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void layoutAll(Rect area, {required double floorY, double sizeScale = 1}) {
-    for (final s in scenes.values) {
-      s.layout(area, floorY: floorY, sizeScale: sizeScale);
+  /// Lays every room out with its own floor line (each room's shelf has its
+  /// own height, so each floor sits just above its own shelf).
+  void layoutRooms({required double top, required double width, required double Function(Room) floorFor, double sizeScale = 1}) {
+    for (final e in scenes.entries) {
+      final floor = floorFor(e.key);
+      e.value.layout(Rect.fromLTWH(0, top, width, floor - top), floorY: floor, sizeScale: sizeScale);
     }
   }
 

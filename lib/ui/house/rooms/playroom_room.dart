@@ -107,16 +107,27 @@ class _BoardArt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const colors = [Color(0xFFF7A9BD), Colors.white, Color(0xFFF2B632), Colors.white, Color(0xFF9FD3F0), Colors.white, Color(0xFFB9E3A8), Colors.white, Color(0xFFF7A9BD)];
+    const colors = [Color(0xFFF7A9BD), Color(0xFF8E5C3B), Color(0xFFF2B632), Color(0xFF8E5C3B), Color(0xFF9FD3F0), Color(0xFF8E5C3B), Color(0xFFB9E3A8), Color(0xFF8E5C3B), Color(0xFFF7A9BD)];
     return Container(
-      decoration: BoxDecoration(color: const Color(0xFFFFE3EC), borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(color: const Color(0xFFDDEFD3), borderRadius: BorderRadius.circular(20)),
       padding: const EdgeInsets.all(9),
-      child: GridView.count(
-        crossAxisCount: 3,
-        mainAxisSpacing: 5,
-        crossAxisSpacing: 5,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [for (final c in colors) DecoratedBox(decoration: BoxDecoration(shape: BoxShape.circle, color: c))],
+      child: Column(
+        children: [
+          for (var r = 0; r < 3; r++)
+            Expanded(
+              child: Row(
+                children: [
+                  for (var c = 0; c < 3; c++)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.5),
+                        child: DecoratedBox(decoration: BoxDecoration(shape: BoxShape.circle, color: colors[r * 3 + c])),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }

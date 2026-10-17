@@ -92,6 +92,10 @@ class SnackCatchGame {
   double minX;
   double maxX;
 
+  /// False stops new items from spawning (tests and replays drive the board
+  /// with [drop] instead).
+  bool spawning = true;
+
   final List<FallItem> items = [];
   final List<SnackCatchEvent> _events = [];
 
@@ -150,7 +154,7 @@ class SnackCatchGame {
     _elapsed = math.min(duration, _elapsed + h);
     if (_stun > 0) _stun = math.max(0, _stun - h);
     _spawnIn -= h;
-    if (_spawnIn <= 0 && _elapsed < duration) {
+    if (spawning && _spawnIn <= 0 && _elapsed < duration) {
       _spawn();
       _spawnIn = spawnGapAt(progress) + _rng.nextDouble() * 0.25;
     }

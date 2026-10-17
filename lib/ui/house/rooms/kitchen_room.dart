@@ -134,6 +134,7 @@ class KitchenRoom extends RoomModule {
             ),
             const SizedBox(height: 8),
             GridView.count(
+              padding: EdgeInsets.zero,
               crossAxisCount: 3,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

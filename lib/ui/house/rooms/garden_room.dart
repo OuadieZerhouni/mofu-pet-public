@@ -328,10 +328,10 @@ class _BigButton extends StatelessWidget {
               Icon(icon, color: enabled ? House.rose : House.woodText, size: 22),
               const SizedBox(width: 8),
               Flexible(
-                child: Text(label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: enabled ? House.ink : House.woodText)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(label, maxLines: 1, style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: enabled ? House.ink : House.woodText)),
+                ),
               ),
             ],
           ),

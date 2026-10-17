@@ -503,67 +503,71 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rxSpinHint => 'دلّعه بحركة دائرية';
 
   @override
-  String get roomLiving => 'Living room';
+  String get roomLiving => 'الصالة';
 
   @override
-  String get roomSpa => 'Spa';
+  String get roomSpa => 'السبا';
 
   @override
-  String get roomKitchen => 'Kitchen';
+  String get roomKitchen => 'المطبخ';
 
   @override
-  String get roomBedroom => 'Bedroom';
+  String get roomBedroom => 'غرفة النوم';
 
   @override
-  String get roomPlayroom => 'Playroom';
+  String get roomPlayroom => 'غرفة اللعب';
 
   @override
-  String get roomGarden => 'Garden';
+  String get roomGarden => 'الحديقة';
 
   @override
-  String get navPrevRoom => 'Previous room';
+  String get navPrevRoom => 'الغرفة السابقة';
 
   @override
-  String get navNextRoom => 'Next room';
+  String get navNextRoom => 'الغرفة التالية';
 
   @override
-  String get navSettings => 'Settings';
+  String get navSettings => 'الإعدادات';
 
   @override
   String starsCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count stars',
-      one: '1 star',
+      other: '$count نجمة',
+      many: '$count نجمة',
+      few: '$count نجوم',
+      two: 'نجمتان',
+      one: 'نجمة واحدة',
+      zero: '$count نجمة',
     );
     return '$_temp0';
   }
 
   @override
   String friendsHere(int count, int max) {
-    return '$count of $max here';
+    return '$count من $max هنا';
   }
 
   @override
-  String get shelfTapHint => 'Tap a friend to bring them here';
+  String get shelfTapHint => 'انقر على صديق لتجلبه إلى هنا';
 
   @override
-  String get roomFull => 'This room is full — 4 friends at most';
+  String get roomFull => 'هذه الغرفة ممتلئة: أربعة أصدقاء على الأكثر';
 
   @override
   String friendHereLabel(String name) {
-    return '$name, in this room. Double-tap for their card.';
+    return '$name في هذه الغرفة. انقر مرتين لفتح بطاقته.';
   }
 
   @override
   String friendElsewhereLabel(String name) {
-    return '$name. Double-tap to bring them here.';
+    return '$name. انقر مرتين لتجلبه إلى هنا.';
   }
 
   @override
   String eggCoinLabel(int stars) {
-    return 'Next egg hatches at $stars stars';
+    return 'ستفقس البيضة التالية عند $stars نجمة';
   }
 
   @override
@@ -573,159 +577,159 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String toastLevelUp(String name, int level) {
-    return '$name reached friendship level $level!';
+    return 'وصل $name إلى مستوى الصداقة $level!';
   }
 
   @override
-  String get toastEggReady => 'An egg is ready in the garden!';
+  String get toastEggReady => 'بيضة جاهزة في الحديقة!';
 
   @override
   String toastFluffy(String name, int percent) {
-    return '$name is $percent% fluffy!';
+    return '$name منفوش بنسبة $percent٪!';
   }
 
   @override
-  String get bubbleFull => 'I\'m full!';
+  String get bubbleFull => 'شبعت!';
 
   @override
-  String get bubbleOink => 'Oink!';
+  String get bubbleOink => 'أوينك!';
 
   @override
-  String get bubbleOinkQuestion => 'Oink?';
+  String get bubbleOinkQuestion => 'أوينك؟';
 
   @override
-  String get bubbleWoof => 'Woof!';
+  String get bubbleWoof => 'هاو!';
 
   @override
-  String get bubbleAchoo => 'Achoo!';
+  String get bubbleAchoo => 'هاتشي!';
 
   @override
-  String get bubbleYip => 'Yip!';
+  String get bubbleYip => 'ييب!';
 
   @override
-  String get bubbleHowl => 'Awooo!';
+  String get bubbleHowl => 'أووووو!';
 
   @override
-  String get bubbleWhimper => 'Whimper…';
+  String get bubbleWhimper => 'نييي…';
 
   @override
-  String get bubbleGrrr => 'Grrr!';
+  String get bubbleGrrr => 'غررر!';
 
   @override
-  String get bubbleSqueak => 'Squeak!';
+  String get bubbleSqueak => 'صيييك!';
 
   @override
-  String get bubblePant => 'Hah-hah!';
+  String get bubblePant => 'هاه هاه!';
 
   @override
-  String get bubblePlay => 'Let\'s play!';
+  String get bubblePlay => 'هيا نلعب!';
 
   @override
-  String get bubbleCombo10 => 'Boop-a-doop!';
+  String get bubbleCombo10 => 'بوب بوب بوب!';
 
   @override
-  String get bubbleCombo25 => 'Snoot storm!';
+  String get bubbleCombo25 => 'عاصفة أنوف!';
 
   @override
-  String get bubbleCombo50 => 'Mega boop!';
+  String get bubbleCombo50 => 'بوب خارق!';
 
   @override
-  String get bubbleHi => 'Hi!';
+  String get bubbleHi => 'مرحبًا!';
 
   @override
-  String get spaEmptyTitle => 'The spa is ready';
+  String get spaEmptyTitle => 'السبا جاهز';
 
   @override
-  String get spaEmptyHint => 'Tap a friend below to bring them to the spa';
+  String get spaEmptyHint => 'انقر على صديق بالأسفل لتأخذه إلى السبا';
 
   @override
   String spaTitle(String name) {
-    return '$name\'s spa day';
+    return 'يوم سبا $name';
   }
 
   @override
   String spaStepOf(int step, int total) {
-    return 'Step $step of $total';
+    return 'الخطوة $step من $total';
   }
 
   @override
-  String get spaStepFoam => 'Foam';
+  String get spaStepFoam => 'رغوة';
 
   @override
-  String get spaStepRinse => 'Rinse';
+  String get spaStepRinse => 'شطف';
 
   @override
-  String get spaStepTowel => 'Towel';
+  String get spaStepTowel => 'منشفة';
 
   @override
-  String get spaStepDry => 'Dry';
+  String get spaStepDry => 'تجفيف';
 
   @override
-  String get spaHintFoam => 'Rub to make bubbles';
+  String get spaHintFoam => 'افرك لتصنع فقاعات';
 
   @override
-  String get spaHintRinse => 'Drag the shower over the foam';
+  String get spaHintRinse => 'اسحب الدش فوق الرغوة';
 
   @override
-  String get spaHintTowel => 'Rub gently until dry';
+  String get spaHintTowel => 'افرك بلطف حتى يجف';
 
   @override
-  String get spaHintDry => 'Blow-dry for extra fluff';
+  String get spaHintDry => 'جفّفه بالمجفف ليزداد نفشًا';
 
   @override
-  String get spaHintDone => 'All fresh! Play, or start again';
+  String get spaHintDone => 'صار منعشًا! العب أو ابدأ من جديد';
 
   @override
-  String get spaAgain => 'Spa again';
+  String get spaAgain => 'سبا مرة أخرى';
 
   @override
-  String get spaFreshToast => 'New in the journal: Spa day';
+  String get spaFreshToast => 'جديد في الدفتر: يوم سبا';
 
   @override
-  String get bubbleFresh => 'Fresh!';
+  String get bubbleFresh => 'منعش!';
 
   @override
-  String get snackApple => 'Apple';
+  String get snackApple => 'تفاحة';
 
   @override
-  String get snackCarrot => 'Carrot';
+  String get snackCarrot => 'جزرة';
 
   @override
-  String get snackCorn => 'Corn';
+  String get snackCorn => 'ذرة';
 
   @override
-  String get snackLettuce => 'Lettuce';
+  String get snackLettuce => 'خس';
 
   @override
-  String get snackWatermelon => 'Melon';
+  String get snackWatermelon => 'بطيخ';
 
   @override
-  String get snackBone => 'Bone';
+  String get snackBone => 'عظمة';
 
   @override
-  String get snackBacon => 'Bacon bite';
+  String get snackBacon => 'لحم مقدد';
 
   @override
-  String get snackCheese => 'Cheese';
+  String get snackCheese => 'جبن';
 
   @override
-  String get snackCupcake => 'Cupcake';
+  String get snackCupcake => 'كب كيك';
 
   @override
-  String get snackBlueberry => 'Blueberries';
+  String get snackBlueberry => 'توت أزرق';
 
   @override
-  String get snackCherry => 'Cherries';
+  String get snackCherry => 'كرز';
 
   @override
-  String get snackGrape => 'Grapes';
+  String get snackGrape => 'عنب';
 
   @override
-  String get snackPeach => 'Peach';
+  String get snackPeach => 'خوخ';
 
   @override
   String kitchenMenuFor(String name) {
-    return '$name\'s menu · drag to the mouth';
+    return 'قائمة $name · اسحب إلى الفم';
   }
 
   @override
@@ -733,146 +737,148 @@ class AppLocalizationsAr extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count more this hour',
-      one: '1 more this hour',
-      zero: 'Full for now',
+      other: '$count وجبة أخرى هذه الساعة',
+      many: '$count وجبة أخرى هذه الساعة',
+      few: '$count وجبات أخرى هذه الساعة',
+      two: 'وجبتان أخريان هذه الساعة',
+      one: 'وجبة واحدة أخرى هذه الساعة',
+      zero: 'شبعان حاليًا',
     );
     return '$_temp0';
   }
 
   @override
-  String get kitchenEmptyHint =>
-      'Tap a friend below to invite them for a snack';
+  String get kitchenEmptyHint => 'انقر على صديق بالأسفل لتدعوه إلى وجبة خفيفة';
 
   @override
   String kitchenFavoriteToast(String name, String snack) {
-    return '$name loves $snack! +1 ★';
+    return '$name يحب $snack! +1 ★';
   }
 
   @override
-  String get kitchenPickHint => 'Tap a friend to choose who eats';
+  String get kitchenPickHint => 'انقر على صديق لتختار من سيأكل';
 
   @override
-  String get bedLamp => 'Night light';
+  String get bedLamp => 'ضوء الليل';
 
   @override
-  String get bedTuckIn => 'Tuck in';
+  String get bedTuckIn => 'تغطية';
 
   @override
-  String get bedWakeUp => 'Wake up';
+  String get bedWakeUp => 'إيقاظ';
 
   @override
-  String get sleepSounds => 'Sleep sounds';
+  String get sleepSounds => 'أصوات النوم';
 
   @override
-  String get sleepPlay => 'Play';
+  String get sleepPlay => 'تشغيل';
 
   @override
-  String get sleepStop => 'Stop';
+  String get sleepStop => 'إيقاف';
 
   @override
-  String get sleepMix => 'Mix';
+  String get sleepMix => 'مزج';
 
   @override
-  String get sleepTimer => 'Timer';
+  String get sleepTimer => 'مؤقّت';
 
   @override
-  String get sleepTimerOff => 'Off';
+  String get sleepTimerOff => 'بدون';
 
   @override
   String sleepMinutes(int minutes) {
-    return '$minutes min';
+    return '$minutes د';
   }
 
   @override
-  String get sleepRain => 'Rain';
+  String get sleepRain => 'مطر';
 
   @override
-  String get sleepPurr => 'Purr';
+  String get sleepPurr => 'خرخرة';
 
   @override
-  String get sleepFire => 'Fireplace';
+  String get sleepFire => 'مدفأة';
 
   @override
-  String get sleepOcean => 'Ocean';
+  String get sleepOcean => 'بحر';
 
   @override
-  String get sleepChimes => 'Wind chimes';
+  String get sleepChimes => 'أجراس الرياح';
 
   @override
-  String get sleepNoise => 'Soft noise';
+  String get sleepNoise => 'ضوضاء ناعمة';
 
   @override
-  String get sleepScreenOff => 'Keeps playing with the screen off';
+  String get sleepScreenOff => 'يستمر التشغيل والشاشة مطفأة';
 
   @override
   String sleepEndsIn(int minutes) {
-    return 'Stops in $minutes min';
+    return 'يتوقف بعد $minutes د';
   }
 
   @override
   String sleepVolume(String channel) {
-    return '$channel volume';
+    return 'مستوى صوت $channel';
   }
 
   @override
   String get gameBoopRush => 'Boop Rush';
 
   @override
-  String get gameBoopRushDesc => 'Boop every snoot that pops up. 30 seconds.';
+  String get gameBoopRushDesc => 'المس كل أنف يظهر. 30 ثانية.';
 
   @override
   String get gameSnackCatch => 'Snack Catch';
 
   @override
   String get gameSnackCatchDesc =>
-      'Slide a friend to catch snacks, dodge the bees. 45 seconds.';
+      'حرّك صديقًا لتلتقط الوجبات وتتفادى النحل. 45 ثانية.';
 
   @override
   String gameBest(int score) {
-    return 'Best $score';
+    return 'الأفضل $score';
   }
 
   @override
   String gameStarsCap(int count) {
-    return 'Up to $count ★ a day';
+    return 'حتى $count ★ يوميًا';
   }
 
   @override
   String gamePlay(String game) {
-    return 'Play $game';
+    return 'العب $game';
   }
 
   @override
-  String get gameReady => 'Ready?';
+  String get gameReady => 'جاهز؟';
 
   @override
-  String get gameGo => 'Go!';
+  String get gameGo => 'انطلق!';
 
   @override
   String gameScore(int score) {
-    return 'Score $score';
+    return 'النقاط $score';
   }
 
   @override
   String gameTime(int seconds) {
-    return '${seconds}s';
+    return '$seconds ث';
   }
 
   @override
-  String get gamePause => 'Pause';
+  String get gamePause => 'إيقاف مؤقت';
 
   @override
-  String get gameResume => 'Resume';
+  String get gameResume => 'متابعة';
 
   @override
-  String get gameQuit => 'Quit';
+  String get gameQuit => 'خروج';
 
   @override
-  String get gameTimesUp => 'Time\'s up!';
+  String get gameTimesUp => 'انتهى الوقت!';
 
   @override
-  String get gameNewBest => 'New best!';
+  String get gameNewBest => 'رقم قياسي جديد!';
 
   @override
   String gameStarsEarned(int count) {
@@ -880,266 +886,270 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get gamePlayAgain => 'Play again';
+  String get gamePlayAgain => 'العب مجددًا';
 
   @override
-  String get gameDone => 'Done';
+  String get gameDone => 'تم';
 
   @override
-  String get gameCatcherHint => 'Drag left and right';
+  String get gameCatcherHint => 'اسحب يمينًا ويسارًا';
 
   @override
-  String get gameBoopHint => 'Boop the snoots! Don\'t wake the sleepy ones.';
+  String get gameBoopHint => 'المس الأنوف! لا توقظ النعسانين.';
 
   @override
-  String get gardenEggReadyTitle => 'A new egg is ready!';
+  String get gardenEggReadyTitle => 'بيضة جديدة جاهزة!';
 
   @override
-  String get gardenEggReadyHint => 'Tap the egg to welcome a new friend';
+  String get gardenEggReadyHint => 'انقر على البيضة لتستقبل صديقًا جديدًا';
 
   @override
   String gardenNextEgg(int stars) {
-    return 'Next friend at $stars ★';
+    return 'الصديق التالي عند $stars ★';
   }
 
   @override
   String gardenProgress(int have, int need) {
-    return '$have of $need ★';
+    return '$have من $need ★';
   }
 
   @override
-  String get gardenEggHint => 'Care for your friends to earn stars';
+  String get gardenEggHint => 'اعتنِ بأصدقائك لتجمع النجوم';
 
   @override
-  String get gardenAllHatched => 'Everyone has hatched!';
+  String get gardenAllHatched => 'فقس الجميع!';
 
   @override
   String gardenEggNotYet(int stars) {
-    return 'This egg needs $stars ★';
+    return 'هذه البيضة تحتاج $stars ★';
   }
 
   @override
   String hatchNameTitle(String species) {
-    return 'Name your new $species';
+    return 'صديقك الجديد: $species. اختر له اسمًا';
   }
 
   @override
-  String get gardenGift => 'Daily gift';
+  String get gardenGift => 'هدية يومية';
 
   @override
   String gardenGiftDay(int day) {
-    return 'Daily gift · day $day';
+    return 'هدية يومية · اليوم $day';
   }
 
   @override
-  String get gardenGiftClaimed => 'Come back tomorrow';
+  String get gardenGiftClaimed => 'عُد غدًا';
 
   @override
-  String get gardenPhotoBooth => 'Photo booth';
+  String get gardenPhotoBooth => 'ركن التصوير';
 
   @override
   String toastGift(int count) {
-    return '+$count ★ · see you tomorrow!';
+    return '+$count ★ · نراك غدًا!';
   }
 
   @override
   String toastNewFriend(String name) {
-    return 'Say hi to $name!';
+    return 'قل مرحبًا لـ$name!';
   }
 
   @override
-  String get speciesMofu => 'fluff puff';
+  String get speciesMofu => 'كرة فرو';
 
   @override
-  String get speciesOink => 'piglet';
+  String get speciesOink => 'خنزير صغير';
 
   @override
-  String get speciesWuff => 'puppy';
+  String get speciesWuff => 'جرو';
 
   @override
-  String get speciesBoop => 'boop';
+  String get speciesBoop => 'بوب';
 
   @override
   String eggLabel(String state) {
-    return 'Egg. $state';
+    return 'بيضة. $state';
   }
 
   @override
-  String get cardTabPlay => 'Play';
+  String get cardTabPlay => 'لعب';
 
   @override
-  String get cardTabWardrobe => 'Wardrobe';
+  String get cardTabWardrobe => 'ملابس';
 
   @override
-  String get cardTabJournal => 'Journal';
+  String get cardTabJournal => 'دفتر';
 
   @override
   String cardHatched(String date) {
-    return 'Hatched $date';
+    return 'فقس في $date';
   }
 
   @override
   String cardLoves(String snack) {
-    return 'Loves $snack';
+    return 'يحب: $snack';
   }
 
   @override
-  String get cardLovesSecret => 'Favourite snack: a secret!';
+  String get cardLovesSecret => 'الوجبة المفضّلة: سر!';
 
   @override
   String cardLevel(int level) {
-    return 'Friendship level $level';
+    return 'مستوى الصداقة $level';
   }
 
   @override
-  String get cardRename => 'Rename';
+  String get cardRename => 'تغيير الاسم';
 
   @override
-  String get cardMoveTo => 'Move to…';
+  String get cardMoveTo => 'انقل إلى…';
 
   @override
-  String get cardTricks => 'Tricks';
+  String get cardTricks => 'حيل';
 
   @override
-  String get cardVoice => 'Voice';
+  String get cardVoice => 'الصوت';
 
   @override
-  String get trickMastered => 'Mastered';
+  String get trickMastered => 'أتقنها';
 
   @override
   String trickPractice(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count more days',
-      one: '1 more day',
+      other: '$count يوم آخر',
+      many: '$count يومًا آخر',
+      few: '$count أيام أخرى',
+      two: 'يومان آخران',
+      one: 'يوم واحد آخر',
+      zero: '$count يوم إضافي',
     );
     return '$_temp0';
   }
 
   @override
-  String get trickTryIt => 'Try it!';
+  String get trickTryIt => 'جرّبها!';
 
   @override
-  String get trickDoneToday => 'Practised today';
+  String get trickDoneToday => 'تدرّب اليوم';
 
   @override
-  String get trickSit => 'Sit';
+  String get trickSit => 'اجلس';
 
   @override
-  String get trickPaw => 'Paw';
+  String get trickPaw => 'صافح';
 
   @override
-  String get trickSpin => 'Spin';
+  String get trickSpin => 'دُر';
 
   @override
-  String get trickSpeak => 'Speak';
+  String get trickSpeak => 'انبح';
 
   @override
-  String get trickPlayDead => 'Play dead';
+  String get trickPlayDead => 'تظاهر بالموت';
 
   @override
-  String get trickHighFive => 'High five';
+  String get trickHighFive => 'كفّ بكفّ';
 
   @override
-  String get wardrobeCoats => 'Coats';
+  String get wardrobeCoats => 'فراء';
 
   @override
-  String get wardrobeAccessories => 'Accessories';
+  String get wardrobeAccessories => 'إكسسوارات';
 
   @override
   String unlockLevel(int level) {
-    return 'Friendship level $level';
+    return 'مستوى الصداقة $level';
   }
 
   @override
   String unlockStars(int stars) {
-    return '$stars ★ in total';
+    return '$stars ★ إجمالًا';
   }
 
   @override
-  String get unlockSeasonal => 'Seasonal';
+  String get unlockSeasonal => 'موسمي';
 
   @override
   String journalCount(int have, int total) {
-    return '$have of $total found';
+    return 'وُجد $have من $total';
   }
 
   @override
-  String get journalHidden => '???';
+  String get journalHidden => '؟؟؟';
 
   @override
-  String get accScarf => 'Scarf';
+  String get accScarf => 'وشاح';
 
   @override
-  String get accBandana => 'Bandana';
+  String get accBandana => 'باندانا';
 
   @override
-  String get accBell => 'Bell collar';
+  String get accBell => 'طوق بجرس';
 
   @override
-  String get accBowtie => 'Bow tie';
+  String get accBowtie => 'ربطة فراشة';
 
   @override
   String voicePad(String name) {
-    return 'Play $name\'s voice';
+    return 'تشغيل صوت $name';
   }
 
   @override
   String toastTrickMastered(String name, String trick) {
-    return '$name mastered $trick!';
+    return 'أتقن $name حيلة «$trick»!';
   }
 
   @override
   String toastMoved(String name, String room) {
-    return '$name went to the $room';
+    return 'انتقل $name إلى $room';
   }
 
   @override
-  String get wearNone => 'None';
+  String get wearNone => 'بدون';
 
   @override
-  String get settingsReduceMotion => 'Reduce motion';
+  String get settingsReduceMotion => 'تقليل الحركة';
 
   @override
-  String get settingsCredits => 'Credits';
+  String get settingsCredits => 'شكر وتقدير';
 
   @override
   String get creditsBody =>
-      'Made with love by Ouadie Zerhouni. Every friend, room and sound in this app is original.';
+      'صُنع بحب بواسطة Ouadie Zerhouni. كل صديق وغرفة وصوت في هذا التطبيق أصلي.';
 
   @override
   String get creditsAudio =>
-      'Some sound effects made with Stable Audio · Powered by Stability AI';
+      'بعض المؤثرات الصوتية صُنعت بواسطة Stable Audio · Powered by Stability AI';
 
   @override
   String get resetHouseBody =>
-      'This clears every friend, all stars, the wardrobe and the journal. It can\'t be undone.';
+      'سيُحذف كل الأصدقاء وكل النجوم والملابس والدفتر. لا يمكن التراجع.';
 
   @override
-  String get photoTitle => 'Photo booth';
+  String get photoTitle => 'ركن التصوير';
 
   @override
-  String get photoBackdrop => 'Backdrop';
+  String get photoBackdrop => 'الخلفية';
 
   @override
-  String get photoFriends => 'Friends';
+  String get photoFriends => 'الأصدقاء';
 
   @override
-  String get photoStickers => 'Stickers';
+  String get photoStickers => 'ملصقات';
 
   @override
-  String get photoShare => 'Share';
+  String get photoShare => 'مشاركة';
 
   @override
-  String get photoHint => 'Drag friends and stickers into place';
+  String get photoHint => 'اسحب الأصدقاء والملصقات إلى مكانها';
 
   @override
-  String get photoClose => 'Close';
+  String get photoClose => 'إغلاق';
 
   @override
-  String get photoShareText => 'My friends in Mofu';
+  String get photoShareText => 'أصدقائي في موفو';
 
   @override
-  String get photoRemoveSticker => 'Double-tap a sticker to remove it';
+  String get photoRemoveSticker => 'انقر مرتين على ملصق لإزالته';
 }

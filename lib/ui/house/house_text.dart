@@ -1,7 +1,5 @@
-import '../../creatures/boop/boop_catalog.dart';
-import '../../creatures/oink/oink_catalog.dart';
-import '../../creatures/wuff/wuff_catalog.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/species_text.dart';
 import '../../model/house_store.dart';
 import '../names.dart';
 
@@ -38,23 +36,11 @@ extension HouseText on AppLocalizations {
       };
 
   /// Journal name of a reaction id (`mofu.boing`, `oink.belly`, `house.pileUp`).
-  String reactionName(String id) {
-    final dot = id.indexOf('.');
-    final species = dot < 0 ? '' : id.substring(0, dot);
-    final local = dot < 0 ? id : id.substring(dot + 1);
-    switch (species) {
-      case 'mofu':
-        return reaction(local).$1;
-      case 'oink':
-        return oinkReactions.where((r) => r.id == id).firstOrNull?.englishName ?? local;
-      case 'wuff':
-        return wuffReactions.where((r) => r.id == id).firstOrNull?.englishName ?? local;
-      case 'boop':
-        return boopReactions.where((r) => r.id == id).firstOrNull?.englishName ?? local;
-      case 'house':
-        return local == 'pileUp' ? 'Friend pile' : 'Nuzzle';
-      default:
-        return local;
-    }
+  String reactionName(String id) => reactionText(id).$1;
+
+  /// (name, hint) for any reaction id, localised.
+  (String, String) reactionText(String id) {
+    if (id.startsWith('mofu.')) return reaction(id.substring(5));
+    return speciesReaction(localeName, id) ?? (id, '');
   }
 }

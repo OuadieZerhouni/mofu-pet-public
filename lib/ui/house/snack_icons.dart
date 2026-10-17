@@ -86,19 +86,22 @@ class _SnackPainter extends CustomPainter {
           canvas.drawOval(Rect.fromCenter(center: d, width: 5, height: 8), f(const Color(0xFF3A2A2E)));
         }
       case 'bone':
-        canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(26, 42, 48, 16), const Radius.circular(8)), f(const Color(0xFFFFF4E0)));
+        final bone = Path()..addRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(26, 42, 48, 16), const Radius.circular(8)));
         for (final c in const [Offset(24, 40), Offset(24, 60), Offset(76, 40), Offset(76, 60)]) {
-          canvas.drawCircle(c, 12, f(const Color(0xFFFFF4E0)));
+          bone.addOval(Rect.fromCircle(center: c, radius: 12));
         }
+        canvas.drawPath(bone, line(const Color(0xFFB98F5E), 6));
+        canvas.drawPath(bone, f(const Color(0xFFFFF4E0)));
         canvas.drawRRect(RRect.fromRectAndRadius(const Rect.fromLTWH(12, 28, 76, 44), const Radius.circular(22)), line(const Color(0xFFE6D3B8), 2.5));
       case 'bacon':
-        for (var i = 0; i < 2; i++) {
-          final p = Path()..moveTo(14, 34 + i * 26.0);
-          for (var x = 14.0; x <= 86; x += 12) {
-            p.lineTo(x, 34 + i * 26.0 + ((x ~/ 12).isEven ? 8 : 0));
+        for (var k = 0; k < 2; k++) {
+          final y0 = 30.0 + k * 26;
+          final wave = Path()..moveTo(12, y0);
+          for (var x = 12.0; x <= 88; x += 4) {
+            wave.lineTo(x, y0 + math.sin(x / 8) * 5);
           }
-          canvas.drawPath(p, line(const Color(0xFFC9473F), 14));
-          canvas.drawPath(p, line(const Color(0xFFF7C1A8), 4));
+          canvas.drawPath(wave, line(const Color(0xFFB8402F), 16));
+          canvas.drawPath(wave, line(const Color(0xFFF7C9B4), 5));
         }
       case 'cheese':
         final p = Path()

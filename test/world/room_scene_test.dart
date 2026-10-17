@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mofu_pet/creatures/boop/boop_creature.dart';
 import 'package:mofu_pet/creatures/mofu/mofu_creature.dart';
+import 'package:mofu_pet/creatures/oink/oink_creature.dart';
+import 'package:mofu_pet/creatures/wuff/wuff_creature.dart';
 import 'package:mofu_pet/sim/mofu_sim.dart' show MofuMode;
 import 'package:mofu_pet/world/room_scene.dart';
 
@@ -85,5 +87,29 @@ void main() {
     run(s, 0.5);
     expect(s.creatures.every((c) => c.asleep), isTrue);
     expect(s.paintOrder.length, 3);
+  });
+
+  test('a full room of four species fits inside the walls and stands on the floor', () {
+    for (final w in [375.0, 440.0]) {
+      final s = RoomScene()..layout(Rect.fromLTWH(0, 180, w, 400), floorY: 580, sizeScale: w / 390);
+      s
+        ..add(OinkCreature(friendId: 'o', seed: 1))
+        ..add(MofuCreature(friendId: 'm', seed: 2))
+        ..add(WuffCreature(friendId: 'w', seed: 3))
+        ..add(BoopCreature(friendId: 'b', seed: 4, variant: 'mochi'));
+      run(s, 8);
+      expect(s.crowdScale, lessThan(1));
+      for (final c in s.creatures) {
+        expect(c.bounds.left, greaterThanOrEqualTo(-2), reason: '${c.friendId} @ $w');
+        expect(c.bounds.right, lessThanOrEqualTo(w + 2), reason: '${c.friendId} @ $w');
+        expect(c.footPoint.dy, closeTo(580, 1.5), reason: '${c.friendId} @ $w');
+      }
+      // Moving to a room with a higher floor keeps everyone on it.
+      s.layout(Rect.fromLTWH(0, 180, w, 300), floorY: 480, sizeScale: w / 390);
+      run(s, 1);
+      for (final c in s.creatures) {
+        expect(c.footPoint.dy, closeTo(480, 1.5), reason: '${c.friendId} relayout @ $w');
+      }
+    }
   });
 }

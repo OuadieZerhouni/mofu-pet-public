@@ -24,13 +24,13 @@ class BedroomRoom extends RoomModule {
   }
 
   static String channelName(AppLocalizations l, String ch) => switch (ch) {
-        'rain' => l.sleepRain,
-        'purr' => l.sleepPurr,
-        'fire' => l.sleepFire,
-        'ocean' => l.sleepOcean,
-        'chimes' => l.sleepChimes,
-        _ => l.sleepNoise,
-      };
+    'rain' => l.sleepRain,
+    'purr' => l.sleepPurr,
+    'fire' => l.sleepFire,
+    'ocean' => l.sleepOcean,
+    'chimes' => l.sleepChimes,
+    _ => l.sleepNoise,
+  };
 
   @override
   Widget? tools(BuildContext context, RoomContext rc) {
@@ -39,35 +39,43 @@ class BedroomRoom extends RoomModule {
     return ListenableBuilder(
       listenable: Listenable.merge([audio, lampOn, rc.store]),
       builder: (context, _) {
-        final allAsleep = rc.house.scenes[Room.bedroom]!.creatures.every((c) => c.asleep) && rc.house.scenes[Room.bedroom]!.creatures.isNotEmpty;
+        final allAsleep =
+            rc.house.scenes[Room.bedroom]!.creatures.every((c) => c.asleep) && rc.house.scenes[Room.bedroom]!.creatures.isNotEmpty;
         return Row(
           children: [
-            _ShelfButton(
-              icon: lampOn.value ? Icons.lightbulb_rounded : Icons.lightbulb_outline_rounded,
-              label: l.bedLamp,
-              selected: lampOn.value,
-              onTap: () {
-                lampOn.value = !lampOn.value;
-                audio.play('ui.tap');
-                audio.haptic('selection');
-              },
-            ),
-            const SizedBox(width: 8),
-            _ShelfButton(
-              icon: allAsleep ? Icons.wb_sunny_rounded : Icons.bedtime_rounded,
-              label: allAsleep ? l.bedWakeUp : l.bedTuckIn,
-              onTap: () {
-                rc.house.bedtime(!allAsleep);
-                if (!allAsleep) lampOn.value = false;
-                audio.haptic('light');
-              },
+            Expanded(
+              child: _ShelfButton(
+                icon: lampOn.value ? Icons.lightbulb_rounded : Icons.lightbulb_outline_rounded,
+                label: l.bedLamp,
+                selected: lampOn.value,
+                onTap: () {
+                  lampOn.value = !lampOn.value;
+                  audio.play('ui.tap');
+                  audio.haptic('selection');
+                },
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: _ShelfButton(
+                icon: allAsleep ? Icons.wb_sunny_rounded : Icons.bedtime_rounded,
+                label: allAsleep ? l.bedWakeUp : l.bedTuckIn,
+                onTap: () {
+                  rc.house.bedtime(!allAsleep);
+                  if (!allAsleep) lampOn.value = false;
+                  audio.haptic('light');
+                },
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 2,
+              child: _ShelfButton(
                 icon: audio.mixerOn ? Icons.stop_circle_rounded : Icons.play_circle_rounded,
                 label: audio.mixerOn
-                    ? (audio.sleepEndsAt == null ? l.sleepStop : l.sleepEndsIn(audio.sleepEndsAt!.difference(DateTime.now()).inMinutes.clamp(0, 999) + 1))
+                    ? (audio.sleepEndsAt == null
+                          ? l.sleepStop
+                          : l.sleepEndsIn(audio.sleepEndsAt!.difference(DateTime.now()).inMinutes.clamp(0, 999) + 1))
                     : l.sleepSounds,
                 selected: audio.mixerOn,
                 wide: true,
@@ -82,7 +90,9 @@ class BedroomRoom extends RoomModule {
               ),
             ),
             const SizedBox(width: 8),
-            _ShelfButton(icon: Icons.tune_rounded, label: l.sleepMix, onTap: () => unawaited(showSleepMixer(context, rc))),
+            Expanded(
+              child: _ShelfButton(icon: Icons.tune_rounded, label: l.sleepMix, onTap: () => unawaited(showSleepMixer(context, rc))),
+            ),
           ],
         );
       },
@@ -109,8 +119,7 @@ class _ShelfButton extends StatelessWidget {
         onTap: onTap,
         child: Container(
           height: 54,
-          constraints: BoxConstraints(minWidth: wide ? 0 : 64),
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 6),
           decoration: BoxDecoration(
             color: selected ? House.woodText : Colors.white.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(18),
@@ -120,10 +129,10 @@ class _ShelfButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, size: 22, color: selected ? House.ink : House.woodText),
-              Text(label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: selected ? House.ink : House.woodText)),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(label, maxLines: 1, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: selected ? House.ink : House.woodText)),
+              ),
             ],
           ),
         ),
@@ -136,7 +145,7 @@ class _ShelfButton extends StatelessWidget {
 Future<void> showSleepMixer(BuildContext context, RoomContext rc) {
   return showModalBottomSheet<void>(
     context: context,
-    backgroundColor: const Color(0xFFF7F3FF),
+    backgroundColor: House.paper,
     shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
     builder: (context) {
       final l = rc.l;
@@ -152,15 +161,29 @@ Future<void> showSleepMixer(BuildContext context, RoomContext rc) {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text(l.sleepSounds, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: House.ink))),
-                    Text(l.sleepScreenOff, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: House.lilac)),
+                    Expanded(
+                      child: Text(
+                        l.sleepSounds,
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: House.ink),
+                      ),
+                    ),
+                    Text(
+                      l.sleepScreenOff,
+                      style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: House.lilac),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 8),
                 for (final ch in sleepChannels)
                   Row(
                     children: [
-                      SizedBox(width: 104, child: Text(BedroomRoom.channelName(l, ch), style: const TextStyle(fontWeight: FontWeight.w800, color: House.ink))),
+                      SizedBox(
+                        width: 104,
+                        child: Text(
+                          BedroomRoom.channelName(l, ch),
+                          style: const TextStyle(fontWeight: FontWeight.w800, color: House.ink),
+                        ),
+                      ),
                       Expanded(
                         child: Semantics(
                           label: l.sleepVolume(BedroomRoom.channelName(l, ch)),
@@ -179,7 +202,10 @@ Future<void> showSleepMixer(BuildContext context, RoomContext rc) {
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Text(l.sleepTimer, style: const TextStyle(fontWeight: FontWeight.w900, color: House.ink)),
+                    Text(
+                      l.sleepTimer,
+                      style: const TextStyle(fontWeight: FontWeight.w900, color: House.ink),
+                    ),
                     const SizedBox(width: 10),
                     for (final m in const [0, 15, 30, 60])
                       Expanded(
@@ -189,7 +215,10 @@ Future<void> showSleepMixer(BuildContext context, RoomContext rc) {
                             label: Text(m == 0 ? l.sleepTimerOff : l.sleepMinutes(m)),
                             selected: rc.store.sleepTimerMin == m,
                             selectedColor: House.lilac,
-                            labelStyle: TextStyle(fontWeight: FontWeight.w900, color: rc.store.sleepTimerMin == m ? Colors.white : House.ink),
+                            labelStyle: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              color: rc.store.sleepTimerMin == m ? Colors.white : House.ink,
+                            ),
                             showCheckmark: false,
                             onSelected: (_) {
                               rc.store.setSleepTimer(m);

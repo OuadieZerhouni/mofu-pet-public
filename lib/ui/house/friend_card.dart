@@ -8,6 +8,7 @@ import '../../creatures/oink/oink_catalog.dart';
 import '../../creatures/wuff/wuff_catalog.dart';
 import '../../creatures/wuff/wuff_creature.dart';
 import '../../l10n/app_localizations.dart';
+import '../../l10n/species_text.dart';
 import '../../model/catalog.dart';
 import '../../model/house_store.dart';
 import '../../model/wardrobe.dart';
@@ -22,33 +23,10 @@ import 'parts.dart';
 List<String> mofuReactionIds() => [for (final r in Catalog.reactions) 'mofu.${r.id}'];
 
 /// Localised (or catalogue) name of a coat / colour variant.
-String variantName(AppLocalizations l, Species s, String id) => switch (s) {
-      Species.mofu => l.colorName(id),
-      Species.oink => oinkTints.where((t) => t.id == id).firstOrNull?.englishName ?? id,
-      Species.boop => boopVariants.where((v) => v.id == id).firstOrNull?.englishName ?? id,
-      Species.wuff => const {
-            'golden': 'Golden',
-            'cream': 'Cream',
-            'chocolate': 'Chocolate',
-            'blackTan': 'Black & tan',
-            'snow': 'Snow',
-            'corgi': 'Corgi',
-            'dalmatian': 'Dalmatian',
-            'husky': 'Husky',
-            'beagle': 'Beagle',
-            'cottonCandy': 'Cotton candy',
-          }[id] ??
-          id,
-    };
+String variantName(AppLocalizations l, Species s, String id) =>
+    s == Species.mofu ? l.colorName(id) : (speciesVariant(l.localeName, s.name, id) ?? id);
 
-String trickName(AppLocalizations l, String id) => switch (id) {
-      'sit' => l.trickSit,
-      'paw' => l.trickPaw,
-      'spin' => l.trickSpin,
-      'speak' => l.trickSpeak,
-      'playDead' => l.trickPlayDead,
-      _ => l.trickHighFive,
-    };
+String trickName(AppLocalizations l, String id) => speciesTrick(l.localeName, id) ?? id;
 
 /// Voice pads per species: (label id, sound id).
 List<(String, String)> voicePads(Species s) => switch (s) {
@@ -100,10 +78,8 @@ class _FriendCardState extends State<_FriendCard> {
         if (f == null) return const SizedBox.shrink();
         return ListView(
           controller: widget.scroll,
-          padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 28),
           children: [
-            Center(child: Container(width: 46, height: 5, decoration: BoxDecoration(color: const Color(0xFFD9C3AD), borderRadius: BorderRadius.circular(3)))),
-            const SizedBox(height: 16),
             _header(l, f),
             const SizedBox(height: 16),
             _tabs(l),
@@ -165,7 +141,7 @@ class _FriendCardState extends State<_FriendCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(f.name, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 24, color: House.ink)),
+              Text(f.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 24, color: House.ink)),
               Text(l.cardHatched(date), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft)),
               Text(knowsFav ? l.cardLoves(l.snackName(fav)) : l.cardLovesSecret, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft)),
               const SizedBox(height: 4),
@@ -180,7 +156,10 @@ class _FriendCardState extends State<_FriendCard> {
                         child: Icon(Icons.favorite_rounded, size: 18, color: (f.level + 1) ~/ 2 >= i ? House.rose : const Color(0xFFE8D5C4)),
                       ),
                     const SizedBox(width: 4),
-                    Text(l.cardLevel(f.level), style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: House.ink)),
+                    Flexible(
+                      child: Text(l.cardLevel(f.level),
+                          maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: House.ink)),
+                    ),
                   ],
                 ),
               ),
@@ -236,6 +215,7 @@ class _FriendCardState extends State<_FriendCard> {
           Text(l.cardTricks, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
           const SizedBox(height: 8),
           GridView.count(
+            padding: EdgeInsets.zero,
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -262,6 +242,7 @@ class _FriendCardState extends State<_FriendCard> {
         Text(l.cardVoice, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
         const SizedBox(height: 8),
         GridView.count(
+          padding: EdgeInsets.zero,
           crossAxisCount: 3,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -309,6 +290,7 @@ class _FriendCardState extends State<_FriendCard> {
         Text(l.wardrobeCoats, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
         const SizedBox(height: 8),
         GridView.count(
+          padding: EdgeInsets.zero,
           crossAxisCount: 3,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -335,6 +317,7 @@ class _FriendCardState extends State<_FriendCard> {
         Text(l.wardrobeAccessories, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
         const SizedBox(height: 8),
         GridView.count(
+          padding: EdgeInsets.zero,
           crossAxisCount: 3,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -379,12 +362,7 @@ class _FriendCardState extends State<_FriendCard> {
       Species.boop => boopReactions.map((r) => r.id).toList(),
       Species.mofu => mofuReactionIds(),
     };
-    String hint(String id) => switch (f.species) {
-          Species.oink => oinkReactions.firstWhere((r) => r.id == id).englishHint,
-          Species.wuff => wuffReactions.firstWhere((r) => r.id == id).englishHint,
-          Species.boop => boopReactions.firstWhere((r) => r.id == id).englishHint,
-          Species.mofu => l.reaction(id.substring(5)).$2,
-        };
+    String hint(String id) => l.reactionText(id).$2;
     final found = ids.where(store.discovered.contains).length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

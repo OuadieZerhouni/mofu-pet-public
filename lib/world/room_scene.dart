@@ -38,6 +38,10 @@ class RoomScene {
   /// When false (spa, kitchen) idle friends do not nuzzle each other.
   bool socialIdle = true;
 
+  /// Horizontal floor spans (as fractions of the room width) friends keep
+  /// clear of, e.g. the garden nest.
+  List<(double, double)> keepOut = const [];
+
   final Map<int, Creature> _owners = {};
   final Map<Creature, LifeState> _lastLife = {};
   double _time = 0;
@@ -47,17 +51,47 @@ class RoomScene {
   double get time => _time;
 
   // ── membership ────────────────────────────────────────────────────────
+  /// Friends shrink as the room fills so everyone still fits side by side.
+  /// Measured from their real visual widths, so it holds on every screen.
+  double get crowdScale => _crowd;
+  double _crowd = 1;
+
+  void _relayoutAll() {
+    final xs = {for (final c in creatures) c: c.position.dx};
+    for (final c in creatures) {
+      c.layout(area, floorY: floorY, sizeScale: sizeScale);
+    }
+    _crowd = 1;
+    if (creatures.length > 1) {
+      final total = creatures.fold<double>(0, (s, c) => s + c.bounds.width);
+      // Neighbours may overlap 18% (see _separate), plus a little wall slack.
+      _crowd = math.min(1.0, area.width * 0.96 / (total * 0.86));
+      if (_crowd < 1) {
+        for (final c in creatures) {
+          c.layout(area, floorY: floorY, sizeScale: sizeScale * _crowd);
+        }
+      }
+    }
+    for (final c in creatures) {
+      final half = c.bounds.width / 2;
+      final x = xs[c]!;
+      c.position = Offset(x.clamp(area.left + half, math.max(area.left + half, area.right - half)).toDouble(), c.position.dy);
+    }
+  }
+
   void add(Creature c, {double? atX}) {
     if (creatures.contains(c)) return;
     creatures.add(c);
-    c.layout(area, floorY: floorY, sizeScale: sizeScale);
+    _relayoutAll();
     final x = atX ?? _freeSpotX(c);
-    c.position = Offset(x.clamp(area.left + c.radius, area.right - c.radius).toDouble(), c.position.dy);
+    final half = c.bounds.width / 2;
+    c.position = Offset(x.clamp(area.left + half, math.max(area.left + half, area.right - half)).toDouble(), c.position.dy);
     _lastLife[c] = c.life;
   }
 
   void remove(Creature c) {
-    creatures.remove(c);
+    if (!creatures.remove(c)) return;
+    _relayoutAll();
     _owners.removeWhere((_, v) => v == c);
     _lastLife.remove(c);
   }
@@ -68,7 +102,10 @@ class RoomScene {
   double _freeSpotX(Creature c) {
     final n = creatures.length;
     if (n <= 1) return area.center.dx;
-    final slots = [for (var i = 0; i < n; i++) area.left + area.width * (i + 0.5) / n];
+    final slots = [
+      for (var i = 0; i < 6; i++) area.left + area.width * (i + 0.5) / 6,
+    ]..removeWhere((x) => keepOut.any((k) => x > area.left + k.$1 * area.width - 30 && x < area.left + k.$2 * area.width + 30));
+    if (slots.isEmpty) return area.center.dx;
     final taken = creatures.where((o) => o != c).map((o) => o.position.dx).toList();
     slots.sort((a, b) {
       double gap(double x) => taken.isEmpty ? 1e9 : taken.map((t) => (t - x).abs()).reduce(math.min);
@@ -78,17 +115,16 @@ class RoomScene {
   }
 
   void layout(Rect area, {required double floorY, double sizeScale = 1}) {
-    final oldW = this.area.width;
+    final old = this.area;
     this.area = area;
     this.floorY = floorY;
     this.sizeScale = sizeScale;
-    for (final c in creatures) {
-      final rel = oldW > 1 ? (c.position.dx - this.area.left) / oldW : 0.5;
-      c.layout(area, floorY: floorY, sizeScale: sizeScale);
-      if (oldW > 1 && (area.width - oldW).abs() > 1) {
-        c.position = Offset(area.left + rel * area.width, c.position.dy);
+    if ((area.width - old.width).abs() > 1 && old.width > 1) {
+      for (final c in creatures) {
+        c.position = Offset(area.left + (c.position.dx - old.left) / old.width * area.width, c.position.dy);
       }
     }
+    _relayoutAll();
   }
 
   // ── input ─────────────────────────────────────────────────────────────
@@ -139,6 +175,8 @@ class RoomScene {
       c.update(dt);
     }
     _separate(dt);
+    _keepInside();
+    _keepClear();
     _landings();
     if (socialIdle && !reduceMotion) _idleSocial();
     for (final c in creatures) {
@@ -157,13 +195,40 @@ class RoomScene {
         final a = creatures[i], b = creatures[j];
         if (!_grounded(a) || !_grounded(b)) continue;
         final dx = b.position.dx - a.position.dx;
-        final minGap = (a.radius + b.radius) * 0.92;
+        // Visual widths (ears, fur, tails) — not just the body — so faces never hide.
+        final minGap = (a.bounds.width + b.bounds.width) * 0.5 * 0.82;
         final overlap = minGap - dx.abs();
         if (overlap <= 0) continue;
         final dir = dx == 0 ? (i.isEven ? 1.0 : -1.0) : dx.sign;
         final push = overlap * 6; // px/s per px of overlap
         if (!a.pinned) a.nudge(Offset(-dir * push, 0));
         if (!b.pinned) b.nudge(Offset(dir * push, 0));
+      }
+    }
+  }
+
+  /// Ears and tails stay on screen: a soft wall push on the visual bounds.
+  void _keepInside() {
+    for (final c in creatures) {
+      if (!_grounded(c) || c.pinned) continue;
+      final b = c.bounds;
+      if (b.left < area.left) c.nudge(Offset((area.left - b.left) * 8, 0));
+      if (b.right > area.right) c.nudge(Offset(-(b.right - area.right) * 8, 0));
+    }
+  }
+
+  void _keepClear() {
+    if (keepOut.isEmpty) return;
+    for (final c in creatures) {
+      if (!_grounded(c) || c.pinned) continue;
+      final half = c.bounds.width * 0.42;
+      for (final (lo, hi) in keepOut) {
+        final a = area.left + lo * area.width - half;
+        final b = area.left + hi * area.width + half;
+        final x = c.position.dx;
+        if (x <= a || x >= b) continue;
+        final toLeft = x - a, toRight = b - x;
+        c.nudge(Offset((toLeft < toRight ? -1 : 1) * 900, 0));
       }
     }
   }

@@ -39,6 +39,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   Duration _last = Duration.zero;
   bool _started = false;
   bool _locked = false;
+  bool _hatching = false;
   int _pointersOnFriend = 0;
   late AppServices _app;
 
@@ -89,6 +90,8 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   }
 
   void _onStore() {
+    // After "Start over" the house is empty again: show the seed once more.
+    if (!store.firstRunDone && store.friends.isEmpty) _hatching = false;
     _app.audio
       ..soundOn = store.soundOn
       ..hapticsOn = store.hapticsOn;
@@ -174,6 +177,11 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
 
   // ── first run ─────────────────────────────────────────────────────────
   Future<void> _hatchFirst() async {
+    // Let the seed's pop play, then reveal the room so the newcomer is
+    // visible behind the naming dialog.
+    await Future<void>.delayed(const Duration(milliseconds: 450));
+    if (!mounted) return;
+    setState(() => _hatching = true);
     _app.audio.play('ui.fanfare');
     final m = store.adopt(Species.mofu);
     store.moveTo(m.id, Room.living);
@@ -192,13 +200,12 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     final media = MediaQuery.of(context);
     final rc = _rc();
     final module = roomModule(house.active);
-    final shelfH = 104 + module.shelfExtra + media.padding.bottom;
     return Scaffold(
       body: LayoutBuilder(builder: (context, box) {
         final size = box.biggest;
         final top = media.padding.top + 120;
-        final floorY = size.height - shelfH - 34;
-        house.layoutAll(Rect.fromLTWH(0, top, size.width, floorY - top), floorY: floorY, sizeScale: (size.width / 390).clamp(0.85, 1.25));
+        double floorFor(Room r) => size.height - (104 + roomModule(r).shelfExtra + media.padding.bottom) - 34;
+        house.layoutRooms(top: top, width: size.width, floorFor: floorFor, sizeScale: (size.width / 390).clamp(0.85, 1.25));
         return Stack(
           children: [
             Positioned.fill(
@@ -224,7 +231,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
                               painter: RoomBackdrop(
                                 room: room,
                                 daypart: house.daypart,
-                                floorY: floorY,
+                                floorY: floorFor(room),
                                 parallax: parallax,
                                 time: active ? house.time : 0,
                                 lampOn: roomLampOn(room),
@@ -259,9 +266,24 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
               ),
             ),
             Positioned(top: media.padding.top + 8, left: 16, right: 16, child: _topBar(l)),
-            Positioned(top: media.padding.top + 66, left: 0, right: 0, child: ToastView(controller: _toasts)),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 104 + module.shelfExtra + media.padding.bottom + 12,
+              child: IgnorePointer(child: ToastView(controller: _toasts)),
+            ),
             Positioned(left: 0, right: 0, bottom: 0, child: _shelf(l, module, rc, media.padding.bottom)),
-            if (!store.firstRunDone) Positioned.fill(child: _FirstRun(onHatch: _hatchFirst)),
+            if (!store.firstRunDone)
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: _hatching,
+                  child: AnimatedOpacity(
+                    opacity: _hatching ? 0 : 1,
+                    duration: const Duration(milliseconds: 400),
+                    child: _FirstRun(onHatch: _hatchFirst),
+                  ),
+                ),
+              ),
           ],
         );
       }),
@@ -362,16 +384,15 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
           if (tools != null) ...[tools, const SizedBox(height: 10)],
           Row(
             children: [
+              Text(l.friendsHere(here.length, HouseStore.maxFriendsPerRoom),
+                  maxLines: 1, style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w800, fontSize: 13)),
+              const SizedBox(width: 12),
               Expanded(
-                child: Text(l.friendsHere(here.length, HouseStore.maxFriendsPerRoom),
-                    maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w800, fontSize: 13)),
-              ),
-              Flexible(
-                child: Text(l.shelfTapHint,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                    style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w700, fontSize: 13)),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Text(l.shelfTapHint, maxLines: 1, style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w700, fontSize: 13)),
+                ),
               ),
             ],
           ),

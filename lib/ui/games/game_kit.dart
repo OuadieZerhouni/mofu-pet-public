@@ -28,7 +28,8 @@ const double kMaxFrameDt = 0.1;
 /// Use as `with WidgetsBindingObserver, SingleTickerProviderStateMixin,
 /// GameLoop`, call [initLoop] / [disposeLoop] from `initState` / `dispose`,
 /// and implement the hooks.
-mixin GameLoop<T extends StatefulWidget> on State<T>, TickerProvider, WidgetsBindingObserver {
+mixin GameLoop<T extends StatefulWidget>
+    on State<T>, TickerProvider, WidgetsBindingObserver {
   late final Ticker _ticker = createTicker(_tick);
   Duration? _last;
   GamePhase _resumeTo = GamePhase.playing;
@@ -47,6 +48,9 @@ mixin GameLoop<T extends StatefulWidget> on State<T>, TickerProvider, WidgetsBin
 
   /// While "Ready? / Go!" shows (idle animations).
   void onCountdownTick(double dt) {}
+
+  /// "Ready?" just turned into "Go!".
+  void onGo() {}
 
   /// "Go!" is over, the round starts now.
   void onRoundStart() {}
@@ -94,7 +98,9 @@ mixin GameLoop<T extends StatefulWidget> on State<T>, TickerProvider, WidgetsBin
 
   void _tick(Duration elapsed) {
     final prev = _last;
-    final dt = prev == null ? 0.0 : ((elapsed - prev).inMicroseconds / 1e6).clamp(0.0, kMaxFrameDt);
+    final dt = prev == null
+        ? 0.0
+        : ((elapsed - prev).inMicroseconds / 1e6).clamp(0.0, kMaxFrameDt);
     _last = elapsed;
     switch (phase) {
       case GamePhase.countdown:
@@ -102,6 +108,7 @@ mixin GameLoop<T extends StatefulWidget> on State<T>, TickerProvider, WidgetsBin
         onCountdownTick(dt);
         if (!showGo && _phaseT >= kReadySeconds) {
           showGo = true;
+          onGo();
           setState(() {});
         } else if (showGo && _phaseT >= kReadySeconds + kGoSeconds) {
           phase = GamePhase.playing;
@@ -129,7 +136,13 @@ mixin GameLoop<T extends StatefulWidget> on State<T>, TickerProvider, WidgetsBin
 
 /// A stitched felt card (rounded, dashed border, hard offset shadow).
 class GameCard extends StatelessWidget {
-  const GameCard({super.key, required this.child, this.padding = const EdgeInsets.all(20), this.radius = 24, this.color});
+  const GameCard({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.all(20),
+    this.radius = 24,
+    this.color,
+  });
   final Widget child;
   final EdgeInsetsGeometry padding;
   final double radius;
@@ -144,7 +157,9 @@ class GameCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: color ?? House.tag,
           borderRadius: BorderRadius.circular(radius),
-          boxShadow: const [BoxShadow(color: House.tagShadow, offset: Offset(0, 4))],
+          boxShadow: const [
+            BoxShadow(color: House.tagShadow, offset: Offset(0, 4)),
+          ],
         ),
         child: child,
       ),
@@ -159,7 +174,10 @@ class StitchPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rr = RRect.fromRectAndRadius((Offset.zero & size).deflate(5), Radius.circular(math.max(0, radius - 5)));
+    final rr = RRect.fromRectAndRadius(
+      (Offset.zero & size).deflate(5),
+      Radius.circular(math.max(0, radius - 5)),
+    );
     final path = Path()..addRRect(rr);
     final paint = Paint()
       ..color = color
@@ -174,13 +192,20 @@ class StitchPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(StitchPainter old) => old.radius != radius || old.color != color;
+  bool shouldRepaint(StitchPainter old) =>
+      old.radius != radius || old.color != color;
 }
 
 /// Rose pill with white text (primary) or a stitched cream pill (secondary).
 /// At least 52 high and 120 wide, so it is always an easy target.
 class GameButton extends StatelessWidget {
-  const GameButton({super.key, required this.label, required this.onPressed, this.primary = true, this.expand = true});
+  const GameButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.primary = true,
+    this.expand = true,
+  });
   final String label;
   final VoidCallback onPressed;
   final bool primary;
@@ -203,13 +228,20 @@ class GameButton extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 52, minWidth: 120),
         child: Material(
           color: primary ? House.rose : House.tag,
-          shape: StadiumBorder(side: primary ? BorderSide.none : const BorderSide(color: House.stitch, width: 2)),
+          shape: StadiumBorder(
+            side: primary
+                ? BorderSide.none
+                : const BorderSide(color: House.stitch, width: 2),
+          ),
           child: InkWell(
             customBorder: const StadiumBorder(),
             onTap: onPressed,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-              child: Center(widthFactor: 1, child: Text(label, textAlign: TextAlign.center, style: style)),
+              child: Center(
+                widthFactor: 1,
+                child: Text(label, textAlign: TextAlign.center, style: style),
+              ),
             ),
           ),
         ),
@@ -236,7 +268,9 @@ class PauseButton extends StatelessWidget {
         dimension: 48,
         child: Material(
           color: House.tag,
-          shape: const CircleBorder(side: BorderSide(color: House.stitch, width: 2)),
+          shape: const CircleBorder(
+            side: BorderSide(color: House.stitch, width: 2),
+          ),
           child: InkWell(
             customBorder: const CircleBorder(),
             onTap: onPressed,
@@ -257,9 +291,12 @@ class _Bar extends StatelessWidget {
   const _Bar();
   @override
   Widget build(BuildContext context) => const DecoratedBox(
-        decoration: BoxDecoration(color: House.ink, borderRadius: BorderRadius.all(Radius.circular(3))),
-        child: SizedBox(width: 6, height: 18),
-      );
+    decoration: BoxDecoration(
+      color: House.ink,
+      borderRadius: BorderRadius.all(Radius.circular(3)),
+    ),
+    child: SizedBox(width: 6, height: 18),
+  );
 }
 
 /// A small felt chip: label on top of a big number-ish value.
@@ -277,15 +314,26 @@ class StatChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: emphasis ? House.rose : House.tag,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: emphasis ? House.roseDeep : House.stitch, width: 2),
+          border: Border.all(
+            color: emphasis ? House.roseDeep : House.stitch,
+            width: 2,
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Center(
             widthFactor: 1,
-            child: Text(
-              text,
-              style: base.copyWith(color: emphasis ? Colors.white : House.ink, fontWeight: FontWeight.w800, fontSize: 18),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                text,
+                maxLines: 1,
+                style: base.copyWith(
+                  color: emphasis ? Colors.white : House.ink,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18,
+                ),
+              ),
             ),
           ),
         ),
@@ -330,7 +378,9 @@ class StarGlyph extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) => ExcludeSemantics(child: CustomPaint(size: Size.square(size), painter: const _StarPainter()));
+  Widget build(BuildContext context) => ExcludeSemantics(
+    child: CustomPaint(size: Size.square(size), painter: const _StarPainter()),
+  );
 }
 
 class _StarPainter extends CustomPainter {
@@ -367,7 +417,15 @@ class _StarPainter extends CustomPainter {
 
 /// "Ready?" then "Go!", big in the middle of the screen.
 class CountdownBanner extends StatelessWidget {
-  const CountdownBanner({super.key, required this.showGo, required this.hint, this.best = 0, required this.reduceMotion});
+  const CountdownBanner({
+    super.key,
+    required this.title,
+    required this.showGo,
+    required this.hint,
+    this.best = 0,
+    required this.reduceMotion,
+  });
+  final String title;
   final bool showGo;
   final String hint;
   final int best;
@@ -380,39 +438,65 @@ class CountdownBanner extends StatelessWidget {
     final word = showGo ? l.gameGo : l.gameReady;
     return IgnorePointer(
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TweenAnimationBuilder<double>(
-              key: ValueKey(word),
-              tween: Tween(begin: reduceMotion ? 1 : 0.6, end: 1),
-              duration: reduceMotion ? Duration.zero : const Duration(milliseconds: 260),
-              curve: Curves.easeOutBack,
-              builder: (context, s, child) => Transform.scale(scale: s, child: child),
-              child: Text(
-                word,
-                key: const ValueKey('game-countdown-word'),
-                style: (theme.displayMedium ?? const TextStyle()).copyWith(
-                  color: showGo ? House.rose : House.ink,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 64,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: GameCard(
+            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: (theme.titleLarge ?? const TextStyle()).copyWith(
+                    color: House.inkSoft,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 4),
+                TweenAnimationBuilder<double>(
+                  key: ValueKey(word),
+                  tween: Tween(begin: reduceMotion ? 1 : 0.6, end: 1),
+                  duration: reduceMotion
+                      ? Duration.zero
+                      : const Duration(milliseconds: 260),
+                  curve: Curves.easeOutBack,
+                  builder: (context, s, child) =>
+                      Transform.scale(scale: s, child: child),
+                  child: Text(
+                    word,
+                    key: const ValueKey('game-countdown-word'),
+                    style: (theme.displayMedium ?? const TextStyle()).copyWith(
+                      color: showGo ? House.rose : House.ink,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 64,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 36),
+                  child: Text(
+                    hint,
+                    textAlign: TextAlign.center,
+                    style: (theme.titleMedium ?? const TextStyle()).copyWith(
+                      color: House.inkSoft,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                if (best > 0) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    l.gameBest(best),
+                    style: (theme.bodyMedium ?? const TextStyle()).copyWith(
+                      color: House.inkSoft,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ],
             ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36),
-              child: Text(
-                hint,
-                textAlign: TextAlign.center,
-                style: (theme.titleMedium ?? const TextStyle()).copyWith(color: House.inkSoft, fontWeight: FontWeight.w700),
-              ),
-            ),
-            if (best > 0) ...[
-              const SizedBox(height: 6),
-              Text(l.gameBest(best), style: (theme.bodyMedium ?? const TextStyle()).copyWith(color: House.inkSoft, fontWeight: FontWeight.w700)),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -432,7 +516,10 @@ class GameScrim extends StatelessWidget {
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(28),
-            child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: child),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: child,
+            ),
           ),
         ),
       ),
@@ -455,7 +542,10 @@ class PauseOverlay extends StatelessWidget {
           children: [
             Text(
               l.gamePause,
-              style: (Theme.of(context).textTheme.headlineSmall ?? const TextStyle()).copyWith(color: House.ink, fontWeight: FontWeight.w900),
+              style:
+                  (Theme.of(context).textTheme.headlineSmall ??
+                          const TextStyle())
+                      .copyWith(color: House.ink, fontWeight: FontWeight.w900),
             ),
             const SizedBox(height: 18),
             GameButton(label: l.gameResume, onPressed: onResume),
@@ -505,15 +595,29 @@ class ResultOverlay extends StatelessWidget {
             Text(
               newBest ? l.gameNewBest : l.gameTimesUp,
               textAlign: TextAlign.center,
-              style: (t.headlineSmall ?? const TextStyle()).copyWith(color: House.ink, fontWeight: FontWeight.w900),
+              style: (t.headlineSmall ?? const TextStyle()).copyWith(
+                color: House.ink,
+                fontWeight: FontWeight.w900,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               '$score',
               key: const ValueKey('game-result-score'),
-              style: (t.displayLarge ?? const TextStyle()).copyWith(color: House.rose, fontWeight: FontWeight.w900, fontSize: 72, height: 1.1),
+              style: (t.displayLarge ?? const TextStyle()).copyWith(
+                color: House.rose,
+                fontWeight: FontWeight.w900,
+                fontSize: 72,
+                height: 1.1,
+              ),
             ),
-            Text(l.gameBest(best), style: (t.titleMedium ?? const TextStyle()).copyWith(color: House.inkSoft, fontWeight: FontWeight.w700)),
+            Text(
+              l.gameBest(best),
+              style: (t.titleMedium ?? const TextStyle()).copyWith(
+                color: House.inkSoft,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: 12),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -523,12 +627,21 @@ class ResultOverlay extends StatelessWidget {
                 Text(
                   l.gameStarsEarned(stars),
                   key: const ValueKey('game-result-stars'),
-                  style: (t.titleLarge ?? const TextStyle()).copyWith(color: House.ink, fontWeight: FontWeight.w900),
+                  style: (t.titleLarge ?? const TextStyle()).copyWith(
+                    color: House.ink,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 2),
-            Text(l.gameStarsCap(starsCap), style: (t.bodySmall ?? const TextStyle()).copyWith(color: House.inkSoft, fontWeight: FontWeight.w700)),
+            Text(
+              l.gameStarsCap(starsCap),
+              style: (t.bodySmall ?? const TextStyle()).copyWith(
+                color: House.inkSoft,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             const SizedBox(height: 18),
             GameButton(label: l.gamePlayAgain, onPressed: onAgain),
             const SizedBox(height: 10),
@@ -576,7 +689,11 @@ class FloatController extends ChangeNotifier {
 }
 
 class FloatLayer extends StatelessWidget {
-  const FloatLayer({super.key, required this.controller, required this.reduceMotion});
+  const FloatLayer({
+    super.key,
+    required this.controller,
+    required this.reduceMotion,
+  });
   final FloatController controller;
   final bool reduceMotion;
 
@@ -595,7 +712,11 @@ class FloatLayer extends StatelessWidget {
                   left: e.at.dx - 60,
                   width: 120,
                   top: e.at.dy - 20,
-                  child: _FloatItem(entry: e, reduceMotion: reduceMotion, onDone: () => controller._remove(e.id)),
+                  child: _FloatItem(
+                    entry: e,
+                    reduceMotion: reduceMotion,
+                    onDone: () => controller._remove(e.id),
+                  ),
                 ),
             ],
           ),
@@ -606,7 +727,11 @@ class FloatLayer extends StatelessWidget {
 }
 
 class _FloatItem extends StatelessWidget {
-  const _FloatItem({required this.entry, required this.reduceMotion, required this.onDone});
+  const _FloatItem({
+    required this.entry,
+    required this.reduceMotion,
+    required this.onDone,
+  });
   final FloatEntry entry;
   final bool reduceMotion;
   final VoidCallback onDone;
@@ -620,10 +745,15 @@ class _FloatItem extends StatelessWidget {
       onEnd: onDone,
       builder: (context, t, child) {
         final rise = reduceMotion ? 0.0 : Curves.easeOut.transform(t) * 46;
-        final pop = reduceMotion ? 1.0 : (t < 0.2 ? 0.7 + t / 0.2 * 0.5 : 1.2 - (t - 0.2) * 0.25);
+        final pop = reduceMotion
+            ? 1.0
+            : (t < 0.2 ? 0.7 + t / 0.2 * 0.5 : 1.2 - (t - 0.2) * 0.25);
         return Opacity(
           opacity: (1 - t * t).clamp(0.0, 1.0),
-          child: Transform.translate(offset: Offset(0, -rise), child: Transform.scale(scale: pop, child: child)),
+          child: Transform.translate(
+            offset: Offset(0, -rise),
+            child: Transform.scale(scale: pop, child: child),
+          ),
         );
       },
       child: Text(
@@ -633,7 +763,10 @@ class _FloatItem extends StatelessWidget {
           fontSize: entry.size,
           fontWeight: FontWeight.w900,
           color: entry.color,
-          shadows: const [Shadow(color: Colors.white, blurRadius: 3), Shadow(color: Colors.white, blurRadius: 6)],
+          shadows: const [
+            Shadow(color: Colors.white, blurRadius: 3),
+            Shadow(color: Colors.white, blurRadius: 6),
+          ],
         ),
       ),
     );
