@@ -111,16 +111,18 @@ void main() {
     s.adopt(Species.mofu);
     expect(s.eggReady, isFalse);
     expect(s.hatch(), isNull);
-    s.stars = 40;
+    s.stars = 9;
+    expect(s.eggReady, isFalse);
+    s.stars = 10;
     expect(s.eggReady, isTrue);
     final oink = s.hatch(name: 'Truffle')!;
     expect(oink.species, Species.oink);
     expect(oink.name, 'Truffle');
     expect(s.nextEgg!.species, Species.wuff);
     expect(s.eggReady, isFalse);
-    s.stars = 90;
+    s.stars = 60;
     expect(s.hatch()!.species, Species.wuff);
-    s.stars = 150;
+    s.stars = 120;
     final boop = s.hatch()!;
     expect(boop.species, Species.boop);
     expect(boop.variant, HouseStore.boopOrder.first);
@@ -240,5 +242,15 @@ void main() {
     }
     final o = s.adopt(Species.oink);
     expect(s.registerTouch(o.id), isFalse);
+  });
+
+  test('the first egg is reachable in one first session: first touch + gift + one spa day', () async {
+    final s = await fresh();
+    final m = s.adopt(Species.mofu);
+    s.registerTouch(m.id);
+    s.claimGift();
+    s.finishSpa(m.id);
+    expect(s.stars, 10);
+    expect(s.eggReady, isTrue);
   });
 }

@@ -6,6 +6,26 @@ you — tick the box when done and re-run the skill that raised it.
 Delete nothing by hand: a cleared gate is recorded as `[x]` so the next run
 knows not to ask again.
 
+## GATE-FLAGSHIP-RESUBMIT — answer Apple and resubmit as one flagship (added 2026-10-17)
+
+**Why:** Mofu, Oink and Boop! were rejected together on 2026-10-16 (4.3(a)(b) spam + 4.2.6). Decision:
+one app, **Mofu & Friends**, with Oink, Wuff and the Boops as characters inside it.
+
+**Only you can decide / do:**
+1. In App Store Connect, **do not resubmit Oink, Boop! or Wuff.** Remove their versions from review
+   (or leave them rejected) so Apple sees one app, not a suite.
+2. Read `docs/APP_REVIEW_REPLY.md`, fill the `[EDIT]` beta-testing answer truthfully, and send it in
+   the Resolution Center thread of the Mofu rejection when you submit the new build.
+3. Rename the app in App Information to **`Mofu: Cute Pet House`** (allowed while not yet approved).
+   If ASC says the name is taken, fallback: `Mofu: Cute Pet Home`.
+4. Merge `flagship` → `main`, let Codemagic build, and submit the new build with the new listing
+   (GATE-LISTING) and screenshots (`ASO/screenshots/<locale>/01…07*.png`).
+
+**Done when:** the new build is "Waiting for Review" with the reply sent, and the other three apps are
+out of the review queue.
+
+- [ ] GATE-FLAGSHIP-RESUBMIT cleared
+
 ## GATE-BUNDLE-ID — register the bundle identifier com.ouadieZerhouni.mofuPet
 
 **Only you can decide:** Apple requires an account holder for identifier registration — this becomes automatic once the App Store Connect API key is in place (bundle ids can be registered over the API)
@@ -25,7 +45,7 @@ knows not to ask again.
 **Do:**
 1. Open https://appstoreconnect.apple.com/apps
 2. + → New App
-3. Platform: iOS · Name: `Mofu: Fluffy Pet` (plain `Mofu` is already taken on the store) · Primary language: English (U.S.)
+3. Platform: iOS · Name: `Mofu: Fluffy Pet` (flagship rename: see GATE-FLAGSHIP-RESUBMIT) (plain `Mofu` is already taken on the store) · Primary language: English (U.S.)
 4. Bundle ID: pick `com.ouadieZerhouni.mofuPet` from the dropdown (it appears only after GATE-BUNDLE-ID)
 5. SKU: anything unique, e.g. the bundle id
 6. Create — then copy the numeric **Apple ID** from App Information
@@ -48,32 +68,36 @@ knows not to ask again.
 **Done when:** a build lands in TestFlight
 
 - [ ] GATE-CODEMAGIC cleared
-## GATE-DEVICE-QA — 15 minutes on a real iPhone (TestFlight build)
+## GATE-DEVICE-QA — 20 minutes on a real iPhone (TestFlight build of the flagship)
 
 **Only you can decide:** sound, haptics, shake and feel do not exist on web or in tests — perception is yours
 
-**Do (tick mentally, note anything off):**
-1. First run: seed wobbles → tap → hatch sound → name dialog → "Pet me!" bubble
-2. Sounds: squeaks, giggle, purr loop while stroking, brush loop, chew/yum, snore at night — cute, not shrill? Volume balanced?
-3. Start Spotify/Music first, then open Mofu: **your music must keep playing** (ambient session)
-4. Silent switch on → Mofu is silent; haptics still tick on taps
-5. Shake the phone → dizzy; hold → squish → hug; drag up and flick → toss and bounce
-6. Brush until fluff passes 25% → lavender unlock toast + wardrobe "New!" dot
-7. Drag 7 snacks within an hour → 7th is refused ("full")
-8. Night: after 22:00 the room is dark, labels readable, Mofu sleeps after ~12 s idle
-9. Settings → Sound off persists after force-quit; Start over returns to the seed
-10. Smooth on the oldest iPhone you can borrow (fur is ~800 strands)
+**Do (note anything off):**
+1. First run: seed → tap → hatch → name dialog → Mofu in the living room
+2. Swipe all six rooms; arrows and dots work; four friends fit in a room without hiding faces
+3. Touch every species: Mofu boing/purr, Oink belly rub, Wuff tricks (card → Play), Boop wobble. Cute, not shrill? Balanced volume?
+4. **Shake the phone** → everyone in the room reacts (dizzy / hop / wobble)
+5. Spa: foam → rinse → towel → dryer; the loops get louder with finger speed; finishing gives a shine + stars
+6. Kitchen: drag snacks to the mouth; the favourite gets a big reaction; 7th snack in an hour is refused
+7. Bedroom at night: tuck in, lamp, **Sleep sounds** with the screen locked keep playing; the timer fades them out. Rain/fire/ocean/purr come from Stable Audio — do they sound natural, no clicks at the loop point?
+8. Start Spotify/Music first, then open the app: your music keeps playing, also after you start Sleep sounds (they mix)
+9. Silent switch on → friend sounds silent; Settings → Sound off also stops Sleep sounds
+10. Garden: egg hatches at the star price; daily gift; photo booth share sheet works
+11. Playroom: both mini-games, pause, end screen, stars once per day cap
+12. Smooth on the oldest iPhone you can borrow (Mofu's fur is ~800 strands, four friends at once)
 
-**Done when:** nothing above sounds or feels wrong (if a sound is off, say which — `tools/audio/synth_sfx.py` regenerates any one)
+**Done when:** nothing above sounds or feels wrong. Compare loop choices on `build/amb/review.html`
+(all Stable Audio candidates, with metrics) if a sleep/spa sound bothers you.
 
 - [ ] GATE-DEVICE-QA cleared
 ## GATE-ASA — check real search volume in Apple Search Ads
 
 **Only you can decide:** ASA is behind your login; every applyra number is an estimate
 
-**Do:** Apple Search Ads → Keyword planner / popularity for:
+**Do:** Apple Search Ads → keyword popularity for (research: `niche-scout/history/2026-10-17_mofu-flagship-aso.md`):
 - `mofu` in US, GB, DE, MX, BR, SA, JP
-- `fluffy pet` (US), `もふもふ` (JP), `flauschig` (DE), `bichinho virtual` (BR), `kawaii` (SA)
+- US: `pet house`, `cute puppy`, `pet care game` · JP: `もふもふ`, `お世話ゲーム`, `癒しペット`
+- BR: `cuidar de pet` · MX: `cuidar mascotas` · DE: `niedlich` · SA: `cute pet`
 
 **Done when:** `mofu` shows non-minimal popularity in at least US + one other market (otherwise tell Claude: the subtitle/keywords get rebalanced toward the category words)
 
@@ -97,20 +121,32 @@ knows not to ask again.
 **Do:** have a native speaker read `ASO/metadata.json` (ja, ar-SA, then de-DE, pt-BR) and skim the app in that language (Settings → the phone's language). Fix strings in `tools/l10n/translations.py` / `tools/aso/metadata.py` and regenerate.
 
 - [ ] GATE-L10N-REVIEW cleared
-## GATE-LISTING — fill the App Store Connect listing
+## GATE-LISTING — fill the App Store Connect listing (flagship)
 
 **Do:**
-1. Per locale (en-US, en-GB, ja, de-DE, pt-BR, es-MX, fr-FR, ar-SA): name, subtitle, keywords, promotional text, description from `ASO/metadata.json`
-2. Screenshots: drag `ASO/screenshots/<locale>/01…06*.png` into the **6.9" iPhone** slot (1320×2868). No other sizes needed
-3. Category: **Entertainment**, secondary **Lifestyle**. Age rating questionnaire: all "None" → 4+. Do **not** opt into the Kids category
-4. App Privacy → **Data Not Collected**
-5. Privacy Policy URL: `https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md` · Support URL: `…/mofu-pet/SUPPORT.md`
-6. Price: Free. No in-app purchases
-7. Review notes (4.3 sibling risk — same account as OuO/Neko): "Mofu is a standalone toy about grooming a fluffy creature: brushing grows its fur (fluff meter), 24 hidden reactions to discover in a journal, snacks, 10 fur colours and 13 accessories. No account, no ads, no purchases, no data collected."
+1. Per locale (en-US, en-GB, ja, de-DE, pt-BR, es-MX, fr-FR, ar-SA): name, subtitle, keywords, promotional text, description from **`ASO/ASO.md`** (same data as `ASO/metadata.json`)
+2. Screenshots: delete the old v1 set, then drag `ASO/screenshots/<locale>/01…07*.png` into the **6.9" iPhone** slot (1320×2868). No other sizes needed
+3. New app icon ships in the build (night house with Mofu in the doorway) — nothing to upload
+4. Category: **Entertainment**, secondary **Lifestyle**. Age rating questionnaire: all "None" → 4+. Do **not** opt into the Kids category
+5. App Privacy → **Data Not Collected** (unchanged: share sheet and background audio collect nothing)
+6. Privacy Policy URL: `https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md` · Support URL: `…/mofu-pet/SUPPORT.md` (updated pages prepared by Claude; push them first — see the final report)
+7. Price: Free. No in-app purchases
+8. Review notes: paste the short summary at the top of `docs/APP_REVIEW_REPLY.md`
 
-**Done when:** the version is "Ready for Review" and you press Submit
+**Done when:** the version is "Ready for Review" and you press Submit (together with GATE-FLAGSHIP-RESUBMIT)
 
 - [ ] GATE-LISTING cleared
+## GATE-STABILITY — sounds made with Stable Audio 3 ship in this build
+
+**Only you can decide:** the licence registration is tied to you as the business
+
+**Do:**
+1. Register (free) for the Stability AI Community License: https://stability.ai/community-license-agreement (commercial use while total annual revenue < US $1M)
+2. Check the build shows "Powered by Stability AI" (Settings → Credits) and SUPPORT.md credits Stable Audio
+
+**Done when:** registered, and the credit is visible in the build
+
+- [ ] GATE-STABILITY cleared
 ## GATE-POST-RELEASE — after approval
 
 **Do:**

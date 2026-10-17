@@ -6,6 +6,18 @@
 > Before sending: in App Store Connect, make sure Oink, Boop! and Wuff are **not** in review
 > and will not be resubmitted (their characters now live inside Mofu).
 
+## Review notes (App Store Connect → App Review Information → Notes)
+
+```
+Mofu & Friends replaces our earlier separate submissions (Mofu, Oink, Boop!, Wuff): their creatures
+now live together in this single app, and the other three will not be resubmitted.
+How to try it: tap the seed to hatch Mofu. Swipe between six rooms. Spa: bring a friend and rub
+(foam, rinse, towel, dry). Kitchen: drag a snack to a mouth. Bedroom: Sleep sounds + Mix (keeps
+playing with the screen locked - this is why the app declares background audio). Garden: the egg
+hatches a new friend when enough stars are earned (a debug-free build; stars come from playing).
+No account, no ads, no purchases, no data collected.
+```
+
 ---
 
 Hello App Review team,
@@ -60,8 +72,9 @@ and do — the creature simulations, art, rooms, sound design and gameplay — i
 earlier Oink, Boop! and Wuff prototypes were merged into it and will not ship separately.
 
 **8. Codebase, SDK or content shared with a third-party app?**
-No. All characters, illustrations, rooms and sounds were created by the developer for this app. Only
-standard third-party frameworks are used (Flutter and open-source packages).
+No. All characters, illustrations and rooms were created by the developer for this app. Sounds were
+designed by the developer, some with the help of Stability AI's Stable Audio model (credited in the app's
+Settings → Credits). Only standard third-party frameworks are used (Flutter and open-source packages).
 
 **9. Built for a client or third party?**
 No. The developer designed, built and owns the concept, content and branding, and submits it under their

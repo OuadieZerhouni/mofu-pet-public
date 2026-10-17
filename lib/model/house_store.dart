@@ -152,9 +152,11 @@ class HouseStore extends ChangeNotifier {
   static const boopOrder = ['mochi', 'pip', 'bao', 'kiwi', 'momo', 'puff', 'nori', 'taro', 'coco', 'jelly', 'sprout', 'star'];
 
   static List<EggStep> eggSchedule([List<String> boops = boopOrder]) => [
-        const EggStep(Species.oink, 'pink', 40),
-        const EggStep(Species.wuff, 'golden', 90),
-        for (var i = 0; i < boops.length; i++) EggStep(Species.boop, boops[i], 150 + 60 * i),
+        // The first egg is one first session away (first touch 1 + daily gift 6 + a spa day 3),
+        // so a new player — and App Review — meets a second species within minutes.
+        const EggStep(Species.oink, 'pink', 10),
+        const EggStep(Species.wuff, 'golden', 60),
+        for (var i = 0; i < boops.length; i++) EggStep(Species.boop, boops[i], 120 + 60 * i),
       ];
 
   final DateTime Function() _clock;
