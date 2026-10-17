@@ -1,0 +1,103 @@
+[
+ {
+  "file": "assets/sounds/sleep/rain.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "gentle steady rain falling on a window and roof, soft cozy ambience, continuous, seamless, no thunder, no music, no voice",
+  "seed": 4820218430558441,
+  "seconds": 20,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/sleep/fire.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "cozy crackling fireplace, soft wood fire crackles and pops, warm calm ambience, continuous, seamless, no music, no voice",
+  "seed": 8826742706339090,
+  "seconds": 20,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/sleep/ocean.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "calm ocean waves gently washing on a sandy beach at night, slow soft surf, relaxing, continuous, no seagulls, no music, no voice",
+  "seed": 923824687709010,
+  "seconds": 20,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/sleep/purr.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "continuous soft cat purr, close mic, steady deep gentle purring, calm, seamless, no meow, no music",
+  "seed": 8892576447652018,
+  "seconds": 15,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/spa/foam.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "dense soft soap foam being squished and massaged by hands, constant gentle bubbly crackle, wet lather, close mic ASMR, steady and even, continuous, no music, no voice",
+  "seed": 33,
+  "seconds": 10,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/spa/water.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "warm gentle shower water pouring steadily into a bathtub, soft low splashing, warm muffled, steady, continuous, no hiss, no music, no voice",
+  "seed": 11,
+  "seconds": 10,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/spa/dryer.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "soft warm low hum of a quiet hair dryer, gentle steady airflow rumble, mellow, continuous, seamless, no music, no voice",
+  "seed": 44,
+  "seconds": 10,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/spa/towel.ogg",
+  "model": "Stable Audio 3 small-sfx",
+  "graph": "CheckpointLoaderSimple(stable_audio_3_small_sfx) + CLIPLoader(t5gemma_b_b_ul2, stable_audio) -> KSampler 50 steps, cfg 7, dpmpp_2m, simple -> VAEDecodeAudio -> SaveAudioMP3 320k",
+  "prompt": "constant soft towel rubbing on fluffy fur, steady gentle brushing cloth friction, close mic ASMR, even and continuous, no pauses, no music, no voice",
+  "seed": 11,
+  "seconds": 10,
+  "post": "sfx_post.py --loop --edge 0.5 --xf 1.5 --stereo --ogg --loop-rms -24",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/sleep/chimes.ogg",
+  "model": "synthesized",
+  "source": "tools/audio/synth_ambience.py",
+  "post": "ffmpeg volume=-5.5dB (level-matched to -24 dBFS RMS)",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "assets/sounds/sleep/noise.ogg",
+  "model": "synthesized",
+  "source": "tools/audio/synth_ambience.py",
+  "post": "ffmpeg volume=-7dB (level-matched to -24 dBFS RMS)",
+  "date": "2026-10-17"
+ },
+ {
+  "file": "ios/Runner/Assets.xcassets/AppIcon.appiconset/*",
+  "model": "app painter (paintMofu)",
+  "source": "test/icon_flagship_test.dart variant g_house_night_big",
+  "post": "icon_review.py --finalize; tools/icon/make_icons.py",
+  "date": "2026-10-17"
+ }
+]
