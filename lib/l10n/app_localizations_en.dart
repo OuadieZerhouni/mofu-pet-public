@@ -1094,7 +1094,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get creditsAudio =>
-      'Some sound effects made with Stable Audio · Powered by Stability AI';
+      'Some sounds made with Stable Audio · Powered by Stability AI';
 
   @override
   String get resetHouseBody =>

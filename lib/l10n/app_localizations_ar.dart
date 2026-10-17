@@ -1120,7 +1120,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get creditsAudio =>
-      'بعض المؤثرات الصوتية صُنعت بواسطة Stable Audio · Powered by Stability AI';
+      'بعض الأصوات صُنعت بواسطة Stable Audio · Powered by Stability AI';
 
   @override
   String get resetHouseBody =>

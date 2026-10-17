@@ -1098,7 +1098,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get creditsAudio =>
-      'Einige Soundeffekte mit Stable Audio erstellt · Powered by Stability AI';
+      'Einige Klänge mit Stable Audio erstellt · Powered by Stability AI';
 
   @override
   String get resetHouseBody =>

@@ -817,7 +817,7 @@
   "settingsReduceMotion": "Reduce motion",
   "settingsCredits": "Credits",
   "creditsBody": "Made with love by Ouadie Zerhouni. Every friend, room and sound in this app is original.",
-  "creditsAudio": "Some sound effects made with Stable Audio · Powered by Stability AI",
+  "creditsAudio": "Some sounds made with Stable Audio · Powered by Stability AI",
   "@creditsAudio": {
     "description": "Shown only if any shipped sound came from Stable Audio."
   },

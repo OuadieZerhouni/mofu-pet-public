@@ -1083,7 +1083,8 @@ class AppLocalizationsJa extends AppLocalizations {
       'Ouadie Zerhouniが心をこめて作りました。このアプリのなかま、へや、音はすべてオリジナルです。';
 
   @override
-  String get creditsAudio => '一部の効果音はStable Audioで作成 · Powered by Stability AI';
+  String get creditsAudio =>
+      '一部のサウンドはStable Audioで作成 · Powered by Stability AI';
 
   @override
   String get resetHouseBody => 'なかま、星、きせかえ、ずかんがすべて消えます。元に戻せません。';

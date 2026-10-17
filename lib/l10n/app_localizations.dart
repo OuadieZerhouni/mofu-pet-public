@@ -1953,7 +1953,7 @@ abstract class AppLocalizations {
   /// Shown only if any shipped sound came from Stable Audio.
   ///
   /// In en, this message translates to:
-  /// **'Some sound effects made with Stable Audio · Powered by Stability AI'**
+  /// **'Some sounds made with Stable Audio · Powered by Stability AI'**
   String get creditsAudio;
 
   /// No description provided for @resetHouseBody.
