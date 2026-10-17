@@ -42,22 +42,29 @@ class GardenRoom extends RoomModule {
     }
     _hatchT = rc.house.time;
     rc.lockPaging(true);
-    rc.house.audio.play('mofu.wobble');
-    rc.house.audio.haptic('medium');
-    await Future<void>.delayed(const Duration(milliseconds: 1500));
-    rc.house.audio.play('ui.fanfare');
-    rc.house.audio.haptic('success');
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    if (!context.mounted) return;
-    final name = await askName(
-      context,
-      initial: HouseStore.defaultName(egg.species),
-      firstRun: true,
-      title: rc.l.hatchNameTitle(speciesName(rc.l, egg.species)),
-    );
-    final f = store.hatch(name: name);
-    _hatchT = null;
-    rc.lockPaging(false);
+    // The garden page can be paged away during the animation; the dialog lives on the root
+    // navigator so the hatch always completes, and the finally block never leaves it stuck.
+    final host = Navigator.of(context, rootNavigator: true).context;
+    Friend? f;
+    try {
+      rc.house.audio.play('mofu.wobble');
+      rc.house.audio.haptic('medium');
+      await Future<void>.delayed(const Duration(milliseconds: 1500));
+      rc.house.audio.play('ui.fanfare');
+      rc.house.audio.haptic('success');
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      if (!host.mounted) return;
+      final name = await askName(
+        host,
+        initial: HouseStore.defaultName(egg.species),
+        firstRun: true,
+        title: rc.l.hatchNameTitle(speciesName(rc.l, egg.species)),
+      );
+      f = store.hatch(name: name);
+    } finally {
+      _hatchT = null;
+      rc.lockPaging(false);
+    }
     if (f == null) return;
     // The newcomer arrives here in the garden so you can say hi right away.
     if (!rc.house.moveFriend(f.id, Room.garden)) rc.house.sync();
@@ -132,7 +139,7 @@ class GardenRoom extends RoomModule {
             Expanded(
               child: _BigButton(
                 icon: Icons.card_giftcard_rounded,
-                label: giftReady ? l.gardenGiftDay(store.giftStreak + 1 > 7 ? 7 : store.giftStreak + 1) : l.gardenGiftClaimed,
+                label: giftReady ? l.gardenGiftDay(store.nextGiftDay) : l.gardenGiftClaimed,
                 enabled: giftReady,
                 onTap: () {
                   final got = store.claimGift();

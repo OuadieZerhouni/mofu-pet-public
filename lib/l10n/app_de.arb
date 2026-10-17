@@ -317,5 +317,6 @@
   "photoHint": "Zieh Freunde und Sticker an die richtige Stelle",
   "photoClose": "Schließen",
   "photoShareText": "Meine Freunde in Mofu",
-  "photoRemoveSticker": "Doppeltippe auf einen Sticker, um ihn zu entfernen"
+  "photoRemoveSticker": "Doppeltippe auf einen Sticker, um ihn zu entfernen",
+  "sleepSoundOff": "Töne sind aus. Schalte sie in den Einstellungen ein."
 }

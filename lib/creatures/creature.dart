@@ -109,6 +109,13 @@ class FoamBlob {
 /// Where an accessory sits on this creature this frame.
 enum AccessorySlot { head, face, neck }
 
+/// Where a wardrobe item sits on any species.
+AccessorySlot slotOf(String accessoryId) => switch (accessoryId) {
+      'glasses' || 'shades' || 'monocle' => AccessorySlot.face,
+      'scarf' || 'bandana' || 'bell' || 'bowtie' => AccessorySlot.neck,
+      _ => AccessorySlot.head,
+    };
+
 class Anchor {
   const Anchor(this.at, this.scale, this.angle);
   final Offset at; // room coordinates

@@ -66,6 +66,7 @@ class HouseController extends ChangeNotifier {
   final Map<Room, RoomScene> scenes = {};
   final List<Bubble> bubbles = [];
   final List<HouseNotice> notices = [];
+  final Map<String, double> _bondCarry = {};
   Room active = Room.living;
 
   /// The friend last touched in each room (kitchen menus, spa mat).
@@ -74,7 +75,7 @@ class HouseController extends ChangeNotifier {
   final math.Random _rng = math.Random(7);
   double _time = 0;
   double _lastDayCheck = -100;
-  bool _eggAnnounced = false;
+  int _eggAnnouncedAt = -1; // household size when the current egg was announced
 
   RoomScene get scene => scenes[active]!;
   double get time => _time;
@@ -191,11 +192,13 @@ class HouseController extends ChangeNotifier {
       if (store.discover(id)) notices.add(HouseNotice('discovered', id));
     }
     bubbles.removeWhere((b) => b.until < _time);
-    if (store.eggReady && !_eggAnnounced) {
-      _eggAnnounced = true;
+    // Keyed by household size: a hatch makes the next egg a new announcement even if
+    // it is affordable straight away.
+    if (store.eggReady && _eggAnnouncedAt != store.friends.length) {
+      _eggAnnouncedAt = store.friends.length;
       notices.add(const HouseNotice('eggReady'));
     } else if (!store.eggReady) {
-      _eggAnnounced = false;
+      _eggAnnouncedAt = -1;
     }
   }
 
@@ -247,23 +250,27 @@ class HouseController extends ChangeNotifier {
           }
         }
       case 'bond':
-        final lvl = store.addXp(friendId, value.round().clamp(1, 5));
-        if (lvl != null) {
-          notices.add(HouseNotice('levelUp', friendId, '', lvl));
-          creatures[friendId]?.celebrate();
-          audio.play('ui.unlock');
-        }
+        // Creatures emit fractional bond (0.06–1); carry the remainder so xp is earned, not rounded up.
+        final carry = (_bondCarry[friendId] ?? 0) + value.clamp(0, 5);
+        final whole = carry.floor();
+        _bondCarry[friendId] = carry - whole;
+        store.addXp(friendId, whole);
       case 'combo':
         store.recordCombo(value.round());
       case 'trick':
-        final lvl = store.addXp(friendId, 2);
-        if (lvl != null) notices.add(HouseNotice('levelUp', friendId, '', lvl));
+        store.addXp(friendId, 2);
       default:
         break;
     }
   }
 
   List<HouseNotice> drainNotices() {
+    for (final (id, lvl) in store.levelUps) {
+      notices.add(HouseNotice('levelUp', id, '', lvl));
+      creatures[id]?.celebrate();
+      audio.play('ui.unlock');
+    }
+    store.levelUps.clear();
     if (notices.isEmpty) return const [];
     final out = List<HouseNotice>.of(notices);
     notices.clear();

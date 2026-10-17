@@ -40,7 +40,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   bool _started = false;
   bool _locked = false;
   bool _hatching = false;
-  int _pointersOnFriend = 0;
+  final Set<int> _pointersOnFriend = {};
   late AppServices _app;
 
   AppLocalizations get _l => AppLocalizations.of(context);
@@ -138,16 +138,29 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     setState(() => _locked = locked);
   }
 
+  /// The room a multi-page `goTo` is flying to: rooms passed on the way are not entered
+  /// (no bedtime in a bedroom you only flew past).
+  Room? _flyingTo;
+
   void goTo(Room r) {
     if (!_pages.hasClients) return;
     if (store.reduceMotion || skipDeviceOnlyWork) {
       _pages.jumpToPage(r.index);
     } else {
-      unawaited(_pages.animateToPage(r.index, duration: const Duration(milliseconds: 420), curve: Curves.easeInOutCubic));
+      _flyingTo = r;
+      unawaited(_pages
+          .animateToPage(r.index, duration: const Duration(milliseconds: 420), curve: Curves.easeInOutCubic)
+          .whenComplete(() {
+        _flyingTo = null;
+        if (!mounted || !_pages.hasClients) return;
+        final i = (_pages.page ?? r.index.toDouble()).round();
+        if (Room.values[i] != house.active) _onPage(i);
+      }));
     }
   }
 
   void _onPage(int i) {
+    if (_flyingTo != null && i != _flyingTo!.index) return;
     final r = Room.values[i];
     final rc = _rc();
     roomModule(house.active).onLeave(rc);
@@ -183,7 +196,8 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     if (!mounted) return;
     setState(() => _hatching = true);
     _app.audio.play('ui.fanfare');
-    final m = store.adopt(Species.mofu);
+    // Reuse a Mofu adopted before an interrupted first run (app killed while naming).
+    final m = store.friends.firstOrNull ?? store.adopt(Species.mofu);
     store.moveTo(m.id, Room.living);
     house.sync();
     goTo(Room.living);
@@ -244,12 +258,12 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
                           onPointerDown: (e) {
                             if (!active) return;
                             if (house.scene.creatures.any((c) => c.hitTest(e.localPosition))) {
-                              _pointersOnFriend++;
+                              _pointersOnFriend.add(e.pointer);
                               _lockPaging(true);
                             }
                           },
-                          onPointerUp: (_) => _release(),
-                          onPointerCancel: (_) => _release(),
+                          onPointerUp: (e) => _release(e.pointer),
+                          onPointerCancel: (e) => _release(e.pointer),
                           child: RoomStage(
                             house: house,
                             room: room,
@@ -290,9 +304,10 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     );
   }
 
-  void _release() {
-    if (_pointersOnFriend > 0) _pointersOnFriend--;
-    if (_pointersOnFriend == 0) _lockPaging(false);
+  void _release(int pointer) {
+    // Only the fingers that grabbed a friend unlock paging, not any finger lifting elsewhere.
+    if (!_pointersOnFriend.remove(pointer)) return;
+    if (_pointersOnFriend.isEmpty) _lockPaging(false);
   }
 
   Widget _topBar(AppLocalizations l) {

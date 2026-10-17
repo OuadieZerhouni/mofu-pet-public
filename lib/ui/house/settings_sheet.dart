@@ -56,7 +56,10 @@ class _Settings extends StatelessWidget {
                   onChanged: (v) {
                     store.setSound(v);
                     app.audio.soundOn = v;
-                    if (!v) app.audio.stopAllLoops();
+                    if (!v) {
+                      app.audio.stopAllLoops();
+                      unawaited(app.audio.mixerStop(fade: Duration.zero));
+                    }
                   },
                 ),
                 SwitchListTile(

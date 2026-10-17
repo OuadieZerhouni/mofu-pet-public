@@ -208,6 +208,7 @@ class AudioEngine extends ChangeNotifier {
   /// optional fade-out timer in minutes (0 = no timer).
   Future<void> mixerStart(Map<String, double> volumes, {int timerMinutes = 0}) async {
     _mix = Map.of(volumes);
+    if (!_audible) return; // muted: never show "playing" for a silent mixer
     _mixerOn = true;
     if (_ready && soundOn) {
       await _playback();

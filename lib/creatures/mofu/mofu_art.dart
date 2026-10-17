@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import '../../model/catalog.dart';
 import '../../ui/mofu_painter.dart';
-import '../../world/overlays.dart' show slotOf;
 import '../creature.dart';
 import 'mofu_creature.dart';
 

@@ -23,6 +23,12 @@ class BedroomRoom extends RoomModule {
     if (rc.house.daypart == Daypart.night) rc.house.bedtime(true);
   }
 
+  /// By day, friends tucked in for a nap get up when you leave; at night they sleep on.
+  @override
+  void onLeave(RoomContext rc) {
+    if (rc.house.daypart != Daypart.night) rc.house.bedtime(false);
+  }
+
   static String channelName(AppLocalizations l, String ch) => switch (ch) {
     'rain' => l.sleepRain,
     'purr' => l.sleepPurr,
@@ -82,6 +88,8 @@ class BedroomRoom extends RoomModule {
                 onTap: () {
                   if (audio.mixerOn) {
                     unawaited(audio.mixerStop());
+                  } else if (!rc.store.soundOn) {
+                    rc.toast(l.sleepSoundOff);
                   } else {
                     unawaited(audio.mixerStart(rc.store.sleepMix, timerMinutes: rc.store.sleepTimerMin));
                     rc.store.discover('house.sleepSounds');

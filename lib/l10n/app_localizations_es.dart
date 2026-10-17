@@ -1129,4 +1129,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get photoRemoveSticker => 'Toca dos veces un sticker para quitarlo';
+
+  @override
+  String get sleepSoundOff =>
+      'Los sonidos están desactivados. Actívalos en Ajustes.';
 }

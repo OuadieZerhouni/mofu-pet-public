@@ -29,6 +29,7 @@ class SpaRoom extends RoomModule {
     final scene = rc.house.scenes[Room.spa]!;
     final here = scene.creatures;
     if (here.isEmpty) {
+      session?.abandon(); // unpins a friend moved out mid-routine
       session = null;
       _friendId = null;
       return;

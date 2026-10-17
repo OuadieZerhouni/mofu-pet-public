@@ -317,5 +317,6 @@
   "photoHint": "なかまとステッカーをドラッグして配置しよう",
   "photoClose": "閉じる",
   "photoShareText": "Mofuのなかまたち",
-  "photoRemoveSticker": "ステッカーをダブルタップで削除"
+  "photoRemoveSticker": "ステッカーをダブルタップで削除",
+  "sleepSoundOff": "サウンドがオフです。設定でオンにしてね。"
 }

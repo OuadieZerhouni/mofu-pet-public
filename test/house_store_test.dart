@@ -203,4 +203,42 @@ void main() {
     expect(HouseStore.sanitizeName('x' * 40).length, HouseStore.maxNameLength);
     expect(HouseStore.sanitizeName('موفو'), 'موفو');
   });
+
+  test('v1 glasses migrate into the face slot', () async {
+    SharedPreferences.setMockInitialValues({
+      HouseStore.legacyKey: '{"name":"Puffy","color":"peach","accessory":"glasses","fluff":10,"firstRunDone":true}',
+    });
+    final m = (await fresh()).friends.single;
+    expect(m.wear, {'face': 'glasses'});
+  });
+
+  test('gift streak: the button day is the day paid, across month ends, reset after a gap', () async {
+    now = DateTime(2026, 10, 31, 9);
+    final s = await fresh();
+    expect(s.nextGiftDay, 1);
+    expect(s.claimGift(), 6);
+    now = DateTime(2026, 11, 1, 0, 30); // next calendar day, just after midnight
+    expect(s.nextGiftDay, 2);
+    expect(s.claimGift(), 7);
+    expect(s.giftStreak, 2);
+    now = DateTime(2026, 11, 4, 9); // missed two days
+    expect(s.nextGiftDay, 1);
+    s.claimGift();
+    expect(s.giftStreak, 1);
+  });
+
+  test('every xp source reports a level-up; first touch reports stars only when paid', () async {
+    final s = await fresh();
+    final m = s.adopt(Species.mofu);
+    s.levelUps.clear();
+    m.xp = 19; // one short of level 2
+    s.registerTouch(m.id);
+    expect(s.levelUps, [(m.id, 2)]);
+    // The first-touch cap is 8 a day: a 9th friend's touch pays nothing and says so.
+    for (var i = 0; i < 8; i++) {
+      s.earn(StarSource.firstTouch, 1);
+    }
+    final o = s.adopt(Species.oink);
+    expect(s.registerTouch(o.id), isFalse);
+  });
 }

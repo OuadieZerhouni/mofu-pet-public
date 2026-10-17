@@ -317,5 +317,6 @@
   "photoHint": "اسحب الأصدقاء والملصقات إلى مكانها",
   "photoClose": "إغلاق",
   "photoShareText": "أصدقائي في موفو",
-  "photoRemoveSticker": "انقر مرتين على ملصق لإزالته"
+  "photoRemoveSticker": "انقر مرتين على ملصق لإزالته",
+  "sleepSoundOff": "الأصوات مطفأة. شغّلها من الإعدادات."
 }

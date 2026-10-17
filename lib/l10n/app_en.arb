@@ -836,5 +836,9 @@
   "@photoShareText": {
     "description": "Text that goes with a shared photo."
   },
-  "photoRemoveSticker": "Double-tap a sticker to remove it"
+  "photoRemoveSticker": "Double-tap a sticker to remove it",
+  "sleepSoundOff": "Sounds are off. Turn them on in Settings.",
+  "@sleepSoundOff": {
+    "description": "Toast when sleep sounds are tapped while app sounds are muted."
+  }
 }

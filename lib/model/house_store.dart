@@ -257,7 +257,7 @@ class HouseStore extends ChangeNotifier {
       hatchedDay: today,
     )..fluff = pick<num>(j['fluff'], 8).toDouble().clamp(0, 100).toDouble();
     final acc = pick<String>(j['accessory'], 'none');
-    if (acc != 'none') mofu.wear['head'] = acc;
+    if (acc != 'none') mofu.wear[slotOf(acc).name] = acc;
     friends.add(mofu);
     final disc = j['discovered'];
     if (disc is List) discovered.addAll(disc.whereType<String>().map((d) => 'mofu.$d'));
@@ -445,13 +445,18 @@ class HouseStore extends ChangeNotifier {
 
   // ── friendship & care ─────────────────────────────────────────────────
   /// Returns the new level when this xp crossed a level boundary.
+  /// Level-ups from any xp source, drained by the house for the celebration toast.
+  final List<(String, int)> levelUps = [];
+
   int? addXp(String id, int amount) {
     final f = friend(id);
     if (f == null || amount <= 0) return null;
     final before = f.level;
     f.xp += amount;
     _changed();
-    return f.level > before ? f.level : null;
+    if (f.level <= before) return null;
+    levelUps.add((id, f.level));
+    return f.level;
   }
 
   /// First touch of the day per friend: +1 ★ and some friendship.
@@ -460,8 +465,7 @@ class HouseStore extends ChangeNotifier {
     if (f == null || f.lastTouchDay == today) return false;
     f.lastTouchDay = today;
     addXp(id, 3);
-    earn(StarSource.firstTouch, 1);
-    return true;
+    return earn(StarSource.firstTouch, 1) > 0;
   }
 
   /// Finished a full spa routine. Stars once per friend per day.
@@ -537,10 +541,16 @@ class HouseStore extends ChangeNotifier {
 
   /// Claims the daily gift: 5 + streak (streak grows on consecutive days,
   /// capped at 7; a missed day restarts it at 1, nothing else is lost).
+  /// The streak day today's gift would be (what the button shows and the claim pays).
+  int get nextGiftDay {
+    // Calendar arithmetic, not "minus 24 h", so DST days keep the streak.
+    final yesterday = dayKey(DateTime(now.year, now.month, now.day - 1));
+    return lastGiftDay == yesterday ? math.min(7, giftStreak + 1) : 1;
+  }
+
   int claimGift() {
     if (!giftReady) return 0;
-    final yesterday = dayKey(now.subtract(const Duration(days: 1)));
-    giftStreak = lastGiftDay == yesterday ? math.min(7, giftStreak + 1) : 1;
+    giftStreak = nextGiftDay;
     lastGiftDay = today;
     return earn(StarSource.gift, 5 + giftStreak);
   }

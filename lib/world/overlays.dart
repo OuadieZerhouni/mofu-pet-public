@@ -8,15 +8,11 @@ import 'dart:math' as math;
 import 'package:flutter/painting.dart';
 
 import '../creatures/creature.dart';
+
+export '../creatures/creature.dart' show slotOf;
 import '../ui/mofu_painter.dart' show paintAccessory;
 
 /// Which slot an accessory id uses.
-AccessorySlot slotOf(String accessoryId) => switch (accessoryId) {
-      'glasses' || 'shades' || 'monocle' => AccessorySlot.face,
-      'scarf' || 'bandana' || 'bell' || 'bowtie' => AccessorySlot.neck,
-      _ => AccessorySlot.head,
-    };
-
 /// Draws [id] on [c] at its anchor. Mofu draws its own (inside its squash
 /// transform), so callers skip this for Mofu.
 void paintAccessoryOn(Canvas canvas, Creature c, String id) {

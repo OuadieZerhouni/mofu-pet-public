@@ -1126,4 +1126,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get photoRemoveSticker => 'Double-tap a sticker to remove it';
+
+  @override
+  String get sleepSoundOff => 'Sounds are off. Turn them on in Settings.';
 }

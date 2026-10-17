@@ -1152,4 +1152,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get photoRemoveSticker => 'انقر مرتين على ملصق لإزالته';
+
+  @override
+  String get sleepSoundOff => 'الأصوات مطفأة. شغّلها من الإعدادات.';
 }

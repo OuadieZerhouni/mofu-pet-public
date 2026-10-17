@@ -65,7 +65,9 @@ class RoomScene {
     if (creatures.length > 1) {
       final total = creatures.fold<double>(0, (s, c) => s + c.bounds.width);
       // Neighbours may overlap 18% (see _separate), plus a little wall slack.
-      _crowd = math.min(1.0, area.width * 0.96 / (total * 0.86));
+      // Floor kept clear (the garden nest) is not standing room.
+      final usable = area.width * (1 - keepOut.fold<double>(0, (s, k) => s + (k.$2 - k.$1)));
+      _crowd = math.min(1.0, usable * 0.96 / (total * 0.86));
       if (_crowd < 1) {
         for (final c in creatures) {
           c.layout(area, floorY: floorY, sizeScale: sizeScale * _crowd);
@@ -115,6 +117,9 @@ class RoomScene {
   }
 
   void layout(Rect area, {required double floorY, double sizeScale = 1}) {
+    // The screen relays out on every rebuild; an unchanged room must not reset creatures
+    // (Oink's layout ends its walk).
+    if (area == this.area && floorY == this.floorY && sizeScale == this.sizeScale) return;
     final old = this.area;
     this.area = area;
     this.floorY = floorY;
@@ -151,7 +156,11 @@ class RoomScene {
   }
 
   void pointerCancel(int pointer) {
-    _owners.remove(pointer)?.pointerCancel(pointer);
+    final c = _owners.remove(pointer);
+    c?.pointerCancel(pointer);
+    for (final o in creatures) {
+      if (o != c) o.lookAt(null);
+    }
   }
 
   void _touched(Creature c) {

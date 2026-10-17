@@ -317,5 +317,6 @@
   "photoHint": "Arraste amigos e stickers para o lugar",
   "photoClose": "Fechar",
   "photoShareText": "Meus amigos no Mofu",
-  "photoRemoveSticker": "Toque duas vezes em um sticker para removê-lo"
+  "photoRemoveSticker": "Toque duas vezes em um sticker para removê-lo",
+  "sleepSoundOff": "Os sons estão desligados. Ative-os nos Ajustes."
 }

@@ -1114,4 +1114,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get photoRemoveSticker => 'ステッカーをダブルタップで削除';
+
+  @override
+  String get sleepSoundOff => 'サウンドがオフです。設定でオンにしてね。';
 }

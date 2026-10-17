@@ -1131,4 +1131,8 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get photoRemoveSticker =>
       'Touche deux fois un sticker pour le retirer';
+
+  @override
+  String get sleepSoundOff =>
+      'Les sons sont coupés. Active-les dans les Réglages.';
 }

@@ -5,7 +5,6 @@ library;
 
 import '../creatures/creature.dart';
 import '../world/creature_factory.dart';
-import '../world/overlays.dart';
 import 'house_store.dart';
 
 enum WearRuleKind { start, level, stars, seasonal }

@@ -2015,6 +2015,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Double-tap a sticker to remove it'**
   String get photoRemoveSticker;
+
+  /// Toast when sleep sounds are tapped while app sounds are muted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds are off. Turn them on in Settings.'**
+  String get sleepSoundOff;
 }
 
 class _AppLocalizationsDelegate
