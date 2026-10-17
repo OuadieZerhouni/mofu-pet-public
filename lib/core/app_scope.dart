@@ -1,20 +1,21 @@
 import 'package:flutter/widgets.dart';
 
-import '../model/pet_store.dart';
+import '../audio/audio_engine.dart';
+import '../model/house_store.dart';
 import 'remote_config.dart';
-import 'sfx.dart';
 
 /// The app's services, handed down the tree once.
 ///
 /// Tests build their own scope with an in-memory store and a config whose
 /// fetch never runs, so no widget reaches for a global.
 class AppServices {
-  AppServices({required this.store, required this.config, required this.sfx, DateTime Function()? clock})
-      : clock = clock ?? DateTime.now;
+  AppServices({required this.store, required this.config, AudioEngine? audio, DateTime Function()? clock})
+      : audio = audio ?? AudioEngine.instance,
+        clock = clock ?? DateTime.now;
 
-  final PetStore store;
+  final HouseStore store;
   final RemoteConfigService config;
-  final Sfx sfx;
+  final AudioEngine audio;
   final DateTime Function() clock;
 }
 

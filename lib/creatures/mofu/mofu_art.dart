@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import '../../model/catalog.dart';
 import '../../ui/mofu_painter.dart';
+import '../../world/overlays.dart' show slotOf;
 import '../creature.dart';
 import 'mofu_creature.dart';
 
@@ -13,7 +14,7 @@ class MofuArt extends CreatureArt {
   @override
   void paint(Canvas canvas, Creature c, CreatureLook look, {bool shadow = true}) {
     final m = c as MofuCreature;
-    final acc = look.accessories.isEmpty ? 'none' : look.accessories.first;
+    final acc = look.accessories.where((a) => slotOf(a) == AccessorySlot.head).firstOrNull ?? 'none';
     paintMofu(canvas, m.sim, Catalog.color(look.variant), acc, shadow: shadow);
     paintParticles(canvas, m.sim);
   }

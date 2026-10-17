@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../l10n/app_localizations.dart';
-import '../model/pet_store.dart';
+import '../model/house_store.dart';
 
 /// Asks for a name. Returns the sanitized name, or null when cancelled.
-Future<String?> askName(BuildContext context, {required String initial, bool firstRun = false}) {
+Future<String?> askName(BuildContext context, {required String initial, bool firstRun = false, String? title}) {
   return showDialog<String>(
     context: context,
     barrierDismissible: !firstRun,
     barrierColor: Colors.black.withValues(alpha: 0.18),
-    builder: (ctx) => _NameDialog(initial: initial, firstRun: firstRun),
+    builder: (ctx) => _NameDialog(initial: initial, firstRun: firstRun, title: title),
   );
 }
 
 class _NameDialog extends StatefulWidget {
-  const _NameDialog({required this.initial, required this.firstRun});
+  const _NameDialog({required this.initial, required this.firstRun, this.title});
   final String initial;
   final bool firstRun;
+  final String? title;
 
   @override
   State<_NameDialog> createState() => _NameDialogState();
@@ -32,21 +33,21 @@ class _NameDialogState extends State<_NameDialog> {
     super.dispose();
   }
 
-  void _save() => Navigator.pop(context, PetStore.sanitizeName(_c.text));
+  void _save() => Navigator.pop(context, HouseStore.sanitizeName(_c.text));
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     return AlertDialog(
       alignment: const Alignment(0, 0.75),
-      title: Text(l.firstRunNameTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
+      title: Text(widget.title ?? l.firstRunNameTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge),
       content: TextField(
         controller: _c,
         autofocus: true,
         textAlign: TextAlign.center,
         textCapitalization: TextCapitalization.words,
-        maxLength: PetStore.maxNameLength,
-        inputFormatters: [LengthLimitingTextInputFormatter(PetStore.maxNameLength)],
+        maxLength: HouseStore.maxNameLength,
+        inputFormatters: [LengthLimitingTextInputFormatter(HouseStore.maxNameLength)],
         style: Theme.of(context).textTheme.titleLarge,
         decoration: InputDecoration(hintText: l.nameFieldHint, counterText: ''),
         onSubmitted: (_) => _save(),
@@ -54,7 +55,7 @@ class _NameDialogState extends State<_NameDialog> {
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context, widget.firstRun ? PetStore.sanitizeName(widget.initial) : null),
+          onPressed: () => Navigator.pop(context, widget.firstRun ? HouseStore.sanitizeName(widget.initial) : null),
           child: Text(widget.firstRun ? l.actionSkip : l.actionCancel),
         ),
         FilledButton(onPressed: _save, child: Text(l.actionSave)),

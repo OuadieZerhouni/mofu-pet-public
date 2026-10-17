@@ -1,25 +1,51 @@
 {
   "@@locale": "en",
   "appTitle": "Mofu",
-
   "dockBrush": "Brush",
   "dockSnacks": "Snacks",
   "dockWardrobe": "Wardrobe",
   "dockJournal": "Journal",
-  "@dockBrush": { "description": "Bottom dock button labels. Keep each to one short word — four sit side by side on an iPhone SE." },
-
+  "@dockBrush": {
+    "description": "Bottom dock button labels. Keep each to one short word — four sit side by side on an iPhone SE."
+  },
   "fluffPercent": "{percent}% fluffy",
-  "@fluffPercent": { "description": "Fluff meter under the name, e.g. '42% fluffy'.", "placeholders": { "percent": { "type": "int" } } },
+  "@fluffPercent": {
+    "description": "Fluff meter under the name, e.g. '42% fluffy'.",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "daysTogether": "{count, plural, =1{Day 1 together} other{Day {count} together}}",
-  "@daysTogether": { "description": "How many distinct days the user has visited.", "placeholders": { "count": { "type": "int" } } },
-
+  "@daysTogether": {
+    "description": "How many distinct days the user has visited.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "coachPetMe": "Pet me!",
-  "@coachPetMe": { "description": "Speech bubble from the creature on first launch, until the first stroke." },
+  "@coachPetMe": {
+    "description": "Speech bubble from the creature on first launch, until the first stroke."
+  },
   "coachBrush": "Brush gently to make {name} fluffier",
-  "@coachBrush": { "placeholders": { "name": { "type": "String" } } },
+  "@coachBrush": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "snacksHint": "Drag a snack to {name}'s mouth",
-  "@snacksHint": { "placeholders": { "name": { "type": "String" } } },
-
+  "@snacksHint": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "firstRunTapSeed": "Tap the fluff seed",
   "firstRunHello": "Hi! I'm your Mofu",
   "firstRunNameTitle": "What should we call your Mofu?",
@@ -29,43 +55,109 @@
   "actionCancel": "Cancel",
   "actionClose": "Close",
   "actionOk": "OK",
-
   "toastNewReaction": "New in the journal: {name}",
-  "@toastNewReaction": { "placeholders": { "name": { "type": "String" } } },
+  "@toastNewReaction": {
+    "description": "Toast when a reaction is discovered for the first time.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "toastUnlocked": "Unlocked: {item}",
-  "@toastUnlocked": { "placeholders": { "item": { "type": "String" } } },
+  "@toastUnlocked": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
   "toastDailyBrush": "First brush of the day ✨",
   "toastFluffMilestone": "Mofu mofu! {percent}% fluffy",
-  "@toastFluffMilestone": { "placeholders": { "percent": { "type": "int" } } },
+  "@toastFluffMilestone": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "toastMaxFluff": "MAX MOFU! The fluffiest ever",
   "toastFull": "{name} is full. Maybe later!",
-  "@toastFull": { "placeholders": { "name": { "type": "String" } } },
+  "@toastFull": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "toastSeasonal": "A seasonal gift arrived: {item}",
-  "@toastSeasonal": { "placeholders": { "item": { "type": "String" } } },
-
+  "@toastSeasonal": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
   "snacksTitle": "Snacks",
   "wardrobeTitle": "Wardrobe",
   "tabFur": "Fur",
   "tabAccessories": "Accessories",
   "badgeNew": "New!",
   "lockedDays": "{count, plural, =1{Visit on 1 day} other{Visit on {count} days}}",
-  "@lockedDays": { "placeholders": { "count": { "type": "int" } } },
+  "@lockedDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockedFluff": "Reach {percent}% fluff",
-  "@lockedFluff": { "placeholders": { "percent": { "type": "int" } } },
+  "@lockedFluff": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "lockedJournal": "{count, plural, =1{Discover 1 reaction} other{Discover {count} reactions}}",
-  "@lockedJournal": { "placeholders": { "count": { "type": "int" } } },
+  "@lockedJournal": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockedSnacks": "{count, plural, =1{Share 1 snack} other{Share {count} snacks}}",
-  "@lockedSnacks": { "placeholders": { "count": { "type": "int" } } },
+  "@lockedSnacks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "lockedSeasonal": "Seasonal: {season}",
-  "@lockedSeasonal": { "placeholders": { "season": { "type": "String" } } },
+  "@lockedSeasonal": {
+    "placeholders": {
+      "season": {
+        "type": "String"
+      }
+    }
+  },
   "seasonHalloween": "Halloween",
   "seasonWinter": "Winter holidays",
-
   "journalTitle": "Journal",
   "journalProgress": "{found} of {total} discovered",
-  "@journalProgress": { "placeholders": { "found": { "type": "int" }, "total": { "type": "int" } } },
+  "@journalProgress": {
+    "placeholders": {
+      "found": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "journalUnknown": "???",
-
   "settingsTitle": "Settings",
   "settingsSound": "Sounds",
   "settingsHaptics": "Haptics",
@@ -74,25 +166,41 @@
   "settingsSupport": "Help & feedback",
   "settingsRate": "Rate Mofu",
   "settingsVersion": "Version {version}",
-  "@settingsVersion": { "placeholders": { "version": { "type": "String" } } },
+  "@settingsVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
   "settingsReset": "Start over",
   "resetTitle": "Start over?",
   "resetBody": "This clears {name}'s fluff, wardrobe and journal. It can't be undone.",
-  "@resetBody": { "placeholders": { "name": { "type": "String" } } },
+  "@resetBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "resetConfirm": "Start over",
-
   "updateTitle": "A new Mofu update",
   "updateBody": "A fresh version is ready on the App Store.",
   "updateRequiredBody": "This version is too old to keep going. Please update to continue.",
   "updateAction": "Update",
   "updateLater": "Later",
-
   "semanticsMofu": "{name}, your Mofu",
-  "@semanticsMofu": { "description": "VoiceOver label for the creature.", "placeholders": { "name": { "type": "String" } } },
+  "@semanticsMofu": {
+    "description": "VoiceOver label for the creature.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "semanticsHug": "Hug",
   "semanticsBrushOn": "Brush on",
   "semanticsSettings": "Settings",
-
   "colorCream": "Cream",
   "colorPeach": "Peach",
   "colorMint": "Mint",
@@ -103,7 +211,6 @@
   "colorCocoa": "Cocoa",
   "colorSnow": "Snow",
   "colorStarry": "Starry night",
-
   "accNone": "Nothing",
   "accBow": "Bow",
   "accSprout": "Sprout",
@@ -117,14 +224,12 @@
   "accCrown": "Crown",
   "accWitch": "Witch hat",
   "accSanta": "Santa hat",
-
   "snackStrawberry": "Strawberry",
   "snackDango": "Dango",
   "snackCookie": "Cookie",
   "snackOnigiri": "Onigiri",
   "snackPudding": "Pudding",
   "snackCandy": "Candy",
-
   "rxBoing": "Boing",
   "rxBoingHint": "Give it a little tap",
   "rxTickle": "Tickle fit",
@@ -172,5 +277,564 @@
   "rxNewLook": "New look",
   "rxNewLookHint": "Change its fur",
   "rxSpin": "Spin cycle",
-  "rxSpinHint": "Pet in circles"
+  "rxSpinHint": "Pet in circles",
+  "roomLiving": "Living room",
+  "@roomLiving": {
+    "description": "Room names, shown in the room switcher at the top."
+  },
+  "roomSpa": "Spa",
+  "roomKitchen": "Kitchen",
+  "roomBedroom": "Bedroom",
+  "roomPlayroom": "Playroom",
+  "roomGarden": "Garden",
+  "navPrevRoom": "Previous room",
+  "@navPrevRoom": {
+    "description": "Accessibility labels for the room switcher arrows."
+  },
+  "navNextRoom": "Next room",
+  "navSettings": "Settings",
+  "starsCount": "{count, plural, =1{1 star} other{{count} stars}}",
+  "@starsCount": {
+    "description": "Accessibility label of the star counter.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "friendsHere": "{count} of {max} here",
+  "@friendsHere": {
+    "description": "Shelf caption: friends in this room.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "shelfTapHint": "Tap a friend to bring them here",
+  "@shelfTapHint": {
+    "description": "Shelf caption on the right."
+  },
+  "roomFull": "This room is full — 4 friends at most",
+  "@roomFull": {
+    "description": "Toast when a fifth friend would join a room."
+  },
+  "friendHereLabel": "{name}, in this room. Double-tap for their card.",
+  "@friendHereLabel": {
+    "description": "Accessibility label of a friend coin.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "friendElsewhereLabel": "{name}. Double-tap to bring them here.",
+  "@friendElsewhereLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "eggCoinLabel": "Next egg hatches at {stars} stars",
+  "@eggCoinLabel": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "toastStars": "+{count} ★",
+  "@toastStars": {
+    "description": "Toast when stars are earned.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "toastLevelUp": "{name} reached friendship level {level}!",
+  "@toastLevelUp": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "toastEggReady": "An egg is ready in the garden!",
+  "toastFluffy": "{name} is {percent}% fluffy!",
+  "@toastFluffy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "bubbleFull": "I'm full!",
+  "@bubbleFull": {
+    "description": "Speech bubbles friends say."
+  },
+  "bubbleOink": "Oink!",
+  "bubbleOinkQuestion": "Oink?",
+  "bubbleWoof": "Woof!",
+  "@bubbleWoof": {
+    "description": "The bark word of this language (Wuff, Guau, Ouaf, Au au, ワン, هاو)."
+  },
+  "bubbleAchoo": "Achoo!",
+  "bubbleYip": "Yip!",
+  "bubbleHowl": "Awooo!",
+  "bubbleWhimper": "Whimper…",
+  "bubbleGrrr": "Grrr!",
+  "bubbleSqueak": "Squeak!",
+  "bubblePant": "Hah-hah!",
+  "bubblePlay": "Let's play!",
+  "bubbleCombo10": "Boop-a-doop!",
+  "@bubbleCombo10": {
+    "description": "Boop combo milestones (10, 25, 50)."
+  },
+  "bubbleCombo25": "Snoot storm!",
+  "bubbleCombo50": "Mega boop!",
+  "bubbleHi": "Hi!",
+  "spaEmptyTitle": "The spa is ready",
+  "@spaEmptyTitle": {
+    "description": "Spa ribbon title when nobody is on the mat."
+  },
+  "spaEmptyHint": "Tap a friend below to bring them to the spa",
+  "spaTitle": "{name}'s spa day",
+  "@spaTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spaStepOf": "Step {step} of {total}",
+  "@spaStepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "spaStepFoam": "Foam",
+  "@spaStepFoam": {
+    "description": "Spa steps and tool names. Keep each to one short word."
+  },
+  "spaStepRinse": "Rinse",
+  "spaStepTowel": "Towel",
+  "spaStepDry": "Dry",
+  "spaHintFoam": "Rub to make bubbles",
+  "spaHintRinse": "Drag the shower over the foam",
+  "spaHintTowel": "Rub gently until dry",
+  "spaHintDry": "Blow-dry for extra fluff",
+  "spaHintDone": "All fresh! Play, or start again",
+  "spaAgain": "Spa again",
+  "spaFreshToast": "New in the journal: Spa day",
+  "bubbleFresh": "Fresh!",
+  "snackApple": "Apple",
+  "@snackApple": {
+    "description": "Snack names in the kitchen tray. One or two short words."
+  },
+  "snackCarrot": "Carrot",
+  "snackCorn": "Corn",
+  "snackLettuce": "Lettuce",
+  "snackWatermelon": "Melon",
+  "snackBone": "Bone",
+  "snackBacon": "Bacon bite",
+  "snackCheese": "Cheese",
+  "snackCupcake": "Cupcake",
+  "snackBlueberry": "Blueberries",
+  "snackCherry": "Cherries",
+  "snackGrape": "Grapes",
+  "snackPeach": "Peach",
+  "kitchenMenuFor": "{name}'s menu · drag to the mouth",
+  "@kitchenMenuFor": {
+    "description": "Kitchen shelf caption.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenLeft": "{count, plural, =0{Full for now} =1{1 more this hour} other{{count} more this hour}}",
+  "@kitchenLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kitchenEmptyHint": "Tap a friend below to invite them for a snack",
+  "kitchenFavoriteToast": "{name} loves {snack}! +1 ★",
+  "@kitchenFavoriteToast": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "snack": {
+        "type": "String"
+      }
+    }
+  },
+  "kitchenPickHint": "Tap a friend to choose who eats",
+  "bedLamp": "Night light",
+  "@bedLamp": {
+    "description": "Bedroom shelf buttons."
+  },
+  "bedTuckIn": "Tuck in",
+  "bedWakeUp": "Wake up",
+  "sleepSounds": "Sleep sounds",
+  "sleepPlay": "Play",
+  "sleepStop": "Stop",
+  "sleepMix": "Mix",
+  "sleepTimer": "Timer",
+  "sleepTimerOff": "Off",
+  "@sleepTimerOff": {
+    "description": "Sleep timer off."
+  },
+  "sleepMinutes": "{minutes} min",
+  "@sleepMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepRain": "Rain",
+  "@sleepRain": {
+    "description": "Sleep sound channels."
+  },
+  "sleepPurr": "Purr",
+  "sleepFire": "Fireplace",
+  "sleepOcean": "Ocean",
+  "sleepChimes": "Wind chimes",
+  "sleepNoise": "Soft noise",
+  "sleepScreenOff": "Keeps playing with the screen off",
+  "sleepEndsIn": "Stops in {minutes} min",
+  "@sleepEndsIn": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "sleepVolume": "{channel} volume",
+  "@sleepVolume": {
+    "description": "Accessibility label of a mixer slider.",
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "gameBoopRush": "Boop Rush",
+  "@gameBoopRush": {
+    "description": "Mini-game names."
+  },
+  "gameBoopRushDesc": "Boop every snoot that pops up. 30 seconds.",
+  "gameSnackCatch": "Snack Catch",
+  "gameSnackCatchDesc": "Slide a friend to catch snacks, dodge the bees. 45 seconds.",
+  "gameBest": "Best {score}",
+  "@gameBest": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "gameStarsCap": "Up to {count} ★ a day",
+  "@gameStarsCap": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gamePlay": "Play {game}",
+  "@gamePlay": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "gameReady": "Ready?",
+  "gameGo": "Go!",
+  "gameScore": "Score {score}",
+  "@gameScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "gameTime": "{seconds}s",
+  "@gameTime": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "gamePause": "Pause",
+  "gameResume": "Resume",
+  "gameQuit": "Quit",
+  "gameTimesUp": "Time's up!",
+  "gameNewBest": "New best!",
+  "gameStarsEarned": "+{count} ★",
+  "@gameStarsEarned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gamePlayAgain": "Play again",
+  "gameDone": "Done",
+  "gameCatcherHint": "Drag left and right",
+  "gameBoopHint": "Boop the snoots! Don't wake the sleepy ones.",
+  "gardenEggReadyTitle": "A new egg is ready!",
+  "@gardenEggReadyTitle": {
+    "description": "Garden hatchery card."
+  },
+  "gardenEggReadyHint": "Tap the egg to welcome a new friend",
+  "gardenNextEgg": "Next friend at {stars} ★",
+  "@gardenNextEgg": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "gardenProgress": "{have} of {need} ★",
+  "@gardenProgress": {
+    "placeholders": {
+      "have": {
+        "type": "int"
+      },
+      "need": {
+        "type": "int"
+      }
+    }
+  },
+  "gardenEggHint": "Care for your friends to earn stars",
+  "gardenAllHatched": "Everyone has hatched!",
+  "gardenEggNotYet": "This egg needs {stars} ★",
+  "@gardenEggNotYet": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "hatchNameTitle": "Name your new {species}",
+  "@hatchNameTitle": {
+    "placeholders": {
+      "species": {
+        "type": "String"
+      }
+    }
+  },
+  "gardenGift": "Daily gift",
+  "gardenGiftDay": "Daily gift · day {day}",
+  "@gardenGiftDay": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "gardenGiftClaimed": "Come back tomorrow",
+  "gardenPhotoBooth": "Photo booth",
+  "toastGift": "+{count} ★ · see you tomorrow!",
+  "@toastGift": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "toastNewFriend": "Say hi to {name}!",
+  "@toastNewFriend": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "speciesMofu": "fluff puff",
+  "@speciesMofu": {
+    "description": "Species names, lowercase inside a sentence (Name your new …)."
+  },
+  "speciesOink": "piglet",
+  "speciesWuff": "puppy",
+  "speciesBoop": "boop",
+  "eggLabel": "Egg. {state}",
+  "@eggLabel": {
+    "description": "Accessibility label of the garden egg.",
+    "placeholders": {
+      "state": {
+        "type": "String"
+      }
+    }
+  },
+  "cardTabPlay": "Play",
+  "@cardTabPlay": {
+    "description": "Friend card tabs."
+  },
+  "cardTabWardrobe": "Wardrobe",
+  "cardTabJournal": "Journal",
+  "cardHatched": "Hatched {date}",
+  "@cardHatched": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "cardLoves": "Loves {snack}",
+  "@cardLoves": {
+    "placeholders": {
+      "snack": {
+        "type": "String"
+      }
+    }
+  },
+  "cardLovesSecret": "Favourite snack: a secret!",
+  "cardLevel": "Friendship level {level}",
+  "@cardLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "cardRename": "Rename",
+  "cardMoveTo": "Move to…",
+  "cardTricks": "Tricks",
+  "cardVoice": "Voice",
+  "@cardVoice": {
+    "description": "Section of sound pads that play the friend's voice."
+  },
+  "trickMastered": "Mastered",
+  "trickPractice": "{count, plural, =1{1 more day} other{{count} more days}}",
+  "@trickPractice": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trickTryIt": "Try it!",
+  "trickDoneToday": "Practised today",
+  "trickSit": "Sit",
+  "@trickSit": {
+    "description": "Puppy tricks."
+  },
+  "trickPaw": "Paw",
+  "trickSpin": "Spin",
+  "trickSpeak": "Speak",
+  "trickPlayDead": "Play dead",
+  "trickHighFive": "High five",
+  "wardrobeCoats": "Coats",
+  "wardrobeAccessories": "Accessories",
+  "unlockLevel": "Friendship level {level}",
+  "@unlockLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "unlockStars": "{stars} ★ in total",
+  "@unlockStars": {
+    "placeholders": {
+      "stars": {
+        "type": "int"
+      }
+    }
+  },
+  "unlockSeasonal": "Seasonal",
+  "journalCount": "{have} of {total} found",
+  "@journalCount": {
+    "placeholders": {
+      "have": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "journalHidden": "???",
+  "accScarf": "Scarf",
+  "accBandana": "Bandana",
+  "accBell": "Bell collar",
+  "accBowtie": "Bow tie",
+  "voicePad": "Play {name}'s voice",
+  "@voicePad": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "toastTrickMastered": "{name} mastered {trick}!",
+  "@toastTrickMastered": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "trick": {
+        "type": "String"
+      }
+    }
+  },
+  "toastMoved": "{name} went to the {room}",
+  "@toastMoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "room": {
+        "type": "String"
+      }
+    }
+  },
+  "wearNone": "None",
+  "settingsReduceMotion": "Reduce motion",
+  "settingsCredits": "Credits",
+  "creditsBody": "Made with love by Ouadie Zerhouni. Every friend, room and sound in this app is original.",
+  "creditsAudio": "Some sound effects made with Stable Audio · Powered by Stability AI",
+  "@creditsAudio": {
+    "description": "Shown only if any shipped sound came from Stable Audio."
+  },
+  "resetHouseBody": "This clears every friend, all stars, the wardrobe and the journal. It can't be undone.",
+  "photoTitle": "Photo booth",
+  "@photoTitle": {
+    "description": "Photo booth screen."
+  },
+  "photoBackdrop": "Backdrop",
+  "photoFriends": "Friends",
+  "photoStickers": "Stickers",
+  "photoShare": "Share",
+  "photoHint": "Drag friends and stickers into place",
+  "photoClose": "Close",
+  "photoShareText": "My friends in Mofu",
+  "@photoShareText": {
+    "description": "Text that goes with a shared photo."
+  },
+  "photoRemoveSticker": "Double-tap a sticker to remove it"
 }

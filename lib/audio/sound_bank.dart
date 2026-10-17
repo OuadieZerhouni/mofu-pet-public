@@ -77,5 +77,5 @@ class SoundBank {
     return m;
   }
 
-  static SoundDef? operator [](String id) => all[id];
+  static SoundDef? def(String id) => all[id];
 }

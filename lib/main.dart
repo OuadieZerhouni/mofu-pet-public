@@ -4,18 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'audio/audio_engine.dart';
 import 'core/app_scope.dart';
 import 'core/debug_flags.dart';
 import 'core/remote_config.dart';
-import 'core/sfx.dart';
+import 'creatures/creature.dart';
 import 'l10n/app_localizations.dart';
-import 'model/catalog.dart';
-import 'model/pet_store.dart';
-import 'ui/home_screen.dart';
+import 'model/house_store.dart';
+import 'ui/house/house_screen.dart';
 import 'ui/theme.dart';
 
 /// Startup order:
-///  1. the store loads first — everything on screen reads it;
+///  1. the household store loads first (and migrates a v1 save) — everything
+///     on screen reads it;
 ///  2. remote config serves its cache immediately and refreshes in the
 ///     background (launch never waits on the network);
 ///  3. audio initialises in the background — the first frame does not wait
@@ -23,29 +24,33 @@ import 'ui/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  final store = PetStore();
+  final store = HouseStore();
   await store.load();
   if (DebugFlags.resetFirstRun) await store.reset();
-  _applyDebugSeed(store);
+  applyDebugSeed(store);
   final config = RemoteConfigService();
   await config.init();
-  final sfx = Sfx.instance
+  final audio = AudioEngine.instance
     ..soundOn = store.soundOn
     ..hapticsOn = store.hapticsOn;
-  unawaited(sfx.init());
-  runApp(MofuApp(services: AppServices(store: store, config: config, sfx: sfx)));
+  unawaited(audio.init(priority: const ['ui.tap', 'ui.pop', 'mofu.squeak', 'mofu.boing', 'mofu.giggle', 'mofu.purr']));
+  runApp(MofuApp(services: AppServices(store: store, config: config, audio: audio)));
 }
 
-/// Screenshot seam: a seeded fluff level with the wardrobe fully open.
-void _applyDebugSeed(PetStore store) {
+/// Screenshot / QA seam: a household with every friend, stars and progress.
+void applyDebugSeed(HouseStore store) {
   if (DebugFlags.seedFluff < 0) return;
-  store
-    ..firstRunDone = true
-    ..coachDone = true
-    ..fluff = DebugFlags.seedFluff.clamp(0, 100).toDouble()
-    ..visitDays = 30
-    ..snacksFed = 20;
-  store.discovered.addAll(Catalog.reactions.take(18).map((r) => r.id));
+  if (store.friends.isEmpty) {
+    store.adopt(Species.mofu).fluff = DebugFlags.seedFluff.clamp(0, 100).toDouble();
+    store.stars = 400;
+    while (store.eggReady && store.friends.length < 6) {
+      store.hatch();
+    }
+  }
+  store.completeFirstRun();
+  for (final s in ['pet', 'rooms', 'spa']) {
+    store.completeCoach(s);
+  }
 }
 
 class MofuApp extends StatelessWidget {
@@ -76,7 +81,7 @@ class MofuApp extends StatelessWidget {
           return Theme(data: mofuTheme(loc), child: child!);
         },
         theme: mofuTheme(const Locale('en')),
-        home: const HomeScreen(),
+        home: const HouseScreen(),
       ),
     );
   }

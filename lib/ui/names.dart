@@ -34,6 +34,10 @@ extension CatalogNames on AppLocalizations {
         'crown' => accCrown,
         'witch' => accWitch,
         'santa' => accSanta,
+        'scarf' => accScarf,
+        'bandana' => accBandana,
+        'bell' => accBell,
+        'bowtie' => accBowtie,
         _ => id,
       };
 
@@ -44,6 +48,19 @@ extension CatalogNames on AppLocalizations {
         'onigiri' => snackOnigiri,
         'pudding' => snackPudding,
         'candy' => snackCandy,
+        'apple' => snackApple,
+        'carrot' => snackCarrot,
+        'corn' => snackCorn,
+        'lettuce' => snackLettuce,
+        'watermelon' => snackWatermelon,
+        'bone' => snackBone,
+        'bacon' => snackBacon,
+        'cheese' => snackCheese,
+        'cupcake' => snackCupcake,
+        'blueberry' => snackBlueberry,
+        'cherry' => snackCherry,
+        'grape' => snackGrape,
+        'peach' => snackPeach,
         _ => id,
       };
 

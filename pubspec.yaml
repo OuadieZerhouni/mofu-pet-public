@@ -43,6 +43,8 @@ dependencies:
   flutter_soloud: ^4.1.7
   audio_session: ^0.2.4
   sensors_plus: ^7.1.1
+  share_plus: ^13.3.1
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +77,8 @@ flutter:
     - assets/sounds/oink/
     - assets/sounds/wuff/
     - assets/sounds/boop/
+    - assets/sounds/spa/
+    - assets/sounds/sleep/
 
   fonts:
     - family: Nunito

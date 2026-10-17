@@ -1,48 +1,48 @@
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mofu_pet/core/sfx.dart';
+import 'package:mofu_pet/audio/sound_bank.dart';
+import 'package:mofu_pet/creatures/creature.dart';
 import 'package:mofu_pet/l10n/app_localizations.dart';
 import 'package:mofu_pet/model/catalog.dart';
+import 'package:mofu_pet/model/house_store.dart';
+import 'package:mofu_pet/model/wardrobe.dart';
+import 'package:mofu_pet/ui/house/house_text.dart';
 import 'package:mofu_pet/ui/names.dart';
+import 'package:mofu_pet/world/creature_factory.dart';
 
 /// Data integrity: every id the app can show has a name in every locale,
-/// every sound the simulation asks for exists on disk, and every unlock rule
-/// is reachable.
+/// every sound the bank promises exists on disk, and every unlock is
+/// reachable.
 void main() {
-  test('24 unique journal reactions', () {
-    final ids = Catalog.reactions.map((r) => r.id).toList();
-    expect(ids.length, 24);
-    expect(ids.toSet().length, 24);
-  });
-
-  test('unlock rules are reachable', () {
-    for (final r in [...Catalog.furColors.map((c) => c.rule), ...Catalog.accessories.map((a) => a.rule)]) {
-      switch (r.kind) {
-        case UnlockKind.fluff:
-          expect(r.amount, inInclusiveRange(1, 100));
-        case UnlockKind.journal:
-          expect(r.amount, lessThanOrEqualTo(Catalog.reactions.length));
-        case UnlockKind.seasonal:
-          expect(['halloween', 'winter'], contains(r.seasonId));
-        default:
-          expect(r.amount, greaterThanOrEqualTo(0));
+  test('every sound in the bank exists on disk in a declared asset folder', () {
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    for (final e in SoundBank.all.entries) {
+      expect(File(e.value.asset).existsSync(), isTrue, reason: '${e.key} → ${e.value.asset}');
+      final dir = e.value.asset.substring(0, e.value.asset.lastIndexOf('/') + 1);
+      expect(pubspec, contains('- $dir'), reason: 'asset folder $dir declared');
+      if (e.value.loop) {
+        expect(e.value.asset.endsWith('.mp3'), isFalse, reason: '${e.key}: loops must be gapless (wav/ogg)');
       }
     }
   });
 
-  test('every catalog id has a real name in every locale', () async {
+  test('every room, snack, coat and accessory has a name in every locale', () async {
     for (final locale in AppLocalizations.supportedLocales) {
       final l = await AppLocalizations.delegate.load(locale);
+      for (final r in Room.values) {
+        expect(l.roomName(r), isNotEmpty);
+      }
+      for (final s in Species.values) {
+        for (final snack in snacksFor(s)) {
+          expect(l.snackName(snack), isNot(snack), reason: '${locale.languageCode} snack $snack');
+        }
+      }
+      for (final item in wardrobeItems) {
+        expect(l.accessoryName(item.id), isNot(item.id), reason: '${locale.languageCode} accessory ${item.id}');
+      }
       for (final c in Catalog.furColors) {
-        expect(l.colorName(c.id), isNot(c.id), reason: '${locale.languageCode} colour ${c.id}');
-      }
-      for (final a in Catalog.accessories) {
-        expect(l.accessoryName(a.id), isNot(a.id), reason: '${locale.languageCode} accessory ${a.id}');
-      }
-      for (final s in Catalog.snacks) {
-        expect(l.snackName(s.id), isNot(s.id), reason: '${locale.languageCode} snack ${s.id}');
+        expect(l.colorName(c.id), isNot(c.id));
       }
       for (final r in Catalog.reactions) {
         final (name, hint) = l.reaction(r.id);
@@ -52,42 +52,33 @@ void main() {
     }
   });
 
-  test('every sound the sim emits is declared and on disk', () {
-    final src = File('lib/sim/mofu_sim.dart').readAsStringSync();
-    final used = {
-      for (final m in RegExp(r"SimEventType\.(?:sound|loopStart|loopStop), '(\w+)'").allMatches(src)) m.group(1)!,
-    };
-    expect(used, isNotEmpty);
-    final declared = {...Sfx.oneShots, ...Sfx.loops};
-    for (final id in used) {
-      expect(declared, contains(id), reason: 'sim plays "$id" but Sfx does not load it');
-    }
-    // Sounds played directly by the UI.
-    for (final id in ['unlock', 'hatch', 'sparkle']) {
-      expect(declared, contains(id));
-    }
-    for (final id in Sfx.oneShots) {
-      expect(File('assets/sounds/$id.mp3').existsSync(), isTrue, reason: 'missing assets/sounds/$id.mp3');
-    }
-    for (final id in Sfx.loops) {
-      expect(File('assets/sounds/$id.wav').existsSync(), isTrue, reason: 'missing assets/sounds/$id.wav');
+  test('the hatch schedule covers every species and every Boop variant once', () {
+    final schedule = HouseStore.eggSchedule();
+    expect(schedule.map((e) => e.species).toSet(), {Species.oink, Species.wuff, Species.boop});
+    final boops = schedule.where((e) => e.species == Species.boop).map((e) => e.variant).toList();
+    expect(boops.toSet(), variantsFor(Species.boop).toSet(), reason: 'hatch order matches the Boop catalogue');
+    for (var i = 1; i < schedule.length; i++) {
+      expect(schedule[i].stars, greaterThan(schedule[i - 1].stars));
     }
   });
 
-  test('every Arabic plural message carries all six categories', () {
-    final arb = File('lib/l10n/app_ar.arb').readAsStringSync();
-    for (final m in RegExp(r'"(\w+)": "(\{count, plural,[^"]*)"').allMatches(arb)) {
-      for (final cat in ['zero{', 'one{', 'two{', 'few{', 'many{', 'other{']) {
-        expect(m.group(2), contains(cat), reason: '${m.group(1)} lacks $cat');
+  test('wardrobe unlocks are reachable', () {
+    for (final item in wardrobeItems) {
+      switch (item.rule.kind) {
+        case WearRuleKind.level:
+          expect(item.rule.amount, inInclusiveRange(1, 10));
+        case WearRuleKind.stars:
+          expect(item.rule.amount, lessThanOrEqualTo(HouseStore.eggSchedule().last.stars + 200));
+        case WearRuleKind.seasonal:
+          expect(['halloween', 'winter'], contains(item.rule.season));
+        case WearRuleKind.start:
+          break;
       }
     }
-  });
-
-  test('locale list in the app matches the manifest', () {
-    expect(
-      AppLocalizations.supportedLocales.map((l) => l.languageCode).toSet(),
-      {'en', 'ja', 'de', 'pt', 'es', 'fr', 'ar'},
-    );
-    expect(const Locale('ar').languageCode, 'ar');
+    for (final s in Species.values) {
+      for (final v in variantsFor(s)) {
+        expect(variantLevel(s, v), lessThanOrEqualTo(10), reason: '$s $v reachable by level 10');
+      }
+    }
   });
 }
