@@ -178,7 +178,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     if (store.reduceMotion || skipDeviceOnlyWork) {
       _pages.jumpToPage(r.index);
     } else {
-      _flyingTo = r;
+      setState(() => _flyingTo = r);
       unawaited(
         _pages.animateToPage(r.index, duration: const Duration(milliseconds: 420), curve: Curves.easeInOutCubic).whenComplete(() {
           _flyingTo = null;
@@ -316,8 +316,8 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
               ),
               Positioned(top: media.padding.top + 8, left: 16, right: 16, child: _topBar(l)),
               // An empty room says what to do instead of showing a bare stage.
-              // (The garden's egg is its own call to action.)
-              if (store.firstRunDone && house.scene.creatures.isEmpty && !(house.active == Room.garden && store.nextEgg != null))
+              // (The garden's egg and the spa's card are their own calls to action.)
+              if (store.firstRunDone && house.scene.creatures.isEmpty && !(house.active == Room.garden && store.nextEgg != null) && house.active != Room.spa)
                 Positioned.fill(
                   child: IgnorePointer(
                     child: ValueListenableBuilder<double>(
@@ -409,7 +409,8 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
 
   Widget _topBar(AppLocalizations l) {
     final dark = house.active == Room.bedroom && house.daypart == Daypart.night;
-    final i = house.active.index;
+    // Rapid arrow taps step from the room already flown to, not the one being left.
+    final i = (_flyingTo ?? house.active).index;
     return Row(
       children: [
         FeltIconButton(

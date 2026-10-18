@@ -112,4 +112,16 @@ void main() {
       }
     }
   });
+
+  test('a lone friend in the garden is placed off the nest, and settle() respects it', () {
+    final s = RoomScene()
+      ..layout(const Rect.fromLTWH(0, 120, 390, 500), floorY: 620)
+      ..keepOut = const [(0.36, 0.64)];
+    final o = OinkCreature(friendId: 'o', seed: 1);
+    s.add(o);
+    expect(o.position.dx < 390 * 0.36 || o.position.dx > 390 * 0.64, isTrue, reason: 'spawned beside the nest');
+    o.position = Offset(195, o.position.dy); // e.g. an old save in the middle
+    s.settle();
+    expect(o.position.dx < 390 * 0.36 || o.position.dx > 390 * 0.64, isTrue, reason: 'settled beside the nest');
+  });
 }

@@ -131,4 +131,17 @@ void main() {
     expect(find.text(l.gardenGiftClaimed), findsOneWidget);
     await settle(tester, 2600);
   });
+
+  testWidgets('rapid arrow taps step through rooms instead of repeating one', (tester) async {
+    final store = await pumpHouse(tester, locale: const Locale('en'));
+    final l = l10n(tester);
+    final state = tester.state<HouseScreenState>(find.byType(HouseScreen));
+    expect(state.house.active, Room.living);
+    await tester.tap(find.bySemanticsLabel(l.navNextRoom));
+    await tester.pump(const Duration(milliseconds: 80));
+    await tester.tap(find.bySemanticsLabel(l.navNextRoom));
+    await settle(tester, 1200);
+    expect(state.house.active, Room.kitchen);
+    expect(store.lastRoom, Room.kitchen);
+  });
 }

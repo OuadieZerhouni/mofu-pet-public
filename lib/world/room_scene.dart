@@ -113,7 +113,7 @@ class RoomScene {
   /// Spreads friends evenly when they arrive so nobody spawns inside another.
   double _freeSpotX(Creature c) {
     final n = creatures.length;
-    if (n <= 1) return area.center.dx;
+    if (n <= 1 && keepOut.isEmpty) return area.center.dx;
     final slots = [
       for (var i = 0; i < 6; i++) area.left + area.width * (i + 0.5) / 6,
     ]..removeWhere((x) => keepOut.any((k) => x > area.left + k.$1 * area.width - 30 && x < area.left + k.$2 * area.width + 30));
@@ -257,7 +257,13 @@ class RoomScene {
       }
       for (final c in creatures) {
         final half = restWidth(c) / 2;
-        final x = c.position.dx.clamp(area.left + half, math.max(area.left + half, area.right - half)).toDouble();
+        var x = c.position.dx.clamp(area.left + half, math.max(area.left + half, area.right - half)).toDouble();
+        // Off kept-clear floor (the garden nest), to the nearer side.
+        for (final (lo, hi) in keepOut) {
+          final a = area.left + lo * area.width - restWidth(c) * 0.42;
+          final b = area.left + hi * area.width + restWidth(c) * 0.42;
+          if (x > a && x < b) x = (x - a < b - x) ? a : b;
+        }
         if (x != c.position.dx) {
           c.position = Offset(x, c.position.dy);
           moved = true;
