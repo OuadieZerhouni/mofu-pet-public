@@ -18,8 +18,10 @@ one app, **Mofu & Friends**, with Oink, Wuff and the Boops as characters inside 
    the Resolution Center thread of the Mofu rejection when you submit the new build.
 3. Rename the app in App Information to **`Mofu: Cute Pet House`** (allowed while not yet approved).
    If ASC says the name is taken, fallback: `Mofu: Cute Pet Home`.
-4. Merge `flagship` → `main`, let Codemagic build, and submit the new build with the new listing
-   (GATE-LISTING) and screenshots (`ASO/screenshots/<locale>/01…07*.png`).
+4. ~~Merge `flagship` → `main`~~ (done 2026-10-18, build **1.0.0+3**; PRIVACY/SUPPORT pages pushed).
+   Start the **testFlight** workflow in Codemagic on `main` (it has no auto-trigger), then submit the
+   new build with the new listing (GATE-LISTING, `ASO/listing.yaml`) and screenshots
+   (`ASO/screenshots/<locale>/01…07*.png`).
 
 **Done when:** the new build is "Waiting for Review" with the reply sent, and the other three apps are
 out of the review queue.
