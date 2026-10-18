@@ -26,7 +26,7 @@ one app, **Mofu & Friends**, with Oink, Wuff and the Boops as characters inside 
 **Done when:** the new build is "Waiting for Review" with the reply sent, and the other three apps are
 out of the review queue.
 
-- [ ] GATE-FLAGSHIP-RESUBMIT cleared
+- [x] GATE-FLAGSHIP-RESUBMIT cleared — 2026-10-18: renamed 'Mofu: Cute Pet House', flagship listing + 56 screenshots pushed, reply posted in the Resolution Center (docs/APP_REVIEW_REPLY.txt, condensed to Apple's 4000-char cap), 1.0.0 (4) resubmitted → WAITING_FOR_REVIEW. Oink and Boop! stay rejected, not resubmitted.
 
 ## GATE-SPEC-QUESTIONS — three product calls where the SPEC and the shipped app disagree
 
