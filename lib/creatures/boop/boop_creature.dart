@@ -20,7 +20,7 @@ import 'boop_catalog.dart';
 /// Which face the painter draws.
 enum BoopFace { open, happy, hug, sleepy, asleep, surprised, munch }
 
-enum BoopParticleKind { heart, sparkle, confetti, zzz }
+enum BoopParticleKind { heart, sparkle, confetti, zzz, crumb }
 
 /// A fire-and-forget effect, in room coordinates, owned by the simulation.
 class BoopParticle {
@@ -782,6 +782,25 @@ class BoopCreature extends Creature {
     }
   }
 
+  void _crumbs(Offset at, int count) {
+    if (reduceMotion) return;
+    for (var i = 0; i < count; i++) {
+      final ang = math.pi / 2 + (_rng.nextDouble() - 0.5) * 2.2;
+      final speed = _radius * 0.8 + _rng.nextDouble() * _radius * 1.2;
+      _addParticle(BoopParticle(
+        kind: BoopParticleKind.crumb,
+        pos: at,
+        vel: Offset(math.cos(ang), math.sin(ang)) * speed,
+        life: 0.6 + _rng.nextDouble() * 0.3,
+        size: _radius * 0.07 + _rng.nextDouble() * _radius * 0.05,
+        color: _crumbColors[_rng.nextInt(_crumbColors.length)],
+        gravity: 420,
+      ));
+    }
+  }
+
+  static const _crumbColors = [Color(0xFFD9A066), Color(0xFFE8B98A), Color(0xFFF2C6C6)];
+
   void _confetti(Offset at, int count) {
     if (reduceMotion) return;
     for (var i = 0; i < count; i++) {
@@ -1088,6 +1107,7 @@ class BoopCreature extends Creature {
     }
     _sound('boop.pop');
     _haptic('light');
+    _crumbs(mouth, 5);
     _reaction(favorite ? 'boop.yum' : 'boop.munch');
     _emit(CreatureEventType.progress, 'bond', favorite ? 2 : 1);
   }

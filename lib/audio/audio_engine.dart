@@ -57,11 +57,17 @@ class AudioEngine extends ChangeNotifier {
     try {
       _session = await AudioSession.instance;
       await _ambient();
-      _session!.interruptionEventStream.listen((e) {
+      _session!.interruptionEventStream.listen((e) async {
         if (e.begin) {
           stopAllLoops();
           _pauseMixer(true);
         } else {
+          // iOS deactivates the session during a call; resuming without reactivating plays nothing.
+          if (_mixerOn) {
+            try {
+              await _session?.setActive(true);
+            } catch (_) {}
+          }
           _pauseMixer(false);
         }
       });

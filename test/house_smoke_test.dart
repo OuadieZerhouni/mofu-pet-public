@@ -17,7 +17,8 @@ void main() {
   const small = Size(375, 667); // iPhone SE (3rd gen)
   const large = Size(440, 956); // iPhone 16 Pro Max
 
-  Future<HouseStore> pumpHouse(WidgetTester tester, {required Locale locale, Size size = large, bool seeded = true, int hour = 14}) async {
+  Future<HouseStore> pumpHouse(WidgetTester tester,
+      {required Locale locale, Size size = large, bool seeded = true, int hour = 14, Room? room}) async {
     tester.view
       ..physicalSize = size * 3
       ..devicePixelRatio = 3;
@@ -34,6 +35,7 @@ void main() {
       }
       store.completeFirstRun();
     }
+    if (room != null) store.setRoom(room);
     await tester.pumpWidget(MofuApp(services: AppServices(store: store, config: RemoteConfigService(), clock: () => clock), locale: locale));
     await tester.pump(const Duration(milliseconds: 100));
     return store;
@@ -157,5 +159,14 @@ void main() {
     await tester.tapAt(const Offset(20, 40));
     await settle(tester, 600);
     await open;
+  });
+
+  // F1-c1: the house reopens on the room the user left.
+  testWidgets('a relaunch opens on the last room, with its name in the header', (tester) async {
+    await pumpHouse(tester, locale: const Locale('en'), room: Room.bedroom);
+    final state = tester.state<HouseScreenState>(find.byType(HouseScreen));
+    expect(state.house.active, Room.bedroom);
+    expect(find.text(l10n(tester).roomName(Room.bedroom)), findsWidgets);
+    await settle(tester, 800); // let the debounced save land
   });
 }

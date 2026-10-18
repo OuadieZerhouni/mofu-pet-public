@@ -169,6 +169,17 @@ void main() {
     expect(s.claimGift(), 6, reason: 'a gap restarts the streak at 1');
   });
 
+  // F8-c1: the streak tops out at 7 days, so day 8 and later still pay 5 + 7.
+  test('gift streak caps at seven days', () async {
+    final s = await fresh();
+    final paid = <int>[];
+    for (var d = 0; d < 10; d++) {
+      paid.add(s.claimGift());
+      now = now.add(const Duration(days: 1));
+    }
+    expect(paid, [6, 7, 8, 9, 10, 11, 12, 12, 12, 12]);
+  });
+
   test('tricks master after practice on three different days', () async {
     final s = await fresh();
     final w = s.adopt(Species.wuff);

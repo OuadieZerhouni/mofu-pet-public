@@ -54,6 +54,22 @@ void main() {
     expect(s.drainEvents().any((e) => e.friendId == 'b'), isTrue);
   });
 
+  // F2-c2: the others turn to look at the friend being touched.
+  test('touching a friend makes the others look at it', () {
+    final s = RoomScene()..layout(const Rect.fromLTWH(0, 0, 400, 800), floorY: 620);
+    final a = MofuCreature(friendId: 'a', seed: 1), b = MofuCreature(friendId: 'b', seed: 2);
+    s
+      ..add(a)
+      ..add(b);
+    run(s, 1);
+    expect(a.sim.lookTarget, isNull);
+    s.pointerDown(1, b.position);
+    run(s, 0.1);
+    expect(a.sim.lookTarget, isNotNull);
+    expect((a.sim.lookTarget! - b.position).distance, lessThan(b.radius * 2));
+    s.pointerUp(1, b.position);
+  });
+
   test('empty floor does not claim the pointer', () {
     final s = scene();
     expect(s.pointerDown(1, const Offset(5, 5)), isNull);
@@ -80,6 +96,27 @@ void main() {
     }
     run(s, 40);
     expect(s.drainMoments().any((m) => m.$1 == GroupMoment.nuzzle), isTrue);
+  });
+
+  // F2-c2: a nuzzle's mutual gaze lets go, so idle glances resume.
+  test('after a nuzzle both friends stop staring and glance around again', () {
+    final s = RoomScene()..layout(const Rect.fromLTWH(0, 0, 400, 800), floorY: 620);
+    final a = MofuCreature(friendId: 'a', seed: 1), b = MofuCreature(friendId: 'b', seed: 2);
+    s
+      ..add(a)
+      ..add(b);
+    a.position = Offset(160, a.position.dy);
+    b.position = Offset(260, b.position.dy);
+    var nuzzled = false;
+    for (var i = 0; i < 60 * 40 && !nuzzled; i++) {
+      s.update(1 / 60);
+      nuzzled = s.drainMoments().any((m) => m.$1 == GroupMoment.nuzzle);
+    }
+    expect(nuzzled, isTrue);
+    expect(a.sim.lookTarget != null || b.sim.lookTarget != null, isTrue);
+    run(s, 3);
+    expect(a.sim.lookTarget, isNull);
+    expect(b.sim.lookTarget, isNull);
   });
 
   test('sleepAll puts everyone to sleep, paint order is stable and complete', () {

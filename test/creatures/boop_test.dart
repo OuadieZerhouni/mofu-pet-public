@@ -305,4 +305,19 @@ void main() {
       }
     });
   });
+
+  // F5-c1: munching drops crumbs from the mouth, like every other species.
+  test('eating drops crumbs that fall from the mouth', () {
+    final c = _boop();
+    c.eat(favorite: false);
+    final crumbs = c.particles.where((p) => p.kind == BoopParticleKind.crumb).toList();
+    expect(crumbs.length, greaterThanOrEqualTo(4));
+    expect((crumbs.first.pos - c.mouth).distance, lessThan(c.b * 0.5));
+    final y0 = crumbs.first.pos.dy;
+    for (var i = 0; i < 20; i++) {
+      c.update(1 / 60);
+    }
+    expect(crumbs.first.pos.dy, greaterThan(y0), reason: 'crumbs fall');
+    expect(_boop(reduceMotion: true)..eat(favorite: false), isA<BoopCreature>());
+  });
 }

@@ -54,6 +54,8 @@ class RoomScene {
   final Map<Creature, LifeState> _lastLife = {};
   double _time = 0;
   double _nextNuzzle = 6;
+  (Creature, Creature)? _gazePair;
+  double _gazeEnds = 0;
   double _touchCueCooldown = 0;
 
   double get time => _time;
@@ -201,6 +203,13 @@ class RoomScene {
     _keepClear(dt);
     _landings();
     if (socialIdle && !reduceMotion) _idleSocial();
+    final pair = _gazePair;
+    if (pair != null && _time >= _gazeEnds) {
+      _gazePair = null;
+      for (final c in [pair.$1, pair.$2]) {
+        if (c.activePointer == null) c.lookAt(null);
+      }
+    }
     for (final c in creatures) {
       for (final e in c.drainEvents()) {
         events.add(SceneEvent(c.friendId, e));
@@ -317,6 +326,8 @@ class RoomScene {
     if ((b.position.dx - a.position.dx).abs() > (a.radius + b.radius) * 2.2) return;
     a.lookAt(b.position);
     b.lookAt(a.position);
+    _gazePair = (a, b);
+    _gazeEnds = _time + 1.8;
     b.react(SocialCue.nuzzled, from: a.position);
     moments.add((GroupMoment.nuzzle, a.friendId, b.friendId));
   }

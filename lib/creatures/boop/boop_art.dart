@@ -784,6 +784,8 @@ class _BoopPainter {
           canvas.restore();
         case BoopParticleKind.zzz:
           _zee(p.pos, p.size * (0.55 + 0.45 * p.t), _inkSoft.withValues(alpha: fade));
+        case BoopParticleKind.crumb:
+          canvas.drawCircle(p.pos, p.size, Paint()..color = p.color.withValues(alpha: fade));
       }
     }
   }

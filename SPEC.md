@@ -59,7 +59,7 @@ Each species keeps its own physics, face set, reactions and sounds (ported from 
 
 ### F1 — The house and rooms
 **Acceptance criteria**
-- [ ] Horizontal paging between six rooms with parallax layers (back wall, furniture, foreground). The room
+- [x] Horizontal paging between six rooms with parallax layers (back wall, furniture, foreground). The room
       name and dots show the position, and the last room is restored on launch.
 - [ ] Each room has day, evening and night lighting from the clock (night 22–6) with a smooth transition.
 - [ ] Rooms render at 60 fps on an iPhone 11 class device (particle and strand caps enforced in code).
@@ -67,7 +67,7 @@ Each species keeps its own physics, face set, reactions and sounds (ported from 
 ### F2 — Friends and the friend bar
 - [ ] Up to 4 friends are in the active room. A friend bar (bottom) shows every hatched friend. Drag a friend's
       chip into the room to bring them, or out of it to send them away.
-- [ ] Friends stand on the room floor without overlapping (soft separation), idle (breathe, blink, look, hop),
+- [x] Friends stand on the room floor without overlapping (soft separation), idle (breathe, blink, look, hop),
       and turn to look at whichever friend is being touched.
 - [ ] Group behaviours: toss one friend onto another and both react; idle friends occasionally boop or nuzzle a
       neighbour; at night idle friends gather into a cuddle pile.
@@ -75,14 +75,14 @@ Each species keeps its own physics, face set, reactions and sounds (ported from 
 ### F3 — Signature touch per species
 - [ ] Mofu: everything in Mofu v1 (tap boing, tickle, eye poke, squish → hug, pick up and toss, stroke purr,
       spin, brush mode with fluff growth and tidy).
-- [ ] Oink: snout boop (6 oinks), belly rub (giggle and kicking legs), ear flop, tail spin.
-- [ ] Wuff: ear scratch (leg thump), chin scratch, nose boop, tricks from the friend card (sit, paw, spin,
+- [x] Oink: snout boop (6 oinks), belly rub (giggle and kicking legs), ear flop, tail spin.
+- [x] Wuff: ear scratch (leg thump), chin scratch, nose boop, tricks from the friend card (sit, paw, spin,
       speak, play dead, high five), barks.
-- [ ] Boops: boop combos (pitch rises, tier banners at 10, 25 and 50, sneeze every 30), squash and stretch, hug.
+- [x] Boops: boop combos (pitch rises, tier banners at 10, 25 and 50, sneeze every 30), squash and stretch, hug.
 - [ ] Every interaction has visible + haptic (+ sound) feedback within 100 ms.
 
 ### F4 — ASMR Spa
-- [ ] Put one friend on the spa mat. Four steps with a progress ribbon: **Foam** (rubbing builds foam blobs that
+- [x] Put one friend on the spa mat. Four steps with a progress ribbon: **Foam** (rubbing builds foam blobs that
       stick, wobble and pop into bubbles), **Rinse** (drag the shower head: water streaks, foam slides off),
       **Towel** (rub until dry; damp-fur look fades), **Blow-dry** (drag the dryer: fur or ears flutter, Mofu
       gains fluff).
@@ -91,9 +91,9 @@ Each species keeps its own physics, face set, reactions and sounds (ported from 
       (mud splats appear after the garden) and the foam step removes them.
 
 ### F5 — Kitchen
-- [ ] A species-specific snack tray (Mofu sweets, Oink fruit and veg, Wuff treats, Boops berries). Drag to a
+- [x] A species-specific snack tray (Mofu sweets, Oink fruit and veg, Wuff treats, Boops berries). Drag to a
       mouth: chew animation, crumbs, munch sound. The favourite (hashed from the name) gets hearts and a jingle.
-- [ ] Six snacks per friend per hour, then "full" (polite head shake). No hunger decay; feeding is a reward, not a chore.
+- [x] Six snacks per friend per hour, then "full" (polite head shake). No hunger decay; feeding is a reward, not a chore.
 
 ### F6 — Bedroom and sleep sounds
 - [ ] Drag friends onto the bed; they curl up, breathe slowly and snore softly. Tap to wake gently.
@@ -103,14 +103,14 @@ Each species keeps its own physics, face set, reactions and sounds (ported from 
 - [ ] Night light dims the room; tapping the lamp toggles it.
 
 ### F7 — Playroom mini-games
-- [ ] **Boop Rush:** 30 s, critters pop up on a 3×3 board. Boop them (+1, golden +5); a sleeping one is −1.
+- [x] **Boop Rush:** 30 s, critters pop up on a 3×3 board. Boop them (+1, golden +5); a sleeping one is −1.
       Best score saved. Pays ★ = score ÷ 5, capped per day.
-- [ ] **Snack Catch:** 45 s, drag a friend left and right to catch falling snacks and dodge bees. Best score
+- [x] **Snack Catch:** 45 s, drag a friend left and right to catch falling snacks and dodge bees. Best score
       saved. Pays ★ = score ÷ 4, capped per day.
-- [ ] Both: a countdown, pause on background, results card with best score and ★ earned.
+- [x] Both: a countdown, pause on background, results card with best score and ★ earned.
 
 ### F8 — Stars, friendship, hatchery
-- [ ] ★ (fluff stars) are earned by care (first touch of the day per friend, spa completion, feeding the
+- [x] ★ (fluff stars) are earned by care (first touch of the day per friend, spa completion, feeding the
       favourite, mini-games, daily gift with a streak up to 7). Daily caps keep it calm. Never purchasable in v1.
 - [ ] Each friend has a friendship level (hearts 1–10) raised by care. Levels unlock outfits and reactions.
 - [ ] Hatchery: an egg becomes available at the ★ thresholds in the species table. Tapping it in the garden
@@ -137,8 +137,52 @@ Each species keeps its own physics, face set, reactions and sounds (ported from 
 - [ ] Sound, haptics, reduce motion, rename friends, start over (confirmed), privacy, support, credits
       (incl. "Powered by Stability AI" if Stable Audio sounds ship), version.
 - [ ] Semantics on every control and friend; Dynamic Type up to 1.3 without overflow; colour contrast AA.
-- [ ] 7 languages (en, ja, de, pt, es, fr, ar RTL). Offline. No account, no ads, no purchases, no data
+- [x] 7 languages (en, ja, de, pt, es, fr, ar RTL). Offline. No account, no ads, no purchases, no data
       collected. Remote config (GitHub JSON, safe defaults) can only tune existing behaviour.
+
+## Open questions (raised by /build, 2026-10-18)
+
+19 criteria stay unticked. Build 1.0.0 (3) is already uploaded for resubmission, so none of the work
+below is in that build. Nothing here is a reason App Review rejects an app.
+
+**A — the code deliberately differs from the SPEC. Pick one: amend the SPEC, or change the code.**
+- F8-c3 egg thresholds: the code uses Oink 10 ★, Wuff 60 ★, Boops 120 + 60·i; the SPEC table says
+  40 / 90 / 150 + 60. A code comment says the first egg should hatch in one session. *Recommend: amend
+  the SPEC.*
+- F2-c1 the friend bar uses tap-to-bring, not drag. There is also no way to send a friend out of every
+  room. *Recommend: keep tap and add a "send away" action on the friend card.*
+- F6-c2 the sleep mixer uses `mixWithOthers`, so it plays over the user's music instead of pausing for
+  other apps, as the SPEC says. *Recommend: keep mixing (rain over your own music is a feature) and
+  amend the SPEC.*
+- F3-c4 the "tier banner" is a speech bubble plus a first-time toast. *Recommend: amend the wording.*
+
+**B — not built yet (1.0.1 list).**
+- F1-c2 lighting changes between dayparts with a hard cut; the SPEC asks for a smooth transition.
+- F2-c3 no night cuddle pile, and the thrown friend doesn't react on landing.
+- F3-c1 Mofu's brush mode can't be reached from the house, so brushing for fluff growth and tidying
+  messy fur are both unavailable.
+- F6-c1 no drag onto the bed (only "Tuck in"), Boops don't snore, and Oink needs 3 taps to wake.
+- F6-c3 switching the lamp off only removes its glow; the room doesn't dim, and the painted lamp
+  can't be tapped.
+- F8-c2 friendship levels unlock outfits but no reactions.
+- F9 seasonal items (witch, santa) can never be earned: `earnSeasonal` and `openSeason` are never
+  called. Halloween opens 2026-10-20. Boops can't switch coats.
+- F11 the journal shows "???" instead of silhouettes, and best scores appear only on the Playroom
+  cards.
+- F12 there's no three-step coach (touch, swipe rooms, spa) and no Skip; the seed sits on an overlay,
+  not in the garden.
+- F13-c1 there's no "Rename friends" row in Settings; renaming is only on the friend card.
+- F13-c2 friends in the room and the photo-booth controls have no semantics. There are no tests for
+  Dynamic Type 1.3 or contrast.
+
+**C — implemented; only a device or /test-drive can prove it.**
+- F1-c3 60 fps on an iPhone 11 (caps are in code; spa foam is the heaviest frame).
+- F3-c5 feedback within 100 ms for every interaction (taps are tested).
+- F4-c2 spa loops follow finger speed; F4-c3 "Fresh!" bubble, and mud picked up in the garden.
+- F6-c2 playback with the screen locked, and resume after a call (the session is now reactivated
+  when an interruption ends).
+- F10 the photo-booth export is 1080×1350 and shares through the share sheet; Info.plist has no
+  photo-library key.
 
 ## Look & feel (detailed on the Claude Design canvas "Mofu & Friends — UI design")
 
