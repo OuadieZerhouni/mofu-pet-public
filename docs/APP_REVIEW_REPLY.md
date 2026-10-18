@@ -50,14 +50,28 @@ ad-free app that collects no data. We could not find an app that combines tactil
 bedtime sound mixer in this way.
 
 **4. Beta testing.**
-[EDIT: describe only what really happened, e.g. "We tested TestFlight builds on iPhone 11 and iPhone 15
-with N testers over N days. Feedback that changed the build: …"]
+Before this submission, testing was done by the developer; we have not yet run an external TestFlight
+group. Release builds were tested by hand room by room, the flagship build went through a separate UX
+review and a correctness review, and every change runs against an automated suite of 306 tests
+(gestures, saving, every language and right-to-left layout) plus a motion-capture harness that records
+each animation frame by frame. Findings from that testing that changed this build: rapid taps on the room
+arrows repeated the same room and now step through rooms; a single friend in the garden no longer lands
+on the hatching nest; an egg hatch could get stuck if the garden was paged away; moving a friend out of
+the spa mid-routine left it pinned; the sleep mixer now obeys the app's Sound switch; the Share button
+was clipped in Arabic in the photo booth; tapping a friend no longer jolts its neighbours. On the first
+Mofu build, simulator testing found that Mofu fell asleep behind the onboarding screen, which was fixed
+before that submission.
 
 **5. Standalone or part of a suite?**
-It is a standalone product. The developer account also publishes OuO cute pet (a single animated face
-for screen companionship), Ocarina Pocket (a musical instrument) and Hot Cold Globe (a geography quiz).
-Mofu & Friends shares no screens or gameplay with them: it is the only app on the account with a
-multi-creature household, rooms, grooming, feeding, hatching and a sleep-sound mixer.
+It is a standalone product. The other apps on this developer account are: OuO cute pet (a single
+animated face that reacts to touch, as a screen companion), OuO Weather (a weather forecast with a cat
+widget), Neko: Pixel Cat Drums & Widget (a single pixel-art cat that plays bongo drums as you tap, with a
+home-screen widget), Ocarina Pocket (a musical instrument with tabs and a tuner), Hot Cold Globe (a
+geography quiz) and Orbit Rage (an arcade game). Oink and Boop! also have rejected records and will not
+be resubmitted. Mofu & Friends shares no screens or gameplay with any of them: it is the only app on the
+account with a multi-creature household, rooms, a grooming routine, feeding, hatching new friends and a
+sleep-sound mixer. Unlike OuO and Neko, which each centre on one character's reactions, it is a care and
+bedtime routine across a household of creatures.
 
 **6. Could it be an in-app purchase or content addition in another app?**
 That was the case for our earlier separate submissions, and we acted on it: the three creature apps have

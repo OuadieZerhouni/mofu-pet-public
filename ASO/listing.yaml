@@ -1,7 +1,7 @@
 # Generated from ASO/metadata.json (tools/aso/metadata.py) for the flagship "Mofu & Friends" on 2026-10-18.
 # Push writes back only what differs from App Store Connect.
 # `app` is the current App Store Connect name used to find the record; the locales rename it.
-app: 'Mofu: Fluffy Pet'
+app: 'Mofu: Cute Pet House'
 bundle_id: com.ouadieZerhouni.mofuPet
 version: 1.0.0
 version_state: PREPARE_FOR_SUBMISSION
