@@ -2,7 +2,10 @@
 /// the wooden shelf, friend coins with live portraits, the egg coin.
 library;
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 import 'package:flutter/rendering.dart';
 
 import '../../creatures/creature.dart';
@@ -72,7 +75,9 @@ class FeltIconButton extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       button: true,
       label: label,
@@ -188,7 +193,9 @@ class FriendCoin extends StatelessWidget {
   };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       button: true,
       label: label,
@@ -223,7 +230,9 @@ class EggCoin extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       button: true,
       label: label,
@@ -286,28 +295,84 @@ class _EggPainter extends CustomPainter {
 }
 
 /// Gold star + count, as in the top bar.
-class StarTag extends StatelessWidget {
+class StarTag extends StatefulWidget {
   const StarTag({super.key, required this.count, required this.label, this.dark = false});
   final int count;
   final String label;
   final bool dark;
 
   @override
+  State<StarTag> createState() => _StarTagState();
+}
+
+/// Earned stars count up, the tag bumps and the star spins a turn and glints:
+/// a reward you see land, instead of a number that silently changes.
+class _StarTagState extends State<StarTag> with SingleTickerProviderStateMixin {
+  late final AnimationController _bump = AnimationController(vsync: this, duration: const Duration(milliseconds: 650));
+  late int _from = widget.count;
+
+  @override
+  void didUpdateWidget(StarTag old) {
+    super.didUpdateWidget(old);
+    if (widget.count > old.count && !(MediaQuery.maybeDisableAnimationsOf(context) ?? false)) {
+      _from = old.count;
+      _bump.forward(from: 0);
+    } else if (widget.count != old.count) {
+      _from = widget.count;
+    }
+  }
+
+  @override
+  void dispose() {
+    _bump.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: label,
+      label: widget.label,
       excludeSemantics: true,
-      child: FeltTag(
-        dark: dark,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomPaint(size: const Size(18, 18), painter: StarPainter()),
-            const SizedBox(width: 6),
-            Text('$count', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: dark ? House.nightText : House.ink)),
-          ],
-        ),
+      child: AnimatedBuilder(
+        animation: _bump,
+        builder: (context, _) {
+          final t = _bump.isAnimating || _bump.value < 1 ? _bump.value : 1.0;
+          final counting = Curves.easeOutCubic.transform((t / 0.6).clamp(0.0, 1.0));
+          final shown = (_from + (widget.count - _from) * counting).round();
+          // A quick swell with a soft overshoot back to rest.
+          final pop = t >= 1 ? 1.0 : 1 + 0.16 * math.sin(math.pi * math.min(1.0, t / 0.35)) * (t < 0.35 ? 1 : 0) - 0.04 * math.sin(math.pi * ((t - 0.35) / 0.65).clamp(0.0, 1.0));
+          final glint = t >= 1 ? 0.0 : math.sin(math.pi * t);
+          return Transform.scale(
+            scale: pop,
+            child: FeltTag(
+              dark: widget.dark,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Transform.rotate(
+                    angle: t >= 1 ? 0 : Curves.easeOutBack.transform(t) * math.pi * 2 / 5,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [BoxShadow(color: House.star.withValues(alpha: 0.7 * glint), blurRadius: 10 * glint)],
+                      ),
+                      child: CustomPaint(size: const Size(18, 18), painter: StarPainter()),
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text('$shown',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                        color: widget.dark ? House.nightText : House.ink,
+                      )),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -369,5 +434,50 @@ class _RenderMeasure extends RenderProxyBox {
     _last = size;
     final s = size;
     WidgetsBinding.instance.addPostFrameCallback((_) => onChange(s));
+  }
+}
+
+/// Springy press feedback for anything tappable: sinks to [pressed] while a
+/// finger is down and springs back with a little overshoot. It only listens
+/// (never claims the gesture), so wrapping a GestureDetector changes nothing else.
+class Squish extends StatefulWidget {
+  const Squish({super.key, required this.child, this.pressed = 0.92});
+  final Widget child;
+  final double pressed;
+
+  @override
+  State<Squish> createState() => _SquishState();
+}
+
+class _SquishState extends State<Squish> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController.unbounded(vsync: this, value: 1);
+  static const _spring = SpringDescription(mass: 1, stiffness: 520, damping: 16);
+
+  void _to(double target) {
+    if (MediaQuery.maybeDisableAnimationsOf(context) ?? false) {
+      _c.value = 1;
+      return;
+    }
+    _c.animateWith(SpringSimulation(_spring, _c.value, target, _c.velocity));
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Listener(
+      onPointerDown: (_) => _to(widget.pressed),
+      onPointerUp: (_) => _to(1),
+      onPointerCancel: (_) => _to(1),
+      child: AnimatedBuilder(
+        animation: _c,
+        builder: (context, child) => Transform.scale(scale: _c.value, child: child),
+        child: widget.child,
+      ),
+    );
   }
 }

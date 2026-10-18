@@ -14,6 +14,9 @@ import '../snack_icons.dart';
 
 /// Playroom: two mini-games on cards; friends play in the background.
 class PlayroomRoom extends RoomModule {
+  @override
+  bool get hasTopCard => true;
+
   const PlayroomRoom();
 
   @override
@@ -67,7 +70,9 @@ class _GameCard extends StatelessWidget {
   final String playLabel;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       button: true,
       enabled: onPlay != null,

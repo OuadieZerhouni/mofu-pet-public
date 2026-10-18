@@ -262,6 +262,13 @@ class WuffCreature extends Creature {
   }
 
   /// Keeps the ears and cheeks inside the walls. True if the wall was hit.
+  @override
+  void shiftX(double dx) {
+    if (pinned) return;
+    cx += dx;
+    _clampX();
+  }
+
   bool _clampX() {
     final m = 1.5 * r;
     final lo = _area.left + m, hi = _area.right - m;

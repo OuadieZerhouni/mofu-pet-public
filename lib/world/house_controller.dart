@@ -16,6 +16,7 @@ import '../creatures/creature.dart';
 import '../creatures/mofu/mofu_creature.dart';
 import '../model/house_store.dart';
 import 'creature_factory.dart';
+import 'fx.dart';
 import 'room_scene.dart';
 import 'spa_session.dart';
 
@@ -31,10 +32,13 @@ Daypart daypartFor(DateTime t) {
 
 /// A short line shown above a friend.
 class Bubble {
-  Bubble(this.friendId, this.key, this.until);
+  Bubble(this.friendId, this.key, this.until, {double? born}) : born = born ?? until - 1.8;
   final String friendId;
   final String key;
   final double until;
+
+  /// When it appeared (for the pop-in / fade-out).
+  final double born;
 }
 
 /// Something the UI should announce once (toast).
@@ -67,6 +71,19 @@ class HouseController extends ChangeNotifier {
   final List<Bubble> bubbles = [];
   final List<HouseNotice> notices = [];
   final Map<String, double> _bondCarry = {};
+
+  /// Live one-shot effects (all rooms; painted by the room they are in).
+  final Map<Room, List<Fx>> fx = {for (final r in Room.values) r: []};
+
+  /// Friends currently entering a room (drop-in or pop out of an egg).
+  final Map<String, Entrance> entrances = {};
+  final Set<String> _landed = {};
+
+  /// True during a big moment (the hatch): routine notices wait instead of covering it.
+  bool quiet = false;
+  int _fxSeed = 1;
+  final Map<Creature, Map<FoamBlob, Offset>> _foamSeen = {};
+  bool _loaded = false;
   Room active = Room.living;
 
   /// The friend last touched in each room (kitchen menus, spa mat).
@@ -112,6 +129,13 @@ class HouseController extends ChangeNotifier {
         s.remove(c);
       }
     }
+    if (!_loaded) {
+      // The house opens already arranged: no visible shuffle on the first frame.
+      _loaded = true;
+      for (final s in scenes.values) {
+        s.settle();
+      }
+    }
     notifyListeners();
   }
 
@@ -139,7 +163,56 @@ class HouseController extends ChangeNotifier {
   bool moveFriend(String friendId, Room? to) {
     if (!store.moveTo(friendId, to)) return false;
     sync();
+    // Arriving in the room you are looking at: drop in rather than appear.
+    if (to == active) enter(friendId, EntranceStyle.drop);
     return true;
+  }
+
+  /// Plays an entrance for [friendId] in its room (see [Entrance]).
+  void enter(String friendId, EntranceStyle style, {Offset? from}) {
+    entrances[friendId] = Entrance(style, _time, from: from);
+    _landed.remove(friendId);
+  }
+
+  void spawnFx(Room room, FxKind kind, Offset at, {double scale = 1, Color? color}) {
+    fx[room]!.add(Fx(kind, at, _time, seed: _fxSeed++, scale: scale, color: color));
+  }
+
+  /// Where a friend's celebration effects start (just above its head).
+  Offset _headOf(Creature c) => Offset(c.position.dx, c.bounds.top + c.radius * 0.2);
+
+  void _tickEffects() {
+    for (final list in fx.values) {
+      list.removeWhere((f) => f.progress(_time) == null && _time > f.born);
+    }
+    entrances.removeWhere((id, e) => _time - e.born > Entrance.duration);
+    // Foam that disappears (rinsed off) pops into a few tiny bubbles where it was.
+    var pops = 0;
+    for (final c in scene.creatures) {
+      final seen = _foamSeen.putIfAbsent(c, () => {});
+      final now = c.care.foam.toSet();
+      for (final MapEntry(key: blob, value: at) in seen.entries) {
+        if (!now.contains(blob) && pops < 3) {
+          spawnFx(active, FxKind.pop, at, scale: c.radius / 60);
+          pops++;
+        }
+      }
+      seen
+        ..clear()
+        ..addEntries(now.map((b) => MapEntry(b, c.position + b.at * c.radius)));
+    }
+    for (final MapEntry(key: id, value: e) in entrances.entries) {
+      if (e.style != EntranceStyle.drop || _landed.contains(id) || _time - e.born < Entrance.impact) continue;
+      _landed.add(id);
+      final c = creatures[id];
+      final room = store.friend(id)?.room;
+      if (c == null || room == null) continue;
+      spawnFx(room, FxKind.dust, c.footPoint, scale: c.radius / 60);
+      if (room == active) {
+        audio.play('ui.land');
+        audio.haptic('light');
+      }
+    }
   }
 
   // ── input from the room view ──────────────────────────────────────────
@@ -147,6 +220,10 @@ class HouseController extends ChangeNotifier {
     final c = scene.pointerDown(pointer, p);
     if (c != null) {
       lastTouched[active] = c.friendId;
+      // Mofu boings and Boops jiggle on their own; the others get a springy squish.
+      if ((c.species == Species.oink || c.species == Species.wuff) && !entrances.containsKey(c.friendId)) {
+        enter(c.friendId, EntranceStyle.squish);
+      }
       // Garden play gets friends a little muddy — the spa washes it off.
       if (active == Room.garden && c.care.mud.length < 4 && _rng.nextDouble() < 0.35) {
         final a = _rng.nextDouble() * math.pi * 2;
@@ -192,9 +269,10 @@ class HouseController extends ChangeNotifier {
       if (store.discover(id)) notices.add(HouseNotice('discovered', id));
     }
     bubbles.removeWhere((b) => b.until < _time);
+    _tickEffects();
     // Keyed by household size: a hatch makes the next egg a new announcement even if
     // it is affordable straight away.
-    if (store.eggReady && _eggAnnouncedAt != store.friends.length) {
+    if (!quiet && store.eggReady && _eggAnnouncedAt != store.friends.length) {
       _eggAnnouncedAt = store.friends.length;
       notices.add(const HouseNotice('eggReady'));
     } else if (!store.eggReady) {
@@ -204,7 +282,7 @@ class HouseController extends ChangeNotifier {
 
   void say(String friendId, String key, {double seconds = 1.8}) {
     bubbles.removeWhere((b) => b.friendId == friendId);
-    bubbles.add(Bubble(friendId, key, _time + seconds));
+    bubbles.add(Bubble(friendId, key, _time + seconds, born: _time));
   }
 
   void _handle(SceneEvent se) {
@@ -267,7 +345,13 @@ class HouseController extends ChangeNotifier {
   List<HouseNotice> drainNotices() {
     for (final (id, lvl) in store.levelUps) {
       notices.add(HouseNotice('levelUp', id, '', lvl));
-      creatures[id]?.celebrate();
+      final c = creatures[id];
+      final room = store.friend(id)?.room;
+      if (c != null && room != null) {
+        c.celebrate();
+        spawnFx(room, FxKind.ring, _headOf(c), scale: c.radius / 60);
+        spawnFx(room, FxKind.burst, _headOf(c), scale: c.radius / 60);
+      }
       audio.play('ui.unlock');
     }
     store.levelUps.clear();

@@ -393,6 +393,12 @@ class OinkCreature extends Creature {
 
   bool _placed = false;
 
+  @override
+  void shiftX(double dx) {
+    if (_mode == _Mode.held) return;
+    _pos = Offset(_clampX(_pos.dx + dx), _pos.dy);
+  }
+
   double _clampX(double x) {
     final lo = _minX, hi = _maxX;
     if (lo > hi) return _area.center.dx;

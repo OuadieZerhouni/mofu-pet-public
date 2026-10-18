@@ -7,6 +7,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../../model/house_store.dart';
 import '../../../world/house_controller.dart';
 import '../../theme.dart';
+import '../parts.dart';
 import '../room_context.dart';
 
 /// Bedroom: tuck friends in, a night light, and the sleep-sound mixer.
@@ -117,7 +118,9 @@ class _ShelfButton extends StatelessWidget {
   final bool wide;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       button: true,
       selected: selected,

@@ -5,7 +5,7 @@ library;
 
 import 'dart:math' as math;
 
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 
 import '../creatures/creature.dart';
 
@@ -96,14 +96,21 @@ void paintCare(Canvas canvas, Creature c, double time) {
   canvas.save();
   canvas.clipPath(c.silhouette);
   if (care.wet > 0.01) {
-    canvas.drawRect(c.bounds, Paint()..color = const Color(0xFF2B5A78).withValues(alpha: 0.22 * care.wet));
+    canvas.drawRect(c.bounds, Paint()..color = const Color(0xFF2B5A78).withValues(alpha: 0.2 * care.wet));
+    // Droplets trickle down the fur, each on its own slow loop, catching the light.
     final rng = math.Random(c.seed);
-    for (var i = 0; i < (18 * care.wet).round(); i++) {
+    final n = (16 * care.wet).round();
+    for (var i = 0; i < n; i++) {
       final a = rng.nextDouble() * 2 * math.pi;
-      final d = math.sqrt(rng.nextDouble()) * r;
-      final p = centre + Offset(math.cos(a), math.sin(a)) * d;
-      canvas.drawOval(Rect.fromCenter(center: p, width: r * 0.06, height: r * 0.09),
-          Paint()..color = const Color(0xFFFFFFFF).withValues(alpha: 0.55 * care.wet));
+      final d = math.sqrt(rng.nextDouble()) * r * 0.95;
+      final speed = 0.08 + rng.nextDouble() * 0.12;
+      final slide = ((time * speed + rng.nextDouble()) % 1.0) * r * 0.5;
+      final p = centre + Offset(math.cos(a) * d, math.sin(a) * d * 0.9 + slide - r * 0.2);
+      final dw = r * (0.045 + rng.nextDouble() * 0.03);
+      final drop = Rect.fromCenter(center: p, width: dw, height: dw * 1.45);
+      canvas.drawOval(drop.shift(Offset(dw * 0.12, dw * 0.18)), Paint()..color = const Color(0xFF2B5A78).withValues(alpha: 0.18 * care.wet));
+      canvas.drawOval(drop, Paint()..color = const Color(0xFFEAF6FF).withValues(alpha: 0.55 * care.wet));
+      canvas.drawCircle(drop.topLeft + Offset(dw * 0.32, dw * 0.38), dw * 0.16, Paint()..color = Colors.white.withValues(alpha: 0.9 * care.wet));
     }
   }
   for (final m in care.mud) {
@@ -115,22 +122,7 @@ void paintCare(Canvas canvas, Creature c, double time) {
   canvas.restore();
 
   // Foam sits on top of the outline, not clipped: it puffs past the body edge.
-  for (final f in care.foam) {
-    final wobble = 1 + 0.06 * math.sin(time * 5 + f.phase * 7);
-    final p = centre + f.at * r;
-    final rad = f.radius * r * wobble;
-    canvas.drawCircle(p + Offset(0, rad * 0.18), rad, Paint()..color = const Color(0xFFBFD8E4).withValues(alpha: 0.55));
-    canvas.drawCircle(
-      p,
-      rad,
-      Paint()
-        ..shader = RadialGradient(
-          center: const Alignment(-0.35, -0.4),
-          colors: const [Color(0xFFFFFFFF), Color(0xFFEFF7FB)],
-        ).createShader(Rect.fromCircle(center: p, radius: rad)),
-    );
-    canvas.drawCircle(p + Offset(-rad * 0.32, -rad * 0.34), rad * 0.18, Paint()..color = const Color(0xCCFFFFFF));
-  }
+  if (care.foam.isNotEmpty) _paintFoam(canvas, care.foam, centre, r, time);
 
   if (care.shine > 0.01) {
     final rng = math.Random(c.seed + 9);
@@ -139,6 +131,56 @@ void paintCare(Canvas canvas, Creature c, double time) {
       final p = centre + Offset(math.cos(a), math.sin(a)) * r * (0.75 + 0.25 * rng.nextDouble());
       final tw = 0.5 + 0.5 * math.sin(time * 4 + i * 1.7);
       _glint(canvas, p, r * 0.09 * tw, const Color(0xFFFFF6C8).withValues(alpha: care.shine));
+    }
+  }
+}
+
+/// Lather: a soft cohesive mass first (so blobs read as one foam, not
+/// separate balls), then translucent rim-lit bubbles of mixed sizes on top,
+/// each breathing on its own phase, with a glossy highlight.
+void _paintFoam(Canvas canvas, List<FoamBlob> foam, Offset centre, double r, double time) {
+  final base = Paint()
+    ..color = const Color(0xFFF7FBFD)
+    ..maskFilter = MaskFilter.blur(BlurStyle.normal, r * 0.035);
+  final shade = Paint()
+    ..color = const Color(0xFFB9D3E1).withValues(alpha: 0.5)
+    ..maskFilter = MaskFilter.blur(BlurStyle.normal, r * 0.05);
+  for (final f in foam) {
+    final rad = f.radius * r * (1 + 0.05 * math.sin(time * 4 + f.phase * 7));
+    canvas.drawCircle(centre + f.at * r + Offset(0, rad * 0.22), rad * 0.95, shade);
+  }
+  for (final f in foam) {
+    final rad = f.radius * r * (1 + 0.05 * math.sin(time * 4 + f.phase * 7));
+    canvas.drawCircle(centre + f.at * r, rad * 0.92, base);
+  }
+  final rim = Paint()
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = math.max(0.8, r * 0.008);
+  final body = Paint();
+  final hi = Paint()..color = Colors.white.withValues(alpha: 0.95);
+  for (final f in foam) {
+    final p0 = centre + f.at * r;
+    final rng = math.Random((f.phase * 100000).round());
+    final count = 3 + rng.nextInt(3);
+    for (var k = 0; k < count; k++) {
+      final a = rng.nextDouble() * math.pi * 2;
+      final d = rng.nextDouble() * f.radius * r * 0.6;
+      final size = f.radius * r * (0.22 + rng.nextDouble() * 0.36) * (1 + 0.08 * math.sin(time * (3 + k) + f.phase * 11 + k));
+      final p = p0 + Offset(math.cos(a) * d, math.sin(a) * d * 0.8);
+      final rect = Rect.fromCircle(center: p, radius: size);
+      // Mostly clear with a pale fill, an iridescent rim and a bright spec.
+      body.shader = RadialGradient(
+        center: const Alignment(-0.25, -0.3),
+        colors: [Colors.white.withValues(alpha: 0.75), const Color(0xFFEAF4FA).withValues(alpha: 0.55), const Color(0xFFD7E9F3).withValues(alpha: 0.4)],
+        stops: const [0, 0.7, 1],
+      ).createShader(rect);
+      canvas.drawCircle(p, size, body);
+      rim.shader = SweepGradient(
+        transform: GradientRotation(time * 0.6 + f.phase * 5),
+        colors: const [Color(0x99F7B9D9), Color(0x99B9DCF7), Color(0x99D5F7C9), Color(0x99F7E3B9), Color(0x99F7B9D9)],
+      ).createShader(rect);
+      canvas.drawCircle(p, size, rim);
+      canvas.drawCircle(p + Offset(-size * 0.38, -size * 0.4), size * 0.2, hi);
     }
   }
 }

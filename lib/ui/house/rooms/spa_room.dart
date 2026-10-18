@@ -10,6 +10,9 @@ import '../room_context.dart';
 
 /// The ASMR spa: one friend on the mat, four tools in order.
 class SpaRoom extends RoomModule {
+  @override
+  bool get hasTopCard => true;
+
   SpaRoom();
 
   SpaSession? session;
@@ -130,7 +133,9 @@ class SpaRoom extends RoomModule {
                 onPointerMove: (e) => _move(rc, e.localPosition),
                 onPointerUp: (_) => _up(rc),
                 onPointerCancel: (_) => _up(rc),
-                child: CustomPaint(painter: _ToolPainter(finger: finger, step: s.step, time: rc.house.time, speed: speed)),
+                child: CustomPaint(
+                  painter: _ToolPainter(finger: finger, step: s.step, time: rc.house.time, speed: speed),
+                ),
               ),
             Positioned(
               top: top,
@@ -157,12 +162,12 @@ class SpaRoom extends RoomModule {
   }
 
   String _hint(AppLocalizations l, SpaStep step) => switch (step) {
-        SpaStep.foam => l.spaHintFoam,
-        SpaStep.rinse => l.spaHintRinse,
-        SpaStep.towel => l.spaHintTowel,
-        SpaStep.dry => l.spaHintDry,
-        SpaStep.done => l.spaHintDone,
-      };
+    SpaStep.foam => l.spaHintFoam,
+    SpaStep.rinse => l.spaHintRinse,
+    SpaStep.towel => l.spaHintTowel,
+    SpaStep.dry => l.spaHintDry,
+    SpaStep.done => l.spaHintDone,
+  };
 
   @override
   Widget? tools(BuildContext context, RoomContext rc) {
@@ -178,26 +183,34 @@ class SpaRoom extends RoomModule {
             child: Semantics(
               label: label,
               selected: current,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                height: 74,
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: current ? House.woodText : Colors.white.withValues(alpha: 0.10),
-                  border: Border.all(color: current ? House.woodText : House.woodText.withValues(alpha: 0.5), width: 3),
-                  boxShadow: current ? const [BoxShadow(color: House.coinShadow, offset: Offset(0, 4))] : null,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(done ? Icons.check_circle_rounded : icon, size: 28, color: current ? House.ink : House.woodText),
-                    const SizedBox(height: 2),
-                    Text(label,
+              // The step you are on lifts a little, so progress reads at a glance.
+              child: AnimatedScale(
+                scale: current ? 1.06 : 1,
+                duration: const Duration(milliseconds: 320),
+                curve: Curves.easeOutBack,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  height: 74,
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: current ? House.woodText : Colors.white.withValues(alpha: 0.10),
+                    border: Border.all(color: current ? House.woodText : House.woodText.withValues(alpha: 0.5), width: 3),
+                    boxShadow: current ? const [BoxShadow(color: House.coinShadow, offset: Offset(0, 4))] : null,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(done ? Icons.check_circle_rounded : icon, size: 28, color: current ? House.ink : House.woodText),
+                      const SizedBox(height: 2),
+                      Text(
+                        label,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: current ? House.ink : House.woodText)),
-                  ],
+                        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: current ? House.ink : House.woodText),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -253,9 +266,19 @@ class _Ribbon extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink))),
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+                ),
+              ),
               if (step != null && step != SpaStep.done)
-                Text(stepOf(idx + 1, 4), style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: House.sky)),
+                Text(
+                  stepOf(idx + 1, 4),
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: House.sky),
+                ),
             ],
           ),
           if (step != null) ...[
@@ -271,7 +294,9 @@ class _Ribbon extends StatelessWidget {
                       child: FractionallySizedBox(
                         alignment: AlignmentDirectional.centerStart,
                         widthFactor: i < idx || step == SpaStep.done ? 1 : (i == idx ? progress.clamp(0.0, 1.0) : 0),
-                        child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: House.sky)),
+                        child: Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: House.sky),
+                        ),
                       ),
                     ),
                   ),
@@ -282,11 +307,13 @@ class _Ribbon extends StatelessWidget {
               children: [
                 for (var i = 0; i < 4; i++)
                   Expanded(
-                    child: Text(stepLabels[i],
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: i == idx ? House.sky : const Color(0xFF5D6B70))),
+                    child: Text(
+                      stepLabels[i],
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: i == idx ? House.sky : const Color(0xFF5D6B70)),
+                    ),
                   ),
               ],
             ),
@@ -294,9 +321,17 @@ class _Ribbon extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              Expanded(child: Text(hint, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft))),
+              Expanded(
+                child: Text(
+                  hint,
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft),
+                ),
+              ),
               if (onAgain != null)
-                TextButton(onPressed: onAgain, child: Text(againLabel, style: const TextStyle(fontWeight: FontWeight.w900))),
+                TextButton(
+                  onPressed: onAgain,
+                  child: Text(againLabel, style: const TextStyle(fontWeight: FontWeight.w900)),
+                ),
             ],
           ),
         ],
@@ -319,7 +354,10 @@ class _ToolPainter extends CustomPainter {
     if (f == null) return;
     switch (step) {
       case SpaStep.foam:
-        final r = RRect.fromRectAndRadius(Rect.fromCenter(center: f + const Offset(0, -34), width: 64, height: 40), const Radius.circular(14));
+        final r = RRect.fromRectAndRadius(
+          Rect.fromCenter(center: f + const Offset(0, -34), width: 64, height: 40),
+          const Radius.circular(14),
+        );
         canvas.drawRRect(r.shift(const Offset(0, 4)), Paint()..color = const Color(0x33000000));
         canvas.drawRRect(r, Paint()..color = const Color(0xFFF6D27A));
         for (final d in const [Offset(-16, -6), Offset(4, 4), Offset(16, -8), Offset(-4, -10)]) {
@@ -331,24 +369,36 @@ class _ToolPainter extends CustomPainter {
         for (var i = 0; i < 18; i++) {
           final x = head.dx + (rng.nextDouble() - 0.5) * 50;
           final y0 = head.dy + 18 + ((time * 900 + i * 37) % 120);
-          canvas.drawLine(Offset(x, y0), Offset(x, y0 + 12),
-              Paint()
-                ..color = const Color(0xAA6FB6D8)
-                ..strokeWidth = 3
-                ..strokeCap = StrokeCap.round);
+          canvas.drawLine(
+            Offset(x, y0),
+            Offset(x, y0 + 12),
+            Paint()
+              ..color = const Color(0xAA6FB6D8)
+              ..strokeWidth = 3
+              ..strokeCap = StrokeCap.round,
+          );
         }
         final p = Path()..addArc(Rect.fromCircle(center: head + const Offset(0, 14), radius: 30), math.pi, math.pi);
         canvas.drawPath(p, Paint()..color = const Color(0xFFB8C6CF));
-        canvas.drawRect(Rect.fromCenter(center: head + const Offset(26, -12), width: 10, height: 30), Paint()..color = const Color(0xFF8FA1AC));
+        canvas.drawRect(
+          Rect.fromCenter(center: head + const Offset(26, -12), width: 10, height: 30),
+          Paint()..color = const Color(0xFF8FA1AC),
+        );
       case SpaStep.towel:
-        final r = RRect.fromRectAndRadius(Rect.fromCenter(center: f + const Offset(0, -30), width: 78, height: 54), const Radius.circular(10));
+        final r = RRect.fromRectAndRadius(
+          Rect.fromCenter(center: f + const Offset(0, -30), width: 78, height: 54),
+          const Radius.circular(10),
+        );
         canvas.drawRRect(r.shift(const Offset(0, 4)), Paint()..color = const Color(0x33000000));
         canvas.drawRRect(r, Paint()..color = const Color(0xFFF4C6CF));
         for (var i = 0; i < 4; i++) {
-          canvas.drawLine(r.outerRect.topLeft + Offset(8 + i * 18.0, 0), r.outerRect.bottomLeft + Offset(8 + i * 18.0, 0),
-              Paint()
-                ..color = const Color(0xFFE9A9B7)
-                ..strokeWidth = 2);
+          canvas.drawLine(
+            r.outerRect.topLeft + Offset(8 + i * 18.0, 0),
+            r.outerRect.bottomLeft + Offset(8 + i * 18.0, 0),
+            Paint()
+              ..color = const Color(0xFFE9A9B7)
+              ..strokeWidth = 2,
+          );
         }
       case SpaStep.dry:
         final n = f + const Offset(0, -44);
@@ -356,14 +406,23 @@ class _ToolPainter extends CustomPainter {
           final t = (time * 2.5 + i / 5) % 1;
           final y = n.dy + 24 + t * 70;
           final x = n.dx + (i - 2) * 9 + math.sin(time * 12 + i) * 4;
-          canvas.drawLine(Offset(x, y), Offset(x, y + 14),
-              Paint()
-                ..color = Colors.white.withValues(alpha: 0.8 * (1 - t))
-                ..strokeWidth = 3
-                ..strokeCap = StrokeCap.round);
+          canvas.drawLine(
+            Offset(x, y),
+            Offset(x, y + 14),
+            Paint()
+              ..color = Colors.white.withValues(alpha: 0.8 * (1 - t))
+              ..strokeWidth = 3
+              ..strokeCap = StrokeCap.round,
+          );
         }
-        canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: n, width: 70, height: 36), const Radius.circular(18)), Paint()..color = const Color(0xFF8E72F0));
-        canvas.drawRRect(RRect.fromRectAndRadius(Rect.fromCenter(center: n + const Offset(-18, 30), width: 16, height: 40), const Radius.circular(6)), Paint()..color = const Color(0xFF6E52D0));
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(Rect.fromCenter(center: n, width: 70, height: 36), const Radius.circular(18)),
+          Paint()..color = const Color(0xFF8E72F0),
+        );
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(Rect.fromCenter(center: n + const Offset(-18, 30), width: 16, height: 40), const Radius.circular(6)),
+          Paint()..color = const Color(0xFF6E52D0),
+        );
       case SpaStep.done:
         break;
     }

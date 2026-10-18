@@ -43,6 +43,14 @@ class RoomScene {
   List<(double, double)> keepOut = const [];
 
   final Map<int, Creature> _owners = {};
+
+  /// Each friend's resting width: rises slowly, falls at once, so a momentary
+  /// burst (fur boing, a stretch, a jump pose) never shoves the neighbours.
+  final Map<Creature, double> _restW = {};
+  double restWidth(Creature c) => _restW[c] ?? c.bounds.width;
+
+  /// Fastest a friend is pushed aside, px/s: a nudge you see, never a jolt.
+  static const maxPush = 140.0;
   final Map<Creature, LifeState> _lastLife = {};
   double _time = 0;
   double _nextNuzzle = 6;
@@ -75,6 +83,7 @@ class RoomScene {
       }
     }
     for (final c in creatures) {
+      _restW[c] = c.bounds.width;
       final half = c.bounds.width / 2;
       final x = xs[c]!;
       c.position = Offset(x.clamp(area.left + half, math.max(area.left + half, area.right - half)).toDouble(), c.position.dy);
@@ -96,6 +105,7 @@ class RoomScene {
     _relayoutAll();
     _owners.removeWhere((_, v) => v == c);
     _lastLife.remove(c);
+    _restW.remove(c);
   }
 
   Creature? byId(String friendId) => creatures.where((c) => c.friendId == friendId).firstOrNull;
@@ -182,10 +192,13 @@ class RoomScene {
       c.night = night;
       c.reduceMotion = reduceMotion;
       c.update(dt);
+      final w = c.bounds.width;
+      final prev = _restW[c] ?? w;
+      _restW[c] = w < prev ? w : prev + (w - prev) * math.min(1.0, dt * 0.8);
     }
     _separate(dt);
-    _keepInside();
-    _keepClear();
+    _keepInside(dt);
+    _keepClear(dt);
     _landings();
     if (socialIdle && !reduceMotion) _idleSocial();
     for (final c in creatures) {
@@ -205,28 +218,56 @@ class RoomScene {
         if (!_grounded(a) || !_grounded(b)) continue;
         final dx = b.position.dx - a.position.dx;
         // Visual widths (ears, fur, tails) — not just the body — so faces never hide.
-        final minGap = (a.bounds.width + b.bounds.width) * 0.5 * 0.82;
+        final minGap = (restWidth(a) + restWidth(b)) * 0.5 * 0.82;
         final overlap = minGap - dx.abs();
         if (overlap <= 0) continue;
         final dir = dx == 0 ? (i.isEven ? 1.0 : -1.0) : dx.sign;
-        final push = overlap * 6; // px/s per px of overlap
-        if (!a.pinned) a.nudge(Offset(-dir * push, 0));
-        if (!b.pinned) b.nudge(Offset(dir * push, 0));
+        // A gentle slide, capped: never a velocity kick (species' nudge semantics differ).
+        final push = math.min(overlap * 6, maxPush) * dt;
+        if (!a.pinned) a.shiftX(-dir * push);
+        if (!b.pinned) b.shiftX(dir * push);
       }
     }
   }
 
   /// Ears and tails stay on screen: a soft wall push on the visual bounds.
-  void _keepInside() {
+  void _keepInside(double dt) {
     for (final c in creatures) {
       if (!_grounded(c) || c.pinned) continue;
-      final b = c.bounds;
-      if (b.left < area.left) c.nudge(Offset((area.left - b.left) * 8, 0));
-      if (b.right > area.right) c.nudge(Offset(-(b.right - area.right) * 8, 0));
+      final half = restWidth(c) / 2;
+      final left = c.position.dx - half, right = c.position.dx + half;
+      if (left < area.left) c.shiftX(math.min((area.left - left) * 8, maxPush) * dt);
+      if (right > area.right) c.shiftX(-math.min((right - area.right) * 8, maxPush) * dt);
     }
   }
 
-  void _keepClear() {
+  /// Resolves overlaps instantly (no visible shuffle): for placing friends
+  /// before the first frame, e.g. when the house loads.
+  void settle() {
+    for (var it = 0; it < 40; it++) {
+      var moved = false;
+      final sorted = List<Creature>.of(creatures)..sort((a, b) => a.position.dx.compareTo(b.position.dx));
+      for (var i = 0; i + 1 < sorted.length; i++) {
+        final a = sorted[i], b = sorted[i + 1];
+        final overlap = (restWidth(a) + restWidth(b)) * 0.5 * 0.82 - (b.position.dx - a.position.dx);
+        if (overlap <= 0.5) continue;
+        moved = true;
+        a.position = Offset(a.position.dx - overlap / 2, a.position.dy);
+        b.position = Offset(b.position.dx + overlap / 2, b.position.dy);
+      }
+      for (final c in creatures) {
+        final half = restWidth(c) / 2;
+        final x = c.position.dx.clamp(area.left + half, math.max(area.left + half, area.right - half)).toDouble();
+        if (x != c.position.dx) {
+          c.position = Offset(x, c.position.dy);
+          moved = true;
+        }
+      }
+      if (!moved) break;
+    }
+  }
+
+  void _keepClear(double dt) {
     if (keepOut.isEmpty) return;
     for (final c in creatures) {
       if (!_grounded(c) || c.pinned) continue;
@@ -237,7 +278,7 @@ class RoomScene {
         final x = c.position.dx;
         if (x <= a || x >= b) continue;
         final toLeft = x - a, toRight = b - x;
-        c.nudge(Offset((toLeft < toRight ? -1 : 1) * 900, 0));
+        c.shiftX((toLeft < toRight ? -1 : 1) * maxPush * 1.5 * dt);
       }
     }
   }

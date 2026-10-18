@@ -378,6 +378,13 @@ class BoopCreature extends Creature {
     _clampX();
   }
 
+  @override
+  void shiftX(double dx) {
+    if (pinned) return;
+    _x += dx;
+    _clampX();
+  }
+
   void _clampX() {
     final m = _wallMargin;
     final lo = _area.left + m;

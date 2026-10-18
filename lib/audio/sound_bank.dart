@@ -65,6 +65,7 @@ class SoundBank {
       m['ui.$id'] = SoundDef('assets/sounds/$id.mp3', gain: 0.8);
     }
     m['ui.tap'] = const SoundDef('assets/sounds/pop.mp3', gain: 0.35);
+    m['ui.land'] = const SoundDef('assets/sounds/squish.mp3', gain: 0.45);
     // Spa and sleep (assets/sounds/spa, assets/sounds/sleep).
     for (final id in spaLoops) {
       m['spa.$id'] = SoundDef('assets/sounds/spa/$id.ogg', loop: true, gain: 0.7);

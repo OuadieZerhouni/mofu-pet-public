@@ -179,14 +179,14 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
       _pages.jumpToPage(r.index);
     } else {
       _flyingTo = r;
-      unawaited(_pages
-          .animateToPage(r.index, duration: const Duration(milliseconds: 420), curve: Curves.easeInOutCubic)
-          .whenComplete(() {
-        _flyingTo = null;
-        if (!mounted || !_pages.hasClients) return;
-        final i = (_pages.page ?? r.index.toDouble()).round();
-        if (Room.values[i] != house.active) _onPage(i);
-      }));
+      unawaited(
+        _pages.animateToPage(r.index, duration: const Duration(milliseconds: 420), curve: Curves.easeInOutCubic).whenComplete(() {
+          _flyingTo = null;
+          if (!mounted || !_pages.hasClients) return;
+          final i = (_pages.page ?? r.index.toDouble()).round();
+          if (Room.values[i] != house.active) _onPage(i);
+        }),
+      );
     }
   }
 
@@ -210,15 +210,15 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   }
 
   RoomContext _rc() => RoomContext(
-        house: house,
-        frame: frame,
-        l: _l,
-        toast: toast,
-        lockPaging: _lockPaging,
-        goTo: goTo,
-        openFriend: (id) => unawaited(openFriend(id)),
-        bottomInset: MediaQuery.of(context).padding.bottom,
-      );
+    house: house,
+    frame: frame,
+    l: _l,
+    toast: toast,
+    lockPaging: _lockPaging,
+    goTo: goTo,
+    openFriend: (id) => unawaited(openFriend(id)),
+    bottomInset: MediaQuery.of(context).padding.bottom,
+  );
 
   // ── first run ─────────────────────────────────────────────────────────
   Future<void> _hatchFirst() async {
@@ -247,140 +247,157 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     final rc = _rc();
     final module = roomModule(house.active);
     return Scaffold(
-      body: LayoutBuilder(builder: (context, box) {
-        final size = box.biggest;
-        final top = media.padding.top + 120;
-        double floorFor(Room r) => size.height - (104 + roomModule(r).shelfExtra + media.padding.bottom) - 34;
-        house.layoutRooms(top: top, width: size.width, floorFor: floorFor, sizeScale: (size.width / 390).clamp(0.85, 1.25));
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: AnimatedBuilder(
-                animation: _pages,
-                builder: (context, _) => PageView.builder(
-                  controller: _pages,
-                  physics: _locked ? const NeverScrollableScrollPhysics() : const PageScrollPhysics(),
-                  onPageChanged: _onPage,
-                  itemCount: Room.values.length,
-                  itemBuilder: (context, i) {
-                    final room = Room.values[i];
-                    final page = _pages.hasClients && _pages.position.haveDimensions ? (_pages.page ?? i.toDouble()) : house.active.index.toDouble();
-                    final parallax = (i - page).clamp(-1.0, 1.0);
-                    final active = room == house.active;
-                    return Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        RepaintBoundary(
-                          child: ValueListenableBuilder<int>(
-                            valueListenable: frame,
-                            builder: (context, _, _) => CustomPaint(
-                              painter: RoomBackdrop(
-                                room: room,
-                                daypart: house.daypart,
-                                floorY: floorFor(room),
-                                parallax: parallax,
-                                time: active ? house.time : 0,
-                                lampOn: roomLampOn(room),
+      body: LayoutBuilder(
+        builder: (context, box) {
+          final size = box.biggest;
+          final top = media.padding.top + 120;
+          double floorFor(Room r) => size.height - (104 + roomModule(r).shelfExtra + media.padding.bottom) - 34;
+          house.layoutRooms(top: top, width: size.width, floorFor: floorFor, sizeScale: (size.width / 390).clamp(0.85, 1.25));
+          return Stack(
+            children: [
+              Positioned.fill(
+                child: AnimatedBuilder(
+                  animation: _pages,
+                  builder: (context, _) => PageView.builder(
+                    controller: _pages,
+                    physics: _locked ? const NeverScrollableScrollPhysics() : const PageScrollPhysics(),
+                    onPageChanged: _onPage,
+                    itemCount: Room.values.length,
+                    itemBuilder: (context, i) {
+                      final room = Room.values[i];
+                      final page = _pages.hasClients && _pages.position.haveDimensions
+                          ? (_pages.page ?? i.toDouble())
+                          : house.active.index.toDouble();
+                      final parallax = (i - page).clamp(-1.0, 1.0);
+                      final active = room == house.active;
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          RepaintBoundary(
+                            child: ValueListenableBuilder<int>(
+                              valueListenable: frame,
+                              builder: (context, _, _) => CustomPaint(
+                                painter: RoomBackdrop(
+                                  room: room,
+                                  daypart: house.daypart,
+                                  floorY: floorFor(room),
+                                  parallax: parallax,
+                                  time: active ? house.time : 0,
+                                  lampOn: roomLampOn(room),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Listener(
-                          behavior: HitTestBehavior.translucent,
-                          onPointerDown: (e) {
-                            if (!active) return;
-                            if (house.scene.creatures.any((c) => c.hitTest(e.localPosition))) {
-                              _pointersOnFriend.add(e.pointer);
-                              _lockPaging(true);
-                            }
-                          },
-                          onPointerUp: (e) => _release(e.pointer),
-                          onPointerCancel: (e) => _release(e.pointer),
-                          child: RoomStage(
-                            house: house,
-                            room: room,
-                            frame: frame,
-                            interactive: active,
-                            bubbleText: (_, key) => l.bubble(key),
-                          ),
-                        ),
-                        if (active) roomModule(room).overlay(context, rc),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            ),
-            Positioned(top: media.padding.top + 8, left: 16, right: 16, child: _topBar(l)),
-            // An empty room says what to do instead of showing a bare stage.
-            if (store.firstRunDone && house.scene.creatures.isEmpty)
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: ValueListenableBuilder<double>(
-                    valueListenable: _shelfH,
-                    builder: (context, h, _) {
-                      final dark = house.active == Room.bedroom && house.daypart == Daypart.night;
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: h + 70, left: 32, right: 32),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: FeltTag(
-                            radius: 22,
-                            height: 52,
-                            dark: dark,
-                            padding: const EdgeInsets.symmetric(horizontal: 18),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  child: Text(l.shelfTapHint,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: dark ? House.nightText : House.ink)),
-                                ),
-                                const SizedBox(width: 8),
-                                Icon(Icons.south_rounded, size: 22, color: dark ? House.nightText : House.rose),
-                              ],
+                          Listener(
+                            behavior: HitTestBehavior.translucent,
+                            onPointerDown: (e) {
+                              if (!active) return;
+                              if (house.scene.creatures.any((c) => c.hitTest(e.localPosition))) {
+                                _pointersOnFriend.add(e.pointer);
+                                _lockPaging(true);
+                              }
+                            },
+                            onPointerUp: (e) => _release(e.pointer),
+                            onPointerCancel: (e) => _release(e.pointer),
+                            child: RoomStage(
+                              house: house,
+                              room: room,
+                              frame: frame,
+                              interactive: active,
+                              bubbleText: (_, key) => l.bubble(key),
                             ),
                           ),
-                        ),
+                          if (active) roomModule(room).overlay(context, rc),
+                        ],
                       );
                     },
                   ),
                 ),
               ),
-            // Toasts float just above the shelf's real top edge, clear of the header cards.
-            Positioned.fill(
-              child: IgnorePointer(
-                child: ValueListenableBuilder<double>(
-                  valueListenable: _shelfH,
-                  builder: (context, h, child) => Padding(
-                    padding: EdgeInsets.only(bottom: h + 14),
-                    child: Align(alignment: Alignment.bottomCenter, child: child),
+              Positioned(top: media.padding.top + 8, left: 16, right: 16, child: _topBar(l)),
+              // An empty room says what to do instead of showing a bare stage.
+              // (The garden's egg is its own call to action.)
+              if (store.firstRunDone && house.scene.creatures.isEmpty && !(house.active == Room.garden && store.nextEgg != null))
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: ValueListenableBuilder<double>(
+                      valueListenable: _shelfH,
+                      builder: (context, h, _) {
+                        final dark = house.active == Room.bedroom && house.daypart == Daypart.night;
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: h + 70, left: 32, right: 32),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: FeltTag(
+                              radius: 22,
+                              height: 52,
+                              dark: dark,
+                              padding: const EdgeInsets.symmetric(horizontal: 18),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      l.shelfTapHint,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 15,
+                                        color: dark ? House.nightText : House.ink,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Icon(Icons.south_rounded, size: 22, color: dark ? House.nightText : House.rose),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  child: ToastView(controller: _toasts),
                 ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: MeasureSize(onChange: (s) => _shelfH.value = s.height, child: _shelf(l, module, rc, media.padding.bottom)),
-            ),
-            if (!store.firstRunDone)
+              // Toasts: under the header in rooms without a top card (clear of the friends),
+              // otherwise just above the shelf's real top edge.
               Positioned.fill(
                 child: IgnorePointer(
-                  ignoring: _hatching,
-                  child: AnimatedOpacity(
-                    opacity: _hatching ? 0 : 1,
-                    duration: const Duration(milliseconds: 400),
-                    child: _FirstRun(onHatch: _hatchFirst),
+                  child: ValueListenableBuilder<double>(
+                    valueListenable: _shelfH,
+                    builder: (context, h, child) => module.hasTopCard
+                        ? Padding(
+                            padding: EdgeInsets.only(bottom: h + 14),
+                            child: Align(alignment: Alignment.bottomCenter, child: child),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(top: media.padding.top + 74),
+                            child: Align(alignment: Alignment.topCenter, child: child),
+                          ),
+                    child: ToastView(controller: _toasts),
                   ),
                 ),
               ),
-          ],
-        );
-      }),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: MeasureSize(onChange: (s) => _shelfH.value = s.height, child: _shelf(l, module, rc, media.padding.bottom)),
+              ),
+              if (!store.firstRunDone)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    ignoring: _hatching,
+                    child: AnimatedOpacity(
+                      opacity: _hatching ? 0 : 1,
+                      duration: const Duration(milliseconds: 400),
+                      child: _FirstRun(onHatch: _hatchFirst),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -395,7 +412,12 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
     final i = house.active.index;
     return Row(
       children: [
-        FeltIconButton(icon: Icons.settings_rounded, label: l.navSettings, dark: dark, onTap: () => unawaited(showHouseSettings(context, house: house))),
+        FeltIconButton(
+          icon: Icons.settings_rounded,
+          label: l.navSettings,
+          dark: dark,
+          onTap: () => unawaited(showHouseSettings(context, house: house)),
+        ),
         const SizedBox(width: 8),
         Expanded(
           child: FeltTag(
@@ -409,10 +431,23 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(l.roomName(house.active),
+                      // The room name slides in with the page instead of snapping.
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 240),
+                        switchInCurve: Curves.easeOutCubic,
+                        switchOutCurve: Curves.easeInCubic,
+                        transitionBuilder: (child, a) => FadeTransition(
+                          opacity: a,
+                          child: SlideTransition(position: Tween(begin: const Offset(0, 0.35), end: Offset.zero).animate(a), child: child),
+                        ),
+                        child: Text(
+                          l.roomName(house.active),
+                          key: ValueKey(house.active),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: dark ? House.nightText : House.ink)),
+                          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: dark ? House.nightText : House.ink),
+                        ),
+                      ),
                       const SizedBox(height: 3),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -433,7 +468,12 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
                     ],
                   ),
                 ),
-                _arrow(Icons.chevron_right_rounded, l.navNextRoom, i < Room.values.length - 1 ? () => goTo(Room.values[i + 1]) : null, dark),
+                _arrow(
+                  Icons.chevron_right_rounded,
+                  l.navNextRoom,
+                  i < Room.values.length - 1 ? () => goTo(Room.values[i + 1]) : null,
+                  dark,
+                ),
               ],
             ),
           ),
@@ -445,22 +485,25 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   }
 
   Widget _arrow(IconData icon, String label, VoidCallback? onTap, bool dark) {
-    return Semantics(
-      button: true,
-      enabled: onTap != null,
-      label: label,
-      excludeSemantics: true,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child: Container(
-          width: 36,
-          height: 36,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: dark ? Colors.white.withValues(alpha: 0.12) : const Color(0xFFF6E6D3),
+    return Squish(
+      child: Semantics(
+        button: true,
+        enabled: onTap != null,
+        label: label,
+        excludeSemantics: true,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: dark ? Colors.white.withValues(alpha: 0.12) : const Color(0xFFF6E6D3)),
+            child: Icon(
+              icon,
+              size: 24,
+              color: onTap == null ? (dark ? const Color(0x66F3EEFF) : const Color(0x553A2A2E)) : (dark ? House.nightText : House.ink),
+            ),
           ),
-          child: Icon(icon, size: 24, color: onTap == null ? (dark ? const Color(0x66F3EEFF) : const Color(0x553A2A2E)) : (dark ? House.nightText : House.ink)),
         ),
       ),
     );
@@ -479,14 +522,21 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
           if (tools != null) ...[tools, const SizedBox(height: 10)],
           Row(
             children: [
-              Text(l.friendsHere(here.length, HouseStore.maxFriendsPerRoom),
-                  maxLines: 1, style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w800, fontSize: 13)),
+              Text(
+                l.friendsHere(here.length, HouseStore.maxFriendsPerRoom),
+                maxLines: 1,
+                style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w800, fontSize: 13),
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: AlignmentDirectional.centerEnd,
-                  child: Text(l.shelfTapHint, maxLines: 1, style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w700, fontSize: 13)),
+                  child: Text(
+                    l.shelfTapHint,
+                    maxLines: 1,
+                    style: const TextStyle(color: House.woodText, fontWeight: FontWeight.w700, fontSize: 13),
+                  ),
                 ),
               ),
             ],
@@ -508,12 +558,7 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
                     ),
                   ),
                 if (egg != null)
-                  EggCoin(
-                    stars: egg.stars,
-                    ready: store.eggReady,
-                    label: l.eggCoinLabel(egg.stars),
-                    onTap: () => goTo(Room.garden),
-                  ),
+                  EggCoin(stars: egg.stars, ready: store.eggReady, label: l.eggCoinLabel(egg.stars), onTap: () => goTo(Room.garden)),
               ],
             ),
           ),
@@ -605,20 +650,33 @@ class _SeedPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final c = size.center(Offset.zero);
     final r = size.width * 0.34;
-    canvas.drawOval(Rect.fromCenter(center: c + Offset(0, r * 1.05), width: r * 1.8, height: r * 0.3),
-        Paint()
-          ..color = const Color(0x333A2A2E)
-          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6));
+    canvas.drawOval(
+      Rect.fromCenter(center: c + Offset(0, r * 1.05), width: r * 1.8, height: r * 0.3),
+      Paint()
+        ..color = const Color(0x333A2A2E)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 6),
+    );
     for (var i = 0; i < 90; i++) {
       final a = i / 90 * 6.283;
       final p = c + Offset(r * 1.02 * math.cos(a), r * 1.02 * math.sin(a));
-      canvas.drawLine(c + Offset(r * 0.8 * math.cos(a), r * 0.8 * math.sin(a)), p,
-          Paint()
-            ..color = const Color(0xFFFFE3D6)
-            ..strokeWidth = 4
-            ..strokeCap = StrokeCap.round);
+      canvas.drawLine(
+        c + Offset(r * 0.8 * math.cos(a), r * 0.8 * math.sin(a)),
+        p,
+        Paint()
+          ..color = const Color(0xFFFFE3D6)
+          ..strokeWidth = 4
+          ..strokeCap = StrokeCap.round,
+      );
     }
-    canvas.drawCircle(c, r * 0.86, Paint()..shader = const RadialGradient(center: Alignment(-0.3, -0.35), colors: [Color(0xFFFFF4EC), Color(0xFFFFCDB8)]).createShader(Rect.fromCircle(center: c, radius: r)));
+    canvas.drawCircle(
+      c,
+      r * 0.86,
+      Paint()
+        ..shader = const RadialGradient(
+          center: Alignment(-0.3, -0.35),
+          colors: [Color(0xFFFFF4EC), Color(0xFFFFCDB8)],
+        ).createShader(Rect.fromCircle(center: c, radius: r)),
+    );
   }
 
   @override

@@ -5,6 +5,7 @@ import '../../../model/house_store.dart';
 import '../../../world/creature_factory.dart';
 import '../../names.dart';
 import '../../theme.dart';
+import '../parts.dart';
 import '../room_context.dart';
 import '../snack_icons.dart';
 
@@ -176,7 +177,9 @@ class _SnackChip extends StatelessWidget {
   final String name;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       label: name,
       child: Container(

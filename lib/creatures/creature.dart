@@ -180,6 +180,10 @@ abstract class Creature {
 
   /// Push from separation or a collision (px/s).
   void nudge(Offset impulse);
+
+  /// Slides the friend sideways by [dx] px without touching its velocity, hop
+  /// or floor (the room uses it to keep friends apart and inside the walls).
+  void shiftX(double dx) => position = Offset(position.dx + dx, position.dy);
   void react(SocialCue cue, {Offset? from});
   void celebrate();
 

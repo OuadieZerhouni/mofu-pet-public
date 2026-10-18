@@ -109,6 +109,9 @@ class MofuCreature extends Creature {
   void nudge(Offset impulse) => sim.nudge(impulse);
 
   @override
+  void shiftX(double dx) => sim.nudge(Offset(dx * 60, 0));
+
+  @override
   void react(SocialCue cue, {Offset? from}) => sim.socialCue(switch (cue) {
         SocialCue.friendTouched => 0,
         SocialCue.landedOnMe => 1,

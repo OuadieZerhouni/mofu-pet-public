@@ -38,6 +38,11 @@ abstract class RoomModule {
   /// Extra height the shelf needs above the friend-coin row.
   double get shelfExtra => 0;
 
+  /// True when the room has a card at the top (spa ribbon, egg card, game
+  /// cards): toasts then sit above the shelf; otherwise under the header,
+  /// clear of the friends.
+  bool get hasTopCard => false;
+
   Widget overlay(BuildContext context, RoomContext rc) => const SizedBox.shrink();
 
   /// Room tools shown on the shelf under the friend coins (null = none).

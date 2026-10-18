@@ -30,34 +30,60 @@ String trickName(AppLocalizations l, String id) => speciesTrick(l.localeName, id
 
 /// Voice pads per species: (label id, sound id).
 List<(String, String)> voicePads(Species s) => switch (s) {
-      Species.mofu => const [('squeak', 'mofu.squeak'), ('giggle', 'mofu.giggle'), ('coo', 'mofu.coo'), ('whee', 'mofu.whee'), ('yawn', 'mofu.yawn'), ('hmph', 'mofu.hmph')],
-      Species.oink => const [('oink', 'oink.oink1'), ('oink!', 'oink.oink3'), ('snort', 'oink.snort1'), ('giggle', 'oink.giggle1'), ('squeal', 'oink.squeal'), ('yawn', 'oink.yawn')],
-      Species.wuff => [for (final p in wuffBarkPads) (p.id, p.sound)],
-      Species.boop => const [('boop', 'boop.boop_02'), ('boop!', 'boop.boop_06'), ('boop!!', 'boop.boop_10'), ('giggle', 'boop.giggle'), ('achoo', 'boop.sneeze'), ('hug', 'boop.hug')],
-    };
+  Species.mofu => const [
+    ('squeak', 'mofu.squeak'),
+    ('giggle', 'mofu.giggle'),
+    ('coo', 'mofu.coo'),
+    ('whee', 'mofu.whee'),
+    ('yawn', 'mofu.yawn'),
+    ('hmph', 'mofu.hmph'),
+  ],
+  Species.oink => const [
+    ('oink', 'oink.oink1'),
+    ('oink!', 'oink.oink3'),
+    ('snort', 'oink.snort1'),
+    ('giggle', 'oink.giggle1'),
+    ('squeal', 'oink.squeal'),
+    ('yawn', 'oink.yawn'),
+  ],
+  Species.wuff => [for (final p in wuffBarkPads) (p.id, p.sound)],
+  Species.boop => const [
+    ('boop', 'boop.boop_02'),
+    ('boop!', 'boop.boop_06'),
+    ('boop!!', 'boop.boop_10'),
+    ('giggle', 'boop.giggle'),
+    ('achoo', 'boop.sneeze'),
+    ('hug', 'boop.hug'),
+  ],
+};
 
 /// One recognisable icon per voice, so the pads read without words in every language.
 IconData voiceIcon(String id) => switch (id) {
-      'hello' => Icons.waving_hand_rounded,
-      'squeak' || 'yip' => Icons.music_note_rounded,
-      'giggle' => Icons.sentiment_very_satisfied_rounded,
-      'coo' || 'hug' => Icons.favorite_rounded,
-      'whee' || 'play' => Icons.celebration_rounded,
-      'yawn' => Icons.bedtime_rounded,
-      'hmph' || 'growl' => Icons.sentiment_dissatisfied_rounded,
-      'whimper' => Icons.water_drop_rounded,
-      'howl' => Icons.nightlight_round,
-      'sneeze' || 'achoo' || 'pant' || 'snort' => Icons.air_rounded,
-      'squeal' => Icons.campaign_rounded,
-      'oink' || 'boop' => Icons.chat_bubble_rounded,
-      'oink!' || 'boop!' => Icons.mark_chat_unread_rounded,
-      'boop!!' => Icons.bolt_rounded,
-      _ => Icons.graphic_eq_rounded,
-    };
+  'hello' => Icons.waving_hand_rounded,
+  'squeak' || 'yip' => Icons.music_note_rounded,
+  'giggle' => Icons.sentiment_very_satisfied_rounded,
+  'coo' || 'hug' => Icons.favorite_rounded,
+  'whee' || 'play' => Icons.celebration_rounded,
+  'yawn' => Icons.bedtime_rounded,
+  'hmph' || 'growl' => Icons.sentiment_dissatisfied_rounded,
+  'whimper' => Icons.water_drop_rounded,
+  'howl' => Icons.nightlight_round,
+  'sneeze' || 'achoo' || 'pant' || 'snort' => Icons.air_rounded,
+  'squeal' => Icons.campaign_rounded,
+  'oink' || 'boop' => Icons.chat_bubble_rounded,
+  'oink!' || 'boop!' => Icons.mark_chat_unread_rounded,
+  'boop!!' => Icons.bolt_rounded,
+  _ => Icons.graphic_eq_rounded,
+};
 
 const _padFills = [Color(0xFFFFE3D6), Color(0xFFFFF0C2), Color(0xFFDDF1D3), Color(0xFFE3ECFF), Color(0xFFF6E2F5), Color(0xFFD6F2EE)];
 
-Future<void> showFriendCard(BuildContext context, {required HouseController house, required String friendId, required void Function(String) toast}) {
+Future<void> showFriendCard(
+  BuildContext context, {
+  required HouseController house,
+  required String friendId,
+  required void Function(String) toast,
+}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
@@ -131,9 +157,16 @@ class _FriendCardState extends State<_FriendCard> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: FilledButton(
-                    style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52), backgroundColor: House.rose, shape: const StadiumBorder()),
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size.fromHeight(52),
+                      backgroundColor: House.rose,
+                      shape: const StadiumBorder(),
+                    ),
                     onPressed: () => _moveSheet(l, f),
-                    child: Text(l.cardMoveTo, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Colors.white)),
+                    child: Text(
+                      l.cardMoveTo,
+                      style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -154,7 +187,11 @@ class _FriendCardState extends State<_FriendCard> {
         Container(
           width: 96,
           height: 96,
-          decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white, border: Border.all(color: House.stitch, width: 3)),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.white,
+            border: Border.all(color: House.stitch, width: 3),
+          ),
           child: ClipOval(child: FriendPortrait(friend: f, size: 90)),
         ),
         const SizedBox(width: 14),
@@ -162,9 +199,20 @@ class _FriendCardState extends State<_FriendCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(f.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 24, color: House.ink)),
-              Text(l.cardHatched(date), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft)),
-              Text(knowsFav ? l.cardLoves(l.snackName(fav)) : l.cardLovesSecret, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft)),
+              Text(
+                f.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 24, color: House.ink),
+              ),
+              Text(
+                l.cardHatched(date),
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft),
+              ),
+              Text(
+                knowsFav ? l.cardLoves(l.snackName(fav)) : l.cardLovesSecret,
+                style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: House.inkSoft),
+              ),
               const SizedBox(height: 4),
               Semantics(
                 label: l.cardLevel(f.level),
@@ -176,8 +224,12 @@ class _FriendCardState extends State<_FriendCard> {
                       Icon(Icons.favorite_rounded, size: 13, color: f.level >= i ? House.rose : const Color(0xFFE8D5C4)),
                     const SizedBox(width: 4),
                     Flexible(
-                      child: Text(l.cardLevel(f.level),
-                          maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: House.ink)),
+                      child: Text(
+                        l.cardLevel(f.level),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 13, color: House.ink),
+                      ),
                     ),
                   ],
                 ),
@@ -212,8 +264,12 @@ class _FriendCardState extends State<_FriendCard> {
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: _tab == i ? const [BoxShadow(color: House.tagShadow, offset: Offset(0, 2))] : null,
                     ),
-                    child: Text(labels[i],
-                        maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: _tab == i ? House.ink : const Color(0xFF6A5560))),
+                    child: Text(
+                      labels[i],
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: _tab == i ? House.ink : const Color(0xFF6A5560)),
+                    ),
                   ),
                 ),
               ),
@@ -231,7 +287,10 @@ class _FriendCardState extends State<_FriendCard> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (f.species == Species.wuff) ...[
-          Text(l.cardTricks, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
+          Text(
+            l.cardTricks,
+            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+          ),
           const SizedBox(height: 8),
           GridView.count(
             padding: EdgeInsets.zero,
@@ -247,7 +306,11 @@ class _FriendCardState extends State<_FriendCard> {
                   title: trickName(l, t.id),
                   subtitle: f.tricks.contains(t.id)
                       ? l.trickMastered
-                      : (f.trickLastDay[t.id] == today ? l.trickDoneToday : (f.trickPractice[t.id] ?? 0) == 0 ? l.trickTryIt : l.trickPractice(3 - (f.trickPractice[t.id] ?? 0))),
+                      : (f.trickLastDay[t.id] == today
+                            ? l.trickDoneToday
+                            : (f.trickPractice[t.id] ?? 0) == 0
+                            ? l.trickTryIt
+                            : l.trickPractice(3 - (f.trickPractice[t.id] ?? 0))),
                   good: f.tricks.contains(t.id),
                   onTap: () {
                     if (c is WuffCreature) c.doTrick(t.id, success: true);
@@ -258,7 +321,10 @@ class _FriendCardState extends State<_FriendCard> {
           ),
           const SizedBox(height: 16),
         ],
-        Text(l.cardVoice, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
+        Text(
+          l.cardVoice,
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+        ),
         const SizedBox(height: 8),
         GridView.count(
           padding: EdgeInsets.zero,
@@ -273,24 +339,26 @@ class _FriendCardState extends State<_FriendCard> {
               Semantics(
                 button: true,
                 label: l.voicePad(f.name),
-                child: GestureDetector(
-                  onTap: () {
-                    if (c is WuffCreature) {
-                      c.bark(pad.$1);
-                    } else {
-                      widget.house.audio.play(pad.$2);
-                      c?.react(SocialCue.nuzzled);
-                    }
-                    widget.house.audio.haptic('light');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: f.species == Species.wuff ? wuffBarkPads[i].color : _padFills[i % _padFills.length],
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: const [BoxShadow(color: House.tagShadow, offset: Offset(0, 3))],
+                child: Squish(
+                  child: GestureDetector(
+                    onTap: () {
+                      if (c is WuffCreature) {
+                        c.bark(pad.$1);
+                      } else {
+                        widget.house.audio.play(pad.$2);
+                        c?.react(SocialCue.nuzzled);
+                      }
+                      widget.house.audio.haptic('light');
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: f.species == Species.wuff ? wuffBarkPads[i].color : _padFills[i % _padFills.length],
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: const [BoxShadow(color: House.tagShadow, offset: Offset(0, 3))],
+                      ),
+                      child: Center(child: Icon(voiceIcon(pad.$1), color: House.ink, size: 28)),
                     ),
-                    child: Center(child: Icon(voiceIcon(pad.$1), color: House.ink, size: 28)),
                   ),
                 ),
               ),
@@ -306,7 +374,10 @@ class _FriendCardState extends State<_FriendCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l.wardrobeCoats, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
+        Text(
+          l.wardrobeCoats,
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+        ),
         const SizedBox(height: 8),
         GridView.count(
           padding: EdgeInsets.zero,
@@ -333,7 +404,10 @@ class _FriendCardState extends State<_FriendCard> {
           ],
         ),
         const SizedBox(height: 16),
-        Text(l.wardrobeAccessories, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
+        Text(
+          l.wardrobeAccessories,
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+        ),
         const SizedBox(height: 8),
         GridView.count(
           padding: EdgeInsets.zero,
@@ -386,7 +460,10 @@ class _FriendCardState extends State<_FriendCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l.journalCount(found, ids.length), style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
+        Text(
+          l.journalCount(found, ids.length),
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+        ),
         const SizedBox(height: 8),
         for (final id in ids)
           Container(
@@ -398,16 +475,24 @@ class _FriendCardState extends State<_FriendCard> {
             ),
             child: Row(
               children: [
-                Icon(store.discovered.contains(id) ? Icons.auto_awesome_rounded : Icons.help_outline_rounded,
-                    color: store.discovered.contains(id) ? House.star : const Color(0xFFB9A592), size: 22),
+                Icon(
+                  store.discovered.contains(id) ? Icons.auto_awesome_rounded : Icons.help_outline_rounded,
+                  color: store.discovered.contains(id) ? House.star : const Color(0xFFB9A592),
+                  size: 22,
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(store.discovered.contains(id) ? l.reactionName(id) : l.journalHidden,
-                          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: House.ink)),
-                      Text(hint(id), style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: House.inkSoft)),
+                      Text(
+                        store.discovered.contains(id) ? l.reactionName(id) : l.journalHidden,
+                        style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15, color: House.ink),
+                      ),
+                      Text(
+                        hint(id),
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: House.inkSoft),
+                      ),
                     ],
                   ),
                 ),
@@ -419,30 +504,32 @@ class _FriendCardState extends State<_FriendCard> {
   }
 
   void _moveSheet(AppLocalizations l, Friend f) {
-    unawaited(showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: House.paper,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
-      builder: (ctx) => SafeArea(
-        child: Wrap(
-          children: [
-            for (final r in Room.values)
-              ListTile(
-                leading: Icon(f.room == r ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded, color: House.rose),
-                title: Text(l.roomName(r), style: const TextStyle(fontWeight: FontWeight.w800)),
-                onTap: () {
-                  Navigator.pop(ctx);
-                  if (widget.house.moveFriend(f.id, r)) {
-                    widget.toast(l.toastMoved(f.name, l.roomName(r)));
-                  } else {
-                    widget.toast(l.roomFull);
-                  }
-                },
-              ),
-          ],
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        backgroundColor: House.paper,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+        builder: (ctx) => SafeArea(
+          child: Wrap(
+            children: [
+              for (final r in Room.values)
+                ListTile(
+                  leading: Icon(f.room == r ? Icons.radio_button_checked_rounded : Icons.radio_button_off_rounded, color: House.rose),
+                  title: Text(l.roomName(r), style: const TextStyle(fontWeight: FontWeight.w800)),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    if (widget.house.moveFriend(f.id, r)) {
+                      widget.toast(l.toastMoved(f.name, l.roomName(r)));
+                    } else {
+                      widget.toast(l.roomFull);
+                    }
+                  },
+                ),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -454,20 +541,36 @@ class _CardTile extends StatelessWidget {
   final bool good;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     return Semantics(
       button: true,
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFE6D3BE), width: 2)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: const Color(0xFFE6D3BE), width: 2),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink)),
-              Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: good ? House.leaf : House.inkSoft)),
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16, color: House.ink),
+              ),
+              Text(
+                subtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: good ? House.leaf : House.inkSoft),
+              ),
             ],
           ),
         ),
@@ -496,7 +599,9 @@ class _WearTile extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => Squish(child: _build(context));
+
+  Widget _build(BuildContext context) {
     final locked = lockText != null;
     final preview = Friend(id: friend.id, species: friend.species, name: friend.name, variant: variant, hatchedDay: friend.hatchedDay);
     if (accessory != null) preview.wear['head'] = accessory!;
@@ -528,14 +633,29 @@ class _WearTile extends StatelessWidget {
                       const PositionedDirectional(
                         top: 0,
                         end: 0,
-                        child: CircleAvatar(radius: 11, backgroundColor: House.rose, child: Icon(Icons.lock_rounded, size: 13, color: Colors.white)),
+                        child: CircleAvatar(
+                          radius: 11,
+                          backgroundColor: House.rose,
+                          child: Icon(Icons.lock_rounded, size: 13, color: Colors.white),
+                        ),
                       ),
                   ],
                 ),
               ),
-              Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: House.ink)),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: House.ink),
+              ),
               if (locked)
-                Text(lockText!, maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: House.roseDeep)),
+                Text(
+                  lockText!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: House.roseDeep),
+                ),
             ],
           ),
         ),
