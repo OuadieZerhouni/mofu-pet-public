@@ -176,6 +176,7 @@ class RoomScene {
   }
 
   void _touched(Creature c) {
+    _gazePair = null; // a touch's gaze outranks a nuzzle's
     for (final o in creatures) {
       if (o == c) continue;
       o.lookAt(c.position);
@@ -318,6 +319,7 @@ class RoomScene {
   void _idleSocial() {
     if (_time < _nextNuzzle) return;
     _nextNuzzle = _time + 8 + _rng.nextDouble() * 9;
+    if (_owners.isNotEmpty) return; // everyone is watching the friend being touched
     final awake = creatures.where((c) => c.life == LifeState.awake && c.activePointer == null && !c.pinned).toList();
     if (awake.length < 2) return;
     final a = awake[_rng.nextInt(awake.length)];

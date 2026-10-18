@@ -318,6 +318,7 @@ void main() {
       c.update(1 / 60);
     }
     expect(crumbs.first.pos.dy, greaterThan(y0), reason: 'crumbs fall');
-    expect(_boop(reduceMotion: true)..eat(favorite: false), isA<BoopCreature>());
+    final calm = _boop(reduceMotion: true)..eat(favorite: false);
+    expect(calm.particles.where((p) => p.kind == BoopParticleKind.crumb), isEmpty, reason: 'reduce motion');
   });
 }

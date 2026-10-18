@@ -169,6 +169,14 @@ void main() {
     expect(s.claimGift(), 6, reason: 'a gap restarts the streak at 1');
   });
 
+  // F1-c1: the room the user was in survives a relaunch.
+  test('last room survives a relaunch', () async {
+    final s = await fresh();
+    s.setRoom(Room.kitchen);
+    await s.flush();
+    expect((await fresh()).lastRoom, Room.kitchen);
+  });
+
   // F8-c1: the streak tops out at 7 days, so day 8 and later still pay 5 + 7.
   test('gift streak caps at seven days', () async {
     final s = await fresh();

@@ -119,6 +119,29 @@ void main() {
     expect(b.sim.lookTarget, isNull);
   });
 
+  test('a touch during the nuzzle gaze keeps its own gaze; no nuzzle starts while a friend is held', () {
+    final s = RoomScene()..layout(const Rect.fromLTWH(0, 0, 400, 800), floorY: 620);
+    final a = MofuCreature(friendId: 'a', seed: 1), b = MofuCreature(friendId: 'b', seed: 2);
+    s
+      ..add(a)
+      ..add(b);
+    a.position = Offset(160, a.position.dy);
+    b.position = Offset(260, b.position.dy);
+    var nuzzled = false;
+    for (var i = 0; i < 60 * 40 && !nuzzled; i++) {
+      s.update(1 / 60);
+      nuzzled = s.drainMoments().any((m) => m.$1 == GroupMoment.nuzzle);
+    }
+    expect(nuzzled, isTrue);
+    run(s, 1.0);
+    s.pointerDown(1, a.position);
+    run(s, 1.5); // past the nuzzle's 1.8 s release
+    expect(b.sim.lookTarget, isNotNull, reason: 'still watching the friend being touched');
+    run(s, 40);
+    expect(s.drainMoments().where((m) => m.$1 == GroupMoment.nuzzle), isEmpty);
+    s.pointerUp(1, a.position);
+  });
+
   test('sleepAll puts everyone to sleep, paint order is stable and complete', () {
     final s = scene(n: 3)..sleepAll();
     run(s, 0.5);

@@ -59,16 +59,16 @@ class AudioEngine extends ChangeNotifier {
       await _ambient();
       _session!.interruptionEventStream.listen((e) async {
         if (e.begin) {
+          _interrupted = true;
           stopAllLoops();
           _pauseMixer(true);
         } else {
+          _interrupted = false;
           // iOS deactivates the session during a call; resuming without reactivating plays nothing.
-          if (_mixerOn) {
-            try {
-              await _session?.setActive(true);
-            } catch (_) {}
-          }
-          _pauseMixer(false);
+          try {
+            await _session?.setActive(true);
+          } catch (_) {}
+          if (!_interrupted) _pauseMixer(false); // a new interruption may have begun meanwhile
         }
       });
       if (!_soloud.isInitialized) await _soloud.init(bufferSize: 1024);
@@ -209,6 +209,7 @@ class AudioEngine extends ChangeNotifier {
   Timer? _sleepTimer;
   DateTime? _sleepEndsAt;
   bool _mixerOn = false;
+  bool _interrupted = false;
   Map<String, double> _mix = {};
 
   bool get mixerOn => _mixerOn;
@@ -278,8 +279,12 @@ class AudioEngine extends ChangeNotifier {
     _sleepEndsAt = null;
     for (final h in _mixer.values) {
       try {
-        _soloud.fadeVolume(h, 0, fade);
-        _soloud.scheduleStop(h, fade + const Duration(milliseconds: 50));
+        if (_interrupted) {
+          _soloud.stop(h); // paused sounds never advance a fade or a scheduled stop
+        } else {
+          _soloud.fadeVolume(h, 0, fade);
+          _soloud.scheduleStop(h, fade + const Duration(milliseconds: 50));
+        }
       } catch (_) {}
     }
     _mixer.clear();
