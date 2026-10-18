@@ -1,8 +1,8 @@
 // Dev tool, skipped by default: renders the 1024×1024 App Store icon from
 // the app's own painter, so the icon is always the creature users meet.
 //
-// Since 2026-10-07 the shipped icon is icon/icon-source-gemini.jpeg (master:
-// icon/icon-1024.png). Running this + make_icons.py replaces it with the painter render.
+// Not the shipped icon: since 2026-10-18 the App Store icon is the night house drawn by
+// test/icon_flagship_test.dart (master icon/icon-1024.png). Running this + make_icons.py replaces it.
 //
 //   flutter test test/icon_render_test.dart --run-skipped
 //   python tools/icon/make_icons.py
