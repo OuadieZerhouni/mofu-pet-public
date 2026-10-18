@@ -134,6 +134,8 @@ class HouseScreenState extends State<HouseScreen> with SingleTickerProviderState
   void _tick(Duration elapsed) {
     final dt = _last == Duration.zero ? 1 / 60 : (elapsed - _last).inMicroseconds / 1e6;
     _last = elapsed;
+    // A sheet or dialog on top (or the first-run overlay) pauses idle dozing.
+    house.idleFrozen = !store.firstRunDone || !(ModalRoute.of(context)?.isCurrent ?? true);
     house.tick(dt.clamp(0, 0.1));
     for (final n in house.drainNotices()) {
       _notice(n);

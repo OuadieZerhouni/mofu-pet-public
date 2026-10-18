@@ -19,7 +19,7 @@
   "actionCancel": "キャンセル",
   "actionClose": "閉じる",
   "actionOk": "OK",
-  "toastNewReaction": "ずかんに追加：{name}",
+  "toastNewReaction": "NEW! {name}",
   "toastUnlocked": "解放：{item}",
   "toastDailyBrush": "今日はじめてのブラッシング ✨",
   "toastFluffMilestone": "もふもふ！ {percent}%",

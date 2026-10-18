@@ -225,7 +225,7 @@ abstract class AppLocalizations {
   /// Toast when a reaction is discovered for the first time.
   ///
   /// In en, this message translates to:
-  /// **'New in the journal: {name}'**
+  /// **'New! {name}'**
   String toastNewReaction(String name);
 
   /// No description provided for @toastUnlocked.

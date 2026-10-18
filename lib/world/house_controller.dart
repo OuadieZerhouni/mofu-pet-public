@@ -81,6 +81,13 @@ class HouseController extends ChangeNotifier {
 
   /// True during a big moment (the hatch): routine notices wait instead of covering it.
   bool quiet = false;
+
+  /// Set while a sheet, dialog or the first-run overlay covers the house.
+  set idleFrozen(bool frozen) {
+    for (final c in creatures.values) {
+      c.idleFrozen = frozen;
+    }
+  }
   int _fxSeed = 1;
   final Map<Creature, Map<FoamBlob, Offset>> _foamSeen = {};
   bool _loaded = false;

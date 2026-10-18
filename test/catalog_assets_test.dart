@@ -81,4 +81,12 @@ void main() {
       }
     }
   });
+
+  // From main (v1 F5-c1/F4-c1): Mofu's own catalogue is unchanged in the flagship.
+  test('Mofu keeps 10 fur colours, 10 year-round accessories and its six snacks', () {
+    expect(Catalog.furColors.map((c) => c.id).toSet().length, 10);
+    final yearRound = Catalog.accessories.where((a) => a.id != 'none' && a.rule.kind != UnlockKind.seasonal);
+    expect(yearRound.map((a) => a.id).toSet().length, 10);
+    expect(Catalog.snacks.map((s) => s.id), ['strawberry', 'dango', 'cookie', 'onigiri', 'pudding', 'candy']);
+  });
 }

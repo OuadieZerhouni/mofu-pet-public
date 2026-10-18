@@ -26,6 +26,18 @@ out of the review queue.
 
 - [ ] GATE-FLAGSHIP-RESUBMIT cleared
 
+## GATE-SPEC-QUESTIONS — three product calls where the SPEC and the shipped app disagree
+
+**Only you can decide:** the code, the ASO copy (8 locales) and the screenshots agree with each other but not with SPEC.md. Either the SPEC changes or the app does.
+
+**Do:** read SPEC.md → "## Open questions" and answer each with a letter:
+1. **Q1 Snacks**: (a) keep pudding + candy and amend the SPEC *(recommended)*, or (b) switch to mochi + star candy (new icon, translations, ASO copy, screenshots).
+2. **Q2 Fluffy day**: (a) a fluffy day is any day you visit *(recommended; gentler, and it is what the lock text already says)*, or (b) only days you brush (new counter; unlocks then need brushing).
+3. **Q3 Full belly**: (a) "shakes its head and declines politely" *(recommended; Mofu has no limbs)*, or (b) add a full-belly bulge-and-wobble pose.
+
+**Done when:** each question has an answer and `/build` has ticked F3-c4, F4-c1, F4-c4 and F5-c1. That unblocks /test-drive.
+
+- [x] GATE-SPEC-QUESTIONS cleared — 2026-10-07, owner took (a) for Q1-Q3; SPEC amended to the shipped app
 ## GATE-BUNDLE-ID — register the bundle identifier com.ouadieZerhouni.mofuPet
 
 **Only you can decide:** Apple requires an account holder for identifier registration — this becomes automatic once the App Store Connect API key is in place (bundle ids can be registered over the API)
@@ -37,7 +49,7 @@ out of the review queue.
 
 **Done when:** the identifier is listed under Identifiers, and `app-store-connect fetch-signing-files <bundle>` can create a profile for it
 
-- [ ] GATE-BUNDLE-ID cleared
+- [x] GATE-BUNDLE-ID cleared — registered over the API 2026-10-07 (`asc.py bundle-id register`, ASC id 3UN76PV8VJ)
 ## GATE-ASC-RECORD — create the App Store Connect record for Mofu
 
 **Only you can decide:** creating an app record is not exposed to API keys until the record exists
@@ -53,7 +65,7 @@ out of the review queue.
 
 **Done when:** the app appears in App Store Connect and its Apple ID is in app.yaml
 
-- [ ] GATE-ASC-RECORD cleared
+- [x] GATE-ASC-RECORD cleared — 2026-10-07, "Mofu: Fluffy Pet" created (Apple ID 6820155832, SKU = bundle id), in app.yaml
 
 ## GATE-CODEMAGIC — connect the repo to Codemagic
 
@@ -135,7 +147,8 @@ out of the review queue.
 
 **Done when:** the version is "Ready for Review" and you press Submit (together with GATE-FLAGSHIP-RESUBMIT)
 
-- [ ] GATE-LISTING cleared
+- [ ] GATE-LISTING cleared (flagship)
+- History: v1 listing was cleared 2026-10-08 by Claude over the App Store Connect API + Chrome (`ASO/listing.yaml`); 1.0.0 (2) was submitted and rejected 2026-10-16 (4.3). The flagship listing is regenerated into `ASO/listing.yaml`.
 ## GATE-STABILITY — sounds made with Stable Audio 3 ship in this build
 
 **Only you can decide:** the licence registration is tied to you as the business

@@ -55,7 +55,7 @@
   "actionCancel": "Cancel",
   "actionClose": "Close",
   "actionOk": "OK",
-  "toastNewReaction": "New in the journal: {name}",
+  "toastNewReaction": "New! {name}",
   "@toastNewReaction": {
     "description": "Toast when a reaction is discovered for the first time.",
     "placeholders": {

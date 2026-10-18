@@ -184,6 +184,10 @@ abstract class Creature {
   /// Slides the friend sideways by [dx] px without touching its velocity, hop
   /// or floor (the room uses it to keep friends apart and inside the walls).
   void shiftX(double dx) => position = Offset(position.dx + dx, position.dy);
+
+  /// While something covers the room (first run, a sheet, a dialog) idle time
+  /// stops counting, so a friend is not found asleep when it closes.
+  set idleFrozen(bool frozen) {}
   void react(SocialCue cue, {Offset? from});
   void celebrate();
 

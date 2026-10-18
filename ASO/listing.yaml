@@ -1,0 +1,432 @@
+# Generated from ASO/metadata.json (tools/aso/metadata.py) for the flagship "Mofu & Friends" on 2026-10-18.
+# Push writes back only what differs from App Store Connect.
+# `app` is the current App Store Connect name used to find the record; the locales rename it.
+app: 'Mofu: Fluffy Pet'
+bundle_id: com.ouadieZerhouni.mofuPet
+version: 1.0.0
+version_state: PREPARE_FOR_SUBMISSION
+locales:
+  en-US:
+    name: 'Mofu: Cute Pet House'
+    subtitle: Care Game, ASMR Spa & Sleep
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Welcome to Mofu''s house — a cozy little home full of cute pets who are always happy to see you.
+
+
+      Pet Mofu the fluffy cloud, rub Oink the piggy''s belly, teach Wuff the puppy new tricks and boop the squishy little Boops. Every friend reacts to your touch in its own way, with soft, satisfying ASMR
+      sounds.
+
+
+      SIX COZY ROOMS
+
+      Swipe through the living room, spa, kitchen, bedroom, playroom and garden. Bring up to four friends into a room and watch them nuzzle, pile up and play together. Shake your phone and everyone reacts.
+
+
+      ASMR SPA DAYS
+
+      Foam with the sponge, rinse with the warm shower, pat dry with the towel and finish with the dryer. The faster you rub, the louder the bubbles fizz. Your friend comes out shiny and happy.
+
+
+      SNACK TIME
+
+      Drag treats to each friend''s mouth in the kitchen. Everyone has a secret favorite — find it and watch them light up.
+
+
+      COZY SLEEP SOUNDS
+
+      Tuck your friends in, dim the night light and mix rain, crackling fire, ocean waves, a soft purr, chimes and gentle noise. Set a sleep timer; the sounds keep playing with the screen off.
+
+
+      HATCH NEW FRIENDS
+
+      Caring and playing earns stars. Save enough and the egg in the garden hatches a new friend for you to name. Stars are never spent, so nothing is ever lost.
+
+
+      PLAY TOGETHER
+
+      Two mini-games in the playroom: boop the critters popping out of their holes, or catch falling snacks.
+
+
+      DRESS UP & COLLECT
+
+      New coats and colors, plus bows, scarves, hats, glasses and more as your friendships grow. Fill the journal with nearly 100 reactions, and snap pictures in the photo booth to share.
+
+
+      Calm, kind and gentle. No ads, no purchases, no account, and no data collected. Just a cozy house of friends.'
+    keywords: puppy,bunny,pig,dog,kawaii,virtual,fluffy,squishy,dress,salon,bath,sounds,cozy,friends,mofumofu,egg
+    promotionalText: Pet, bathe, feed and tuck in a cozy house of cute friends. ASMR spa days, sleep sounds, mini-games and new friends to hatch. Free, no ads.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  en-GB:
+    name: 'Mofu: Cute Pet House'
+    subtitle: Care Game, ASMR Spa & Sleep
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Welcome to Mofu''s house — a cosy little home full of cute pets who are always happy to see you.
+
+
+      Pet Mofu the fluffy cloud, rub Oink the piggy''s belly, teach Wuff the puppy new tricks and boop the squishy little Boops. Every friend reacts to your touch in its own way, with soft, satisfying ASMR
+      sounds.
+
+
+      SIX COSY ROOMS
+
+      Swipe through the living room, spa, kitchen, bedroom, playroom and garden. Bring up to four friends into a room and watch them nuzzle, pile up and play together. Shake your phone and everyone reacts.
+
+
+      ASMR SPA DAYS
+
+      Foam with the sponge, rinse with the warm shower, pat dry with the towel and finish with the dryer. The faster you rub, the louder the bubbles fizz. Your friend comes out shiny and happy.
+
+
+      SNACK TIME
+
+      Drag treats to each friend''s mouth in the kitchen. Everyone has a secret favourite — find it and watch them light up.
+
+
+      COSY SLEEP SOUNDS
+
+      Tuck your friends in, dim the night light and mix rain, crackling fire, ocean waves, a soft purr, chimes and gentle noise. Set a sleep timer; the sounds keep playing with the screen off.
+
+
+      HATCH NEW FRIENDS
+
+      Caring and playing earns stars. Save enough and the egg in the garden hatches a new friend for you to name. Stars are never spent, so nothing is ever lost.
+
+
+      PLAY TOGETHER
+
+      Two mini-games in the playroom: boop the critters popping out of their holes, or catch falling snacks.
+
+
+      DRESS UP & COLLECT
+
+      New coats and colours, plus bows, scarves, hats, glasses and more as your friendships grow. Fill the journal with nearly 100 reactions, and snap pictures in the photo booth to share.
+
+
+      Calm, kind and gentle. No ads, no purchases, no account, and no data collected. Just a cosy house of friends.'
+    keywords: puppy,bunny,pig,dog,kawaii,virtual,fluffy,squishy,dress,salon,bath,sounds,cosy,friends,mofumofu,egg
+    promotionalText: Pet, bathe, feed and tuck in a cosy house of cute friends. ASMR spa days, sleep sounds, mini-games and new friends to hatch. Free, no ads.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  ja:
+    name: 'Mofu: もふもふペットのおうち'
+    subtitle: 癒しのお世話ゲームとASMRスパ
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'ようこそ、Mofuのおうちへ。いつもあなたに会えるのを楽しみにしている、かわいいペットたちがすむ、ほっこり小さなおうちです。
+
+
+      ふわふわの雲のMofuをなでて、こぶたのOinkのおなかをこちょこちょ、こいぬのWuffに新しいトリックを教えて、ぷにぷにのBoopsをぽん。どの友だちも、さわるとそれぞれちがう反応を見せてくれます。やさしくて心地いいASMRサウンドつき。
+
+
+      6つのおへや
+
+      リビング、スパ、キッチン、寝室、プレイルーム、おにわをスワイプでおでかけ。ひとつのへやに最大4ひきまで連れてきて、すり寄ったり、重なったり、いっしょにあそぶ姿を見守ろう。スマホをふると、みんなが反応します。
+
+
+      ASMRスパ
+
+      スポンジであわあわ、あったかいシャワーですすぎ、タオルでふきふき、最後はドライヤー。はやくこするほど、あわのシュワシュワ音が大きくなります。ぴかぴかのごきげんになって出てきます。
+
+
+      おやつタイム
+
+      キッチンで、おやつをなかまの口もとまでドラッグ。だれにでもひみつの大好物があります。見つけると、ぱあっと笑顔に。
+
+
+      ねむりの音
+
+      なかまをおふとんに寝かせて、ナイトライトを暗くして、あめ、だんろ、うみ、ごろごろ、風鈴、やさしいノイズをミックス。ねむりタイマーをセットできて、画面を消しても音は鳴りつづけます。
+
+
+      あたらしいなかま
+
+      お世話やあそびで星がたまります。たくさんたまると、おにわのたまごから新しいなかまが生まれて、名前をつけてあげられます。星は使って減ることがないので、なにも失いません。
+
+
+      いっしょにあそぼう
+
+      プレイルームにはミニゲームが2つ。穴から飛び出してくるいたずらっこをぽん！とつついたり、落ちてくるおやつをキャッチしたり。
+
+
+      きせかえ＆ずかん
+
+      あたらしい毛なみと毛いろ、そして仲よしになるほど、リボン、マフラー、ぼうし、メガネなどが増えます。ずかんには100に近いリアクションがいっぱい。フォトブースで写真をとって、シェアしよう。
+
+
+      おだやかで、やさしくて、のんびり。広告なし・課金なし・アカウント不要・データ収集なし。ただ、友だちがいるほっこりおうち。'
+    keywords: ふわふわ,かわいい,育成,わんちゃん,子犬,ぶた,うさぎ,睡眠音,着せ替え,たまご,ミニゲーム,ぬいぐるみ,スクイーズ,ほっこり,おやつ,なでなで,ぷにぷに,もちもち,寝かしつけ,お風呂
+    promotionalText: Mofuのおうちで、なでて、おふろに入れて、おやつをあげて、おふとんへ。ASMRのスパ、ねむりの音、ミニゲーム、たまごから生まれる新しいなかま。無料・広告なし。
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  de-DE:
+    name: 'Mofu: Niedliche Haustiere'
+    subtitle: Tierpflege, ASMR-Spa & Schlaf
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Willkommen in Mofus Haus – ein gemütliches kleines Zuhause voller süßer Haustiere, die sich immer freuen, dich zu sehen.
+
+
+      Streichle Mofu, die flauschige Wolke, kraule dem Ferkel Oink den Bauch, bring dem Welpen Wuff neue Tricks bei und boop die weichen kleinen Boops. Jeder Freund reagiert auf seine eigene Art auf deine
+      Berührung – mit sanften, wohltuenden ASMR-Klängen.
+
+
+      SECHS GEMÜTLICHE ZIMMER
+
+      Wische durch Wohnzimmer, Spa, Küche, Schlafzimmer, Spielzimmer und Garten. Bring bis zu vier Freunde in ein Zimmer und sieh zu, wie sie kuscheln, sich aufeinander stapeln und zusammen spielen. Schüttle
+      dein Handy, und alle reagieren.
+
+
+      ASMR-SPA-TAGE
+
+      Schäume mit dem Schwamm ein, spüle mit der warmen Dusche ab, tupfe mit dem Handtuch trocken und föhne zum Schluss. Je schneller du rubbelst, desto lauter sprudelt der Schaum. Dein Freund kommt glänzend
+      und glücklich heraus.
+
+
+      SNACKZEIT
+
+      Zieh Snacks in der Küche zum Mund jedes Freundes. Jeder hat einen geheimen Lieblingssnack – finde ihn und sieh zu, wie er strahlt.
+
+
+      GEMÜTLICHE EINSCHLAFKLÄNGE
+
+      Deck deine Freunde zu, dimm das Nachtlicht und mische Regen, knisternden Kamin, Meer, ein leises Schnurren, Windspiel und sanftes Rauschen. Stell einen Schlaf-Timer ein; die Klänge spielen auch bei
+      ausgeschaltetem Bildschirm weiter.
+
+
+      NEUE FREUNDE AUSBRÜTEN
+
+      Fürsorge und Spielen bringen Sterne. Hast du genug gesammelt, schlüpft aus dem Ei im Garten ein neuer Freund, den du benennen darfst. Sterne werden nie ausgegeben, also geht nie etwas verloren.
+
+
+      ZUSAMMEN SPIELEN
+
+      Zwei Minispiele im Spielzimmer: Boop die Tierchen, die aus ihren Löchern auftauchen, oder fang herabfallende Snacks.
+
+
+      OUTFITS & SAMMLUNG
+
+      Neue Felle und Farben sowie Schleifen, Schals, Hüte, Brillen und mehr, wenn eure Freundschaft wächst. Füll das Album mit fast 100 Reaktionen und mach Fotos in der Fotobox, um sie zu teilen.
+
+
+      Ruhig, freundlich und sanft. Ohne Werbung, ohne Käufe, ohne Konto und ohne gesammelte Daten. Einfach ein gemütliches Haus voller Freunde.'
+    keywords: kawaii,flauschig,virtuelles,süß,welpe,hund,schwein,hase,anziehen,spiel,schlüpfen,minispiele,mofumofu
+    promotionalText: 'Streicheln, baden, füttern, zudecken: ein gemütliches Haus voller süßer Freunde. ASMR-Spa, Einschlafklänge, Minispiele, neue Freunde zum Ausbrüten. Gratis, ohne Werbung.'
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  pt-BR:
+    name: 'Mofu: Casinha de Pets Fofos'
+    subtitle: Cuidar de bichinho virtual
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Bem-vindo à casa do Mofu — um cantinho aconchegante cheio de bichinhos fofos que ficam sempre felizes em ver você.
+
+
+      Faça carinho no Mofu, a nuvem fofinha, coce a barriguinha do Oink, o porquinho, ensine truques novos ao Wuff, o cachorrinho, e dê boop nos Boops, pequenos e macios. Cada amigo reage ao seu toque do
+      seu jeito, com sons ASMR suaves e satisfatórios.
+
+
+      SEIS CÔMODOS ACONCHEGANTES
+
+      Deslize entre Sala, Spa, Cozinha, Quarto, Jogos e Jardim. Leve até quatro amigos para um mesmo cômodo e veja todos se aconchegarem, se empilharem e brincarem juntos. Sacuda o celular e todo mundo
+      reage.
+
+
+      DIAS DE SPA ASMR
+
+      Passe espuma com a esponja, enxágue com o chuveirinho quente, seque com a toalha e termine com o secador. Quanto mais rápido você esfregar, mais alto as bolhas estalam. Seu amigo sai brilhando de
+      felicidade.
+
+
+      HORA DO LANCHE
+
+      Arraste lanchinhos até a boca de cada amigo na cozinha. Todo mundo tem um favorito secreto — descubra qual é e veja os olhinhos brilharem.
+
+
+      SONS ACONCHEGANTES PARA DORMIR
+
+      Cubra seus amigos, baixe a luz de presença e misture chuva, lareira crepitante, ondas do oceano, um ronronar suave, sinos de vento e ruído suave. Programe o timer de sono; os sons continuam tocando
+      com a tela apagada.
+
+
+      NOVOS AMIGOS DO OVO
+
+      Cuidar e brincar rende estrelas. Junte o bastante e o ovo no jardim choca um novo amigo para você dar nome. As estrelas nunca são gastas, então nada se perde.
+
+
+      BRINQUEM JUNTOS
+
+      Dois minijogos em Jogos: dê boop nos bichinhos que saem das tocas ou pegue os lanchinhos que caem.
+
+
+      VISUAL E COLEÇÃO
+
+      Pelagens e cores novas, além de laços, cachecóis, chapéus, óculos e mais à medida que a amizade cresce. Preencha o Diário com quase 100 reações e tire fotos na cabine de fotos para compartilhar.
+
+
+      Calmo, gentil e delicado. Sem anúncios, sem compras, sem conta e sem coleta de dados. Só uma casa aconchegante cheia de amigos.'
+    keywords: kawaii,spa,asmr,dormir,sons,cachorrinho,porquinho,coelho,vestir,ovo,minijogos,relaxar,mofumofu,banho
+    promotionalText: Faça carinho, dê banho, alimente e aconchegue amigos fofos numa casa acolhedora. Spa ASMR, sons para dormir, minijogos e novos amigos para chocar. Grátis, sem anúncios.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  es-MX:
+    name: 'Mofu: Casita de Mascotas'
+    subtitle: Cuidar mascotas, spa y ASMR
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Bienvenido a la casa de Mofu: un hogar pequeño y acogedor lleno de mascotas tiernas que siempre se alegran de verte.
+
+
+      Acaricia a Mofu, la nube esponjosa, frótale la pancita a Oink, el cerdito, enséñale trucos nuevos a Wuff, el cachorro, y hazles boop a los suaves y pequeños Boops. Cada amigo reacciona a tu toque
+      a su manera, con sonidos ASMR suaves y satisfactorios.
+
+
+      SEIS CUARTOS ACOGEDORES
+
+      Desliza entre Sala, Spa, Cocina, Dormitorio, Juegos y Jardín. Lleva hasta cuatro amigos a un cuarto y míralos acurrucarse, apilarse y jugar juntos. Agita el teléfono y todos reaccionan.
+
+
+      DÍAS DE SPA ASMR
+
+      Haz espuma con la esponja, enjuaga con la regadera tibia, seca con la toalla y termina con la secadora. Entre más rápido frotes, más fuerte burbujea la espuma. Tu amigo sale brillante y feliz.
+
+
+      HORA DEL SNACK
+
+      Arrastra snacks hasta la boca de cada amigo en la cocina. Todos tienen un favorito secreto: encuéntralo y míralos iluminarse.
+
+
+      SONIDOS ACOGEDORES PARA DORMIR
+
+      Arropa a tus amigos, baja la luz de noche y mezcla lluvia, chimenea crepitante, olas del océano, un ronroneo suave, campanillas y ruido suave. Programa un timer para dormir; los sonidos siguen sonando
+      con la pantalla apagada.
+
+
+      HAZ ECLOSIONAR NUEVOS AMIGOS
+
+      Cuidar y jugar te da estrellas. Junta las suficientes y el huevo del jardín eclosiona un nuevo amigo al que podrás ponerle nombre. Las estrellas nunca se gastan, así que nunca se pierde nada.
+
+
+      JUGAMOS JUNTOS
+
+      Dos minijuegos en Juegos: hazles boop a las criaturitas que salen de sus agujeros o atrapa los snacks que caen.
+
+
+      ESTILO Y COLECCIÓN
+
+      Pelajes y colores nuevos, además de lazos, bufandas, gorros, lentes y más a medida que crece su amistad. Llena el Diario con casi 100 reacciones y toma fotos en la cabina de fotos para compartir.
+
+
+      Tranquilo, amable y suave. Sin anuncios, sin compras, sin cuenta y sin recopilar datos. Solo una casa acogedora llena de amigos.'
+    keywords: virtual,tierna,kawaii,perrito,cerdito,conejito,vestir,huevo,minijuegos,dormir,sonidos,mofumofu,baño
+    promotionalText: Acaricia, baña, alimenta y arropa a tiernos amigos en una casa acogedora. Spa ASMR, sonidos para dormir, minijuegos y nuevos amigos por eclosionar. Gratis, sin anuncios.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  fr-FR:
+    name: 'Mofu: Animaux Mignons'
+    subtitle: Maison cosy, spa ASMR & dodo
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'Bienvenue dans la maison de Mofu : un petit foyer douillet rempli d''adorables compagnons toujours ravis de te voir.
+
+
+      Caresse Mofu, le nuage tout doux, gratte le ventre d''Oink le cochonnet, apprends de nouveaux tours à Wuff le chiot et fais boop sur les petits Boops tout moelleux. Chaque ami réagit à ton toucher
+      à sa façon, avec de doux sons ASMR si satisfaisants.
+
+
+      SIX PIÈCES DOUILLETTES
+
+      Fais défiler Salon, Spa, Cuisine, Chambre, Jeux et Jardin. Réunis jusqu''à quatre amis dans une pièce et regarde-les se blottir, s''empiler et jouer ensemble. Secoue ton téléphone et tout le monde
+      réagit.
+
+
+      JOURNÉES SPA ASMR
+
+      Fais mousser à l''éponge, rince à la douche chaude, sèche avec la serviette et termine au sèche-cheveux. Plus tu frottes vite, plus les bulles pétillent fort. Ton ami en ressort tout brillant et heureux.
+
+
+      L''HEURE DU GOÛTER
+
+      Fais glisser les goûters jusqu''à la bouche de chaque ami dans la cuisine. Chacun a un favori secret : trouve-le et regarde-le s''illuminer.
+
+
+      SONS DOUILLETS POUR DORMIR
+
+      Borde tes amis, tamise la veilleuse et mélange pluie, cheminée crépitante, vagues de l''océan, ronron doux, carillon et bruit doux. Règle un minuteur de sommeil : les sons continuent de jouer écran
+      éteint.
+
+
+      FAIS ÉCLORE DE NOUVEAUX AMIS
+
+      Câliner et jouer fait gagner des étoiles. Mets-en assez de côté et l''œuf du jardin fait éclore un nouvel ami à qui tu donnes un nom. Les étoiles ne se dépensent jamais : rien n''est jamais perdu.
+
+
+      JOUONS ENSEMBLE
+
+      Deux mini-jeux dans la pièce Jeux : fais boop sur les petites bêtes qui sortent de leurs trous, ou attrape les goûters qui tombent.
+
+
+      LOOKS ET COLLECTION
+
+      De nouveaux pelages et couleurs, plus des nœuds, écharpes, chapeaux, lunettes et bien d''autres à mesure que vos liens grandissent. Remplis le Journal avec près de 100 réactions et prends des photos
+      dans la cabine photo pour les partager.
+
+
+      Calme, bienveillant et tout en douceur. Sans pub, sans achat, sans compte, aucune donnée collectée. Juste une maison douillette pleine d''amis.'
+    keywords: virtuel,kawaii,chiot,cochon,lapin,soin,habiller,oeuf,minijeux,dormir,sons,relaxant,mofumofu,jeu,bain
+    promotionalText: Câline, baigne, nourris et borde de tendres amis dans une maison douillette. Spa ASMR, sons pour dormir, mini-jeux et nouveaux amis à faire éclore. Gratuit, sans pub.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md
+  ar-SA:
+    name: 'Mofu: بيت الحيوانات اللطيفة'
+    subtitle: سبا ASMR وأصوات نوم هادئة
+    privacyPolicyUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md
+    description: 'أهلًا بك في بيت موفو — بيت صغير دافئ مليء بحيوانات أليفة لطيفة تفرح دائمًا برؤيتك.
+
+
+      داعب موفو السحابة المنفوشة، ودلّك بطن Oink الخنزير الصغير، وعلّم Wuff الجرو حيلًا جديدة، والمس Boops الصغار الناعمين. يتفاعل كل صديق مع لمستك بطريقته الخاصة، بأصوات ASMR ناعمة وممتعة.
+
+
+      ست غرف دافئة
+
+      تنقّل بين الصالة والسبا والمطبخ وغرفة النوم وغرفة اللعب والحديقة. أدخل حتى أربعة أصدقاء إلى الغرفة الواحدة وشاهدهم يتعانقون ويتكدّسون ويلعبون معًا. هزّ جوالك فيتفاعل الجميع.
+
+
+      أيام سبا ASMR
+
+      ضع الرغوة بالإسفنجة، واشطف بالدش الدافئ، وجفّف بالمنشفة، واختم بالمجفف. كلما فركت أسرع علت فقاعات الرغوة بصوت أعلى. يخرج صديقك لامعًا وسعيدًا.
+
+
+      وقت الوجبات
+
+      اسحب الوجبات الخفيفة إلى فم كل صديق في المطبخ. لكل واحد وجبته المفضلة السرية — اكتشفها وشاهده يتألق فرحًا.
+
+
+      أصوات نوم دافئة
+
+      غطِّ أصدقاءك، وخفّف ضوء الليل، وامزج المطر ومدفأة مطقطقة وأمواج البحر وخرخرة ناعمة وأجراس الرياح وضوضاء ناعمة. اضبط مؤقت النوم؛ تستمر الأصوات في العمل والشاشة مطفأة.
+
+
+      افقس أصدقاء جددًا
+
+      تمنحك العناية واللعب نجومًا. اجمع ما يكفي فتفقس البيضة في الحديقة صديقًا جديدًا لتختار له اسمًا. النجوم لا تُصرف أبدًا، فلا يضيع شيء.
+
+
+      العبوا معًا
+
+      لعبتان صغيرتان في غرفة اللعب: المس المخلوقات التي تطلّ من جحورها، أو التقط الوجبات المتساقطة.
+
+
+      ملابس ودفتر
+
+      فراء وألوان جديدة، إضافةً إلى فيونكات وأوشحة وقبعات ونظارات وغيرها كلما نمت الصداقة. املأ الدفتر بما يقارب 100 ردة فعل، والتقط صورًا في ركن التصوير لتشاركها.
+
+
+      هادئ ولطيف وحنون. بدون إعلانات، بدون مشتريات، بدون حساب، ولا نجمع أي بيانات. فقط بيت دافئ مليء بالأصدقاء.'
+    keywords: pet,cute,kawaii,virtual,fluffy,house,حيوان,أليف,جرو,خنزير,أرنب,تلبيس,بيضة,ألعاب,عناية,mofumofu
+    promotionalText: دلّل أصدقاءك وحمّمهم وأطعمهم ولحّفهم في بيت دافئ مليء بالأحبّاء. سبا ASMR، أصوات للنوم، ألعاب صغيرة وأصدقاء جدد يخرجون من البيض. مجاني وبلا إعلانات.
+    whatsNew: null
+    marketingUrl: null
+    supportUrl: https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md

@@ -58,8 +58,8 @@ class Particle {
 class MofuSim {
   MofuSim({int seed = 7, this.reduceMotion = false}) : _rng = math.Random(seed) {
     _buildFur();
-    _nextBlink = 2 + _rng.nextDouble() * 3;
-    _nextGlance = 3 + _rng.nextDouble() * 4;
+    _nextBlink = 2.5 + _rng.nextDouble() * 3.5;
+    _nextGlance = 6 + _rng.nextDouble() * 8;
     _nextHop = 7 + _rng.nextDouble() * 7;
   }
 
@@ -78,6 +78,11 @@ class MofuSim {
   static const idleSleepAfter = 45.0;
   static const nightSleepAfter = 12.0;
   static const gravity = 2600.0;
+  static const sleepyDuration = 1.4;
+
+  /// Set by the UI while something covers the room (first run, a sheet, a dialog):
+  /// idle time stops counting, so Mofu is not found asleep when it closes.
+  bool idleFrozen = false;
 
   // ── world ─────────────────────────────────────────────────────────────
   Size room = const Size(390, 700);
@@ -271,13 +276,15 @@ class MofuSim {
     _downTime = time;
     _downOnBody = hitBody(p);
     _stroking = false;
+    _strokeBuzzed = false;
     _hold = 0;
     _petTime = 0;
     _lastAngle = null;
     _spinAccum = 0;
     _onceThisGesture.clear();
     _resetIdle();
-    if (asleep && _downOnBody) _wake();
+    _wokeOnDown = asleep && _downOnBody;
+    if (_wokeOnDown) _wake();
   }
 
   void pointerMove(int pointer, Offset p) {
@@ -318,7 +325,9 @@ class MofuSim {
       squashVel -= 4;
       _setExpr(Expr.happy, 0.9);
       _emit(SimEventType.sound, 'pop');
-    } else if (dur <= tapMaxDuration && (p - _downPos).distance <= tapSlop) {
+      _emit(SimEventType.haptic, 'light');
+    } else if (dur <= tapMaxDuration && (p - _downPos).distance <= tapSlop && !_wokeOnDown) {
+      // (The tap that wakes Mofu only wakes it, so the sleepy blink plays out.)
       if (_downOnBody) {
         _tap(p);
       } else {
@@ -343,6 +352,9 @@ class MofuSim {
     _stroking = false;
     squashTarget = 0;
   }
+
+  bool _wokeOnDown = false;
+  bool _strokeBuzzed = false;
 
   void _lookAt(Offset p, double seconds) {
     final d = p - pos;
@@ -399,6 +411,10 @@ class MofuSim {
     if (segLen < 0.5) return;
     final onBody = hitBody(b);
     if (!onBody) return;
+    if (!_strokeBuzzed) {
+      _strokeBuzzed = true;
+      _emit(SimEventType.haptic, 'light');
+    }
     final dir = seg / segLen;
     final r = radius;
     final reach = r * 0.55;
@@ -465,6 +481,7 @@ class MofuSim {
         rotVel += sign * 26;
         _setExpr(Expr.dizzy, 1.6);
         _emit(SimEventType.sound, 'whee');
+        _emit(SimEventType.haptic, 'light');
         _emit(SimEventType.reaction, 'spin');
       }
     }
@@ -525,6 +542,7 @@ class MofuSim {
     _tossPending = speed > 700;
     _dizzyPending = speed > 2300;
     if (_tossPending) _emit(SimEventType.sound, 'wee');
+    _emit(SimEventType.haptic, 'light');
   }
 
   /// Shake gesture from the accelerometer (UI applies the kill switch).
@@ -571,6 +589,7 @@ class MofuSim {
     _setExpr(Expr.content, 1.8);
     rotVel += 7;
     _emit(SimEventType.sound, 'nope');
+    _emit(SimEventType.haptic, 'light');
     _emit(SimEventType.reaction, 'full');
     _resetIdle();
   }
@@ -622,8 +641,9 @@ class MofuSim {
       _snoring = false;
       _emit(SimEventType.loopStop, 'snore');
     }
-    _setExpr(Expr.sleepy, 1.4);
+    _setExpr(Expr.sleepy, sleepyDuration);
     _emit(SimEventType.sound, 'yawn');
+    _emit(SimEventType.haptic, 'light');
     _emit(SimEventType.reaction, 'wake');
     _resetIdle();
   }
@@ -850,7 +870,7 @@ class MofuSim {
     if (follow != null && mode != MofuMode.held) {
       _lookAt(follow, 0.4);
     } else if (time >= _nextGlance && !asleep) {
-      _nextGlance = time + 3 + _rng.nextDouble() * 4;
+      _nextGlance = time + 6 + _rng.nextDouble() * 8;
       final glance = _rng.nextDouble();
       if (glance < 0.4) {
         _lookTX = 0;
@@ -864,21 +884,30 @@ class MofuSim {
     lookX += (_lookTX - lookX) * k;
     lookY += (_lookTY - lookY) * k;
 
-    // Blink.
-    if (!asleep) {
-      if (_blinkT >= 0) {
-        _blinkT += dt;
-        blink = _blinkT < 0.07 ? _blinkT / 0.07 : math.max(0, 1 - (_blinkT - 0.07) / 0.08);
-        if (_blinkT > 0.15) {
-          _blinkT = -1;
-          blink = 0;
-        }
-      } else if (time >= _nextBlink) {
+    // Blink. Just woken: heavy lids, one slow sleepy blink.
+    if (asleep || expr == Expr.sleepy) {
+      // No ordinary blink resumes the moment Mofu is awake again.
+      _blinkT = -1;
+      _nextBlink = math.max(_nextBlink, time + 2.5);
+    }
+    if (asleep) {
+      blink = 1;
+    } else if (expr == Expr.sleepy) {
+      final t = sleepyDuration - _exprTimer;
+      blink = 0.55 + 0.45 * (t > 0.3 && t < 0.9 ? math.sin((t - 0.3) / 0.6 * math.pi) : 0);
+    } else if (_blinkT >= 0) {
+      _blinkT += dt;
+      blink = _blinkT < 0.07 ? _blinkT / 0.07 : math.max(0, 1 - (_blinkT - 0.07) / 0.08);
+      if (_blinkT > 0.15) {
+        _blinkT = -1;
+        blink = 0;
+      }
+    } else {
+      blink = 0;
+      if (time >= _nextBlink) {
         _blinkT = 0;
         _nextBlink = time + 2.5 + _rng.nextDouble() * 3.5;
       }
-    } else {
-      blink = 1;
     }
 
     // Eating sequence, then the post-meal face.
@@ -919,7 +948,7 @@ class MofuSim {
     }
 
     // Sleep.
-    if (_pointer == null && mode == MofuMode.rest && _eatTimer <= 0 && !snackHover) {
+    if (_pointer == null && mode == MofuMode.rest && _eatTimer <= 0 && !snackHover && !idleFrozen) {
       idleTime += dt;
     }
     if (!asleep && mode == MofuMode.rest && _pointer == null &&

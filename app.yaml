@@ -4,7 +4,7 @@ app:
   display_name: Mofu
   slug: mofu_pet
   bundle_id: com.ouadieZerhouni.mofuPet
-  app_store_id: ""
+  app_store_id: "6820155832"
 
 features:
   widget: false
@@ -35,3 +35,7 @@ ci:
   workflow_name: testFlight
   asc_integration: "OUADIE ZERHOUNI"
   notify_email: ""
+
+legal:
+  privacy_url: "https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/PRIVACY.md"
+  support_url: "https://github.com/OuadieZerhouni/app-configs/blob/main/mofu-pet/SUPPORT.md"

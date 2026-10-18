@@ -37,6 +37,10 @@ class AudioEngine extends ChangeNotifier {
 
   bool soundOn = true;
   bool hapticsOn = true;
+
+  /// Lets a test reach the platform channel that device-only work normally skips under test.
+  @visibleForTesting
+  bool forceDeviceWork = false;
   bool remoteSoundsEnabled = true;
   bool _ready = false;
   Future<void>? _initFuture;
@@ -293,7 +297,7 @@ class AudioEngine extends ChangeNotifier {
 
   // ── haptics ───────────────────────────────────────────────────────────
   void haptic(String kind) {
-    if (!hapticsOn || kIsWeb || skipDeviceOnlyWork) return;
+    if (!hapticsOn || kIsWeb || (skipDeviceOnlyWork && !forceDeviceWork)) return;
     switch (kind) {
       case 'light':
         HapticFeedback.lightImpact();

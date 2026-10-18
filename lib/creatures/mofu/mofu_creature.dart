@@ -112,6 +112,9 @@ class MofuCreature extends Creature {
   void shiftX(double dx) => sim.nudge(Offset(dx * 60, 0));
 
   @override
+  set idleFrozen(bool frozen) => sim.idleFrozen = frozen;
+
+  @override
   void react(SocialCue cue, {Offset? from}) => sim.socialCue(switch (cue) {
         SocialCue.friendTouched => 0,
         SocialCue.landedOnMe => 1,

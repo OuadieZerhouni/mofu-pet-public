@@ -19,7 +19,7 @@
   "actionCancel": "إلغاء",
   "actionClose": "إغلاق",
   "actionOk": "حسنًا",
-  "toastNewReaction": "جديد في الدفتر: {name}",
+  "toastNewReaction": "جديد! {name}",
   "toastUnlocked": "تم الفتح: {item}",
   "toastDailyBrush": "أول تمشيط اليوم ✨",
   "toastFluffMilestone": "موفو موفو! منفوش {percent}٪",

@@ -144,4 +144,18 @@ void main() {
     expect(state.house.active, Room.kitchen);
     expect(store.lastRoom, Room.kitchen);
   });
+
+  testWidgets('Mofu does not doze off behind an open friend card (main F7-c2, flagship wiring)', (tester) async {
+    final store = await pumpHouse(tester, locale: const Locale('en'));
+    final state = tester.state<HouseScreenState>(find.byType(HouseScreen));
+    final mofu = store.friends.firstWhere((f) => f.species == Species.mofu);
+    final open = state.openFriend(mofu.id);
+    await settle(tester, 400);
+    // Far longer than Mofu takes to doze when idle in the open (~70 s), with the card covering the room.
+    await settle(tester, 100000);
+    expect(state.house.creature(mofu.id)!.asleep, isFalse);
+    await tester.tapAt(const Offset(20, 40));
+    await settle(tester, 600);
+    await open;
+  });
 }
