@@ -72,6 +72,9 @@ class AudioEngine extends ChangeNotifier {
         }
       });
       if (!_soloud.isInitialized) await _soloud.init(bufferSize: 1024);
+      // flutter_soloud 5 stops the output device after 500 ms of silence; keep
+      // it running (4.x behaviour) so a tap's sound has no restart latency.
+      _soloud.setAudioDeviceIdleTimeout(null);
       _ready = true;
       // Load the sounds people hear first, then everything else.
       final ids = [...priority, ...SoundBank.all.keys.where((k) => !priority.contains(k))];

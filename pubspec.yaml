@@ -40,7 +40,7 @@ dependencies:
   http: ^1.6.0
   package_info_plus: ^10.2.2
   url_launcher: ^6.3.3
-  flutter_soloud: ^4.1.7
+  flutter_soloud: ^5.2.3
   audio_session: ^0.2.4
   sensors_plus: ^7.1.1
   share_plus: ^13.3.1
