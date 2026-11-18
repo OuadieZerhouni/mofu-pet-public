@@ -1,4 +1,32 @@
-# Mofu & Friends — Cute Pet House
+# Mofu & Friends: Cute Pet House
+
+A cozy pocket house for iPhone where four kinds of very touchable creatures live together: Mofu the fluffy cloud, Oink the piglet, Wuff the puppy and a family of jelly Boops. Groom them in an ASMR spa, feed them, play two mini-games, hatch new friends, tuck them in with a sleep-sound mixer, and take photos of the gang.
+
+<p align="center"><img src="ASO/screenshots/en-US/01_house.png" width="220" alt="Mofu house"> <img src="ASO/screenshots/en-US/02_spa.png" width="220" alt="ASMR spa"> <img src="ASO/screenshots/en-US/03_sleep.png" width="220" alt="Sleep sounds"></p>
+
+> **Status: archived.** Mofu was submitted to the App Store in 2026 but not released, and is no longer developed. This repository is published as-is, as a reference.
+
+- **Stack:** Flutter (Dart 3.12), iPhone-first, portrait.
+- **No account, no ads, no purchases, no data collected.** Works offline.
+- **7 languages:** English, Japanese, German, Portuguese, Spanish, French and Arabic (right-to-left).
+- Creatures, rooms and UI are drawn in code; sound effects are synthesized (`tools/audio/`).
+
+## Run it
+
+```bash
+flutter pub get
+flutter gen-l10n
+flutter test
+flutter run            # iOS simulator or device
+```
+
+## License
+
+No open-source license is granted: the code, art and sound are © Ouadie Zerhouni, all rights reserved. You're welcome to read and learn from it; ask before reusing anything.
+
+## Developer notes
+
+The notes below were written while the app was in development. They mention internal files (planning notes, owner to-do lists) that may not be in this repository.
 
 A cozy little house of cute pets: Mofu the fluffy cloud, Oink the piglet, Wuff
 the puppy and a family of jelly Boops. Six rooms (living room, ASMR spa, kitchen,
@@ -20,7 +48,7 @@ Oink, Boop! and Wuff were separate apps until the 2026-10-16 App Review rejectio
 | ASO | **`ASO/ASO.md`** (copy-paste listing, 8 store locales) + `ASO/metadata.json`, `ASO/screenshots/` |
 | Owner steps | `owner-todo.md` |
 
-## Run
+### Run
 
 ```bash
 flutter pub get
@@ -31,7 +59,7 @@ flutter run                      # device or simulator
 flutter run -d web-server --web-port=8684   # quick look in a browser (no sound/haptics)
 ```
 
-## Regenerate assets
+### Regenerate assets
 
 ```bash
 python tools/audio/synth_sfx.py          # synthesized Mofu sound effects -> assets/sounds/
@@ -45,7 +73,7 @@ flutter test test/store_screenshots_test.dart --run-skipped && python tools/scre
 flutter test test/ux_dump_test.dart --run-skipped --dart-define=LANGS=en,ar   # visual QA renders -> build/ux/
 ```
 
-## How it is built
+### How it is built
 
 - `lib/creatures/` — one `Creature` interface (pure-Dart simulation + `CreatureArt`
   painter) and four species: `mofu/` (adapter over `lib/sim/mofu_sim.dart`, ~800
